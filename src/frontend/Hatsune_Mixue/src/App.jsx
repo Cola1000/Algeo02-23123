@@ -10,7 +10,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <main>
+    <main className='w-screen h-screen relative'>
       <Router>
         <Custom_Viewport />
         <Routes>

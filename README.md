@@ -3,9 +3,8 @@ Tubes 2 Aljabar Lanjar dan Geometri
 
 # Setup
 Run these commands in terminal
-```cmd
+'''cmd
+cd .\src\frontend\Hatsune_Mixue\  
 npm install
-```
-```cmd
 npm run dev
 ```
