@@ -1,45 +1,31 @@
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Navigate, NavLink, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-function Custom_Viewport() {
-  const [is3D, setIs3D] = useState(true); // State to toggle between 3D and 2D
+const Custom_Viewport = () => {
   const navigate = useNavigate();
-
-  const handleToggle = () => {
-    setIs3D((prev) => !prev); // Toggle the state
-    navigate(is3D ? '/Home2D' : '/');
-  };
-
   return (
-    <div>
-      <header className="header flex text-lg">
+    <nav className="fixed top-0 left-0 right-0  z-50">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
         <button
-          onClick={handleToggle} // Handle the toggle and navigation on click
+          onClick={() => navigate('Home3D/')}// Handle the toggle and navigation on click
           className="w-10 h-10 rounded-lg items-center justify-center flex font-bold shadow-md bg-black-500"
         >
-          <p className="blue-gradient_text">{is3D ? '3D' : '2D'}</p>
+          <p className="blue-gradient_text">3D</p>
         </button>
-        <nav className="flex text-lg gap-7 font-medium">
-          <NavLink
-            to="/Credits"
-            className={({ isActive }) =>
-              isActive ? 'text-blue-500' : 'text-white'
-            }
-          >
-            Credits
-          </NavLink>
-          <NavLink
-            to="/About"
-            className={({ isActive }) =>
-              isActive ? 'text-blue-500' : 'text-white'
-            }
-          >
-            About
-          </NavLink>
-        </nav>
-      </header>
-    </div>
+          <div className="flex space-x-4">
+            <Link to="/About" className="text-white-800 hover:text-blue-500">
+              About
+            </Link>
+            <Link to="/Credits" className="text-white-800 hover:text-blue-500">
+              Credits
+            </Link>
+          </div>
+        </div>
+      </div>
+    </nav>
   );
-}
+};
 
 export default Custom_Viewport;
