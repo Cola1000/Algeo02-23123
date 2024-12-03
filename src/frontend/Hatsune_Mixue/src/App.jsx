@@ -5,6 +5,7 @@ import './App.css';
 import Custom_Viewport from './components/Custom_Viewport';
 import { Home3D, Home2D, About, Credits } from './pages/index.js';
 import AlbumDetail from './pages/AlbumDetail';
+import AudioRecorder from './pages/AudioRecorder.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -20,6 +21,7 @@ function App() {
         <Route path="/Credits" element={<Credits />} />
         <Route path="/About" element={<About />} />
         <Route path="/album/:albumId" element={<AlbumDetail />} />
+        <Route path="/audio-recorder" element={<AudioRecorder />} />
       </Routes>
     </main>
   );

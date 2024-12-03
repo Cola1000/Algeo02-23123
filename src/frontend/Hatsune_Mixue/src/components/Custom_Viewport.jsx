@@ -9,7 +9,7 @@ const Custom_Viewport = () => {
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
         <button
-          onClick={() => navigate('Home3D/')}// Handle the toggle and navigation on click
+          onClick={() => navigate('/Home3D')}
           className="w-10 h-10 rounded-lg items-center justify-center flex font-bold shadow-md bg-black-500"
         >
           <p className="blue-gradient_text">3D</p>
