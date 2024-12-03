@@ -30,10 +30,10 @@ const AlbumDetail = () => {
     <div className="w-full min-h-screen flex flex-col p-8">
       {/* Back Button */}
       <button
-        onClick={() => navigate('/')}
-        className="absolute top-4 right-4 text-blue-500 hover:underline"
+        onClick={() => navigate(-1)}
+        className="absolute top-4 right-4 text-white-500 hover:text-blue-500"
       >
-        &larr; Back to Home
+        &larr; Back
       </button>
 
       {/* Album Detail */}
@@ -58,7 +58,7 @@ const AlbumDetail = () => {
           <h2 className="text-2xl font-bold mb-4">{album.title}</h2>
           <button
             onClick={handleDownloadAll}
-            className="mb-4 btn shadow-md hover:shadow-lg"
+            className="mb-5 btn shadow-md hover:shadow-lg"
           >
             Download All as ZIP
           </button>
@@ -66,12 +66,12 @@ const AlbumDetail = () => {
             {album.songs.map((song) => (
               <li
                 key={song.id}
-                className="flex justify-between items-center p-2 bg-gray-100 rounded"
+                className="mb-3 flex justify-between items-center p-3 bg-green-500 rounded-xl"
               >
                 <span>{song.title}</span>
                 <button
                   onClick={() => handleDownloadSong(song.id)}
-                  className="text-blue-500 hover:underline"
+                  className="text-white-500 hover:text-blue-500"
                 >
                   Download
                 </button>

@@ -1,7 +1,8 @@
 import React, { useRef, Suspense, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Loader } from '@react-three/drei';
+import { PerspectiveCamera, Loader } from '@react-three/drei';
 import Konbini from '../models/konbini(backup)';
+import MovementController from '../components/MovementController';
 import { useNavigate } from 'react-router-dom';
 
 const Home3D = () => {
@@ -9,23 +10,27 @@ const Home3D = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    
-    const handleEsc = (event) => {
-      if (event.key === 'Escape' || event.key === 'Esc') {
+    // Lock cursor on click
+    const handlePointerLock = () => {
+      document.body.requestPointerLock();
+    };
+
+    const handlePointerLockChange = () => {
+      if (document.pointerLockElement !== document.body) {
         navigate('/');
       }
     };
-    
-    window.addEventListener('keydown', handleEsc);
-    
-    // Cleanup the event listener
+
+    window.addEventListener('click', handlePointerLock);
+    document.addEventListener('pointerlockchange', handlePointerLockChange);
+
     return () => {
-      window.removeEventListener('keydown', handleEsc);
+      window.removeEventListener('click', handlePointerLock);
+      document.removeEventListener('pointerlockchange', handlePointerLockChange);
     };
   }, [navigate]);
 
   return (
-
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <Canvas shadows>
         <Suspense fallback={null}>
@@ -33,8 +38,8 @@ const Home3D = () => {
           <hemisphereLight />
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
-          <Konbini />
-          <OrbitControls />
+          <Konbini position={[0, 0, -4]} scale={[1, 1, 1]} rotation={[0, 0, 0]} />
+          <MovementController cameraRef={cameraRef} />
         </Suspense>
       </Canvas>
 

@@ -53,7 +53,11 @@ const Home2D = () => {
       navigate('/audio-recorder');
     } else {
       alert("Please select an audio file.");
+
+      
       // Logic to upload an audio file goes here
+
+
       setShowDropzone(true);
     }
   };  
@@ -98,11 +102,67 @@ const Home2D = () => {
           </div>
         )}
 
-        {/* Album Auto-scroller */}
-        {/* ...existing code for auto-scroller... */}
+        {/*Album Auto-scroller*/}
+        <div className="mt-16 w-full max-w-screen-lg overflow-hidden z-0 relative">
+          <div className="scroller flex gap-4 items-center flex-nowrap animate-auto-scroll">
+            {albumPictures.length > 0
+              ? [...Array(20)].map((_, index) => (
+                  <div
+                    key={index}
+                    className="custom-glow w-48 h-48 flex-shrink-0 scale-90 cursor-pointer transition-transform transform hover:scale-100"
+                  >
+                    <img
+                      src={
+                        albumPictures[index % albumPictures.length].imageSrc// Repeat the same image if there's only one
+                      }
+                      alt={`Album ${index + 1}`}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                ))
+              : null}
+          </div>
+        </div>
 
         {/* Pagination */}
-        {/* ...existing code for pagination... */}
+        <div className="mt-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {currentAlbums.map((album) => (
+              <div
+                key={album.id}
+                className="w-48 h-48 cursor-pointer transition-transform transform hover:scale-105"
+                onClick={() => handleAlbumClick(album.id)}
+              >
+                <img
+                  src={album.imageSrc}
+                  alt={`Album ${album.title}`}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="mx-2 px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="mx-2">{`Page ${currentPage} of ${totalPages}`}</span>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className="mx-2 px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </section>
     </div>
   );
