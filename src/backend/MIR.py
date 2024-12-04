@@ -3,6 +3,7 @@ import numpy as np
 import shutil
 from music21 import converter
 from convert_audio_to_midi import convert_audio_to_midi
+import json
 
 # Constants
 MIDI_MIN = 0
@@ -82,7 +83,7 @@ def calculate_similarity(query_features, database_features):
 
 
 def query_by_humming(
-    query_audio_file, database_files, threshold=0.8, result_dir="test/result/audio"
+    query_audio_file, database_files, mapper, threshold=0.8, result_dir="test/result"
 ):
     """
     Find all matching MIDI files in the database for a given query audio file with a similarity score of 80% or higher (if threshold not specified).
@@ -109,10 +110,35 @@ def query_by_humming(
     ]
     matches.sort(key=lambda x: x[1], reverse=True)
 
-    os.makedirs(result_dir, exist_ok=True)
+    result_audio_dir = os.path.join(result_dir, "audio")
+    result_picture_dir = os.path.join(result_dir, "picture")
+    os.makedirs(result_audio_dir, exist_ok=True)
+    os.makedirs(result_picture_dir, exist_ok=True)
+
     for rank, (match, similarity) in enumerate(matches, start=1):
-        match_filename = os.path.join(result_dir, f"{rank}.mid")
-        shutil.copy(match, match_filename)
+        # Find the corresponding .wav file for the matched MIDI file
+        for album in mapper:
+            for song in album["songs"]:
+                if (
+                    song["file"].rsplit(".", 1)[0]
+                    == os.path.basename(match).rsplit(".", 1)[0]
+                ):
+                    audio_file_path = os.path.join(
+                        "src/backend/database/audio", song["file"]
+                    )
+                    destination_audio_path = os.path.join(
+                        result_audio_dir, f"{rank}_{os.path.basename(song['file'])}"
+                    )
+                    shutil.copy(audio_file_path, destination_audio_path)
+                    print(f"Copied {audio_file_path} to {destination_audio_path}")
+
+                    # Save the corresponding album image
+                    image_src = album["imageSrc"]
+                    destination_image_path = os.path.join(
+                        result_picture_dir, f"{rank}.jpg"
+                    )
+                    shutil.copy(image_src, destination_image_path)
+                    print(f"Copied {image_src} to {destination_image_path}")
 
     return matches
 
@@ -127,14 +153,19 @@ def load_database(dataset_path, midi_dataset_path):
             midi_file_path = os.path.join(
                 midi_dataset_path, audio_file.rsplit(".", 1)[0] + ".mid"
             )
-            convert_audio_to_midi(audio_file_path, midi_file_path)
+            # convert_audio_to_midi(audio_file_path, midi_file_path)
 
 
 def main():
     dataset_path = "src/backend/database/audio"
     midi_dataset_path = "src/backend/database/midi_audio"
     query_audio_file = "test/query/audio/Cogitation of Epochs_trimmed.mp3"
-    result_dir = "test/result/audio"
+    result_dir = "test/result"
+    mapper_file = "src/backend/database/mapper_all_img.json"
+
+    # Load the mapper
+    with open(mapper_file, "r") as f:
+        mapper = json.load(f)
 
     # Load the database
     load_database(dataset_path, midi_dataset_path)
@@ -151,7 +182,7 @@ def main():
 
     # Perform query by humming
     matches = query_by_humming(
-        query_audio_file, database_files, threshold=0.95, result_dir=result_dir
+        query_audio_file, database_files, mapper, threshold=0.95, result_dir=result_dir
     )
 
     # Print the matches

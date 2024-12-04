@@ -31,7 +31,9 @@ def convert_audio_to_midi(audio_file, midi_file):
         )
 
         # Rename the output file to match the original file name
-        base_name = os.path.basename(audio_file).rsplit(".", 1)[0] + "_temp_basic_pitch.mid"
+        base_name = (
+            os.path.basename(audio_file).rsplit(".", 1)[0] + "_temp_basic_pitch.mid"
+        )
         output_path = os.path.join(output_directory, base_name)
 
         # Process validation
