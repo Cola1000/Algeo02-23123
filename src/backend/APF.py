@@ -3,6 +3,7 @@ import glob
 import numpy as np
 from PIL import Image, ImageOps, ImageEnhance
 import shutil
+import json
 
 
 # Step 1: Image Processing and Loading
@@ -210,10 +211,15 @@ def sort_by_similarity(distances, image_paths, max_results=10):
 
 # Step 5: Retrieval and Output
 def process_query(
-    query_image_path, imageDB, original_image_paths, result_directory, size=(60, 60)
+    query_image_path,
+    imageDB,
+    original_image_paths,
+    result_directory,
+    mapper,
+    size=(60, 60),
 ):
     """
-    Process the query image and retrieve similar images.
+    Process the query image and retrieve similar images and their corresponding songs.
     """
     # Standardize the data
     imageDB_centered, mean = standardize_data(imageDB)
@@ -247,18 +253,41 @@ def process_query(
 
     # Copy the top 10 most similar images to the result folder
     os.makedirs(result_directory, exist_ok=True)
+    result_audio_dir = os.path.join(result_directory, "audio")
+    os.makedirs(result_audio_dir, exist_ok=True)
+    result_picture_dir = os.path.join(result_directory, "picture")
+    os.makedirs(result_picture_dir, exist_ok=True)
+
     for i, path in enumerate(sorted_image_paths, 1):
-        destination_path = os.path.join(result_directory, f"{i}.jpg")
+        destination_path = os.path.join(result_picture_dir, f"{i}.jpg")
         shutil.copy(path, destination_path)
         print(f"Copied {path} to {destination_path}")
+
+        # Find the corresponding songs for the image
+        for album in mapper:
+            if album["imageSrc"].endswith(os.path.basename(path)):
+                for song in album["songs"]:
+                    audio_file_path = os.path.join(
+                        "src/backend/database/audio", song["file"]
+                    )
+                    destination_audio_path = os.path.join(
+                        result_audio_dir, f"{i}_{os.path.basename(song['file'])}"
+                    )
+                    shutil.copy(audio_file_path, destination_audio_path)
+                    print(f"Copied {audio_file_path} to {destination_audio_path}")
 
     return sorted_image_paths
 
 
 def main():
     directory_path = "src/backend/database/picture/"
-    result_directory = "test/result/picture"
+    result_directory = "test/result"
     query_image_path = "test/query/picture/test_pic_7.jpg"
+    mapper_file = "src/backend/database/mapper_all_img.json"
+
+    # Load the mapper
+    with open(mapper_file, "r") as f:
+        mapper = json.load(f)
 
     # Load and preprocess images
     print("Loading and preprocessing images...")
@@ -267,10 +296,12 @@ def main():
         f"Loaded {len(imageDB)} images (including rotations, flips, and color jittering)."
     )
 
-    # Process the query image and retrieve similar images
-    print("Processing query image and retrieving similar images...")
+    # Process the query image and retrieve similar images and their corresponding songs
+    print(
+        "Processing query image and retrieving similar images and their corresponding songs..."
+    )
     sorted_image_paths = process_query(
-        query_image_path, imageDB, original_image_paths, result_directory
+        query_image_path, imageDB, original_image_paths, result_directory, mapper
     )
 
     # Print the sorted image paths
