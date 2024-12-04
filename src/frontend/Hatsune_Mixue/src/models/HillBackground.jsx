@@ -195,8 +195,17 @@ const HillBackground = () => {
 
     init();
 
+    const handleThemeChange = () => {
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      renderer.setClearColor(isDarkMode ? 0x1a1a1a : 0xeeeeee, 1.0);
+    };
+
+    const observer = new MutationObserver(handleThemeChange);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
     return () => {
       window.removeEventListener("resize", resizeWindow);
+      observer.disconnect();
     };
   }, []);
 

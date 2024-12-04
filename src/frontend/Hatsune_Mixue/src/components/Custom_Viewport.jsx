@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate, NavLink, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle.jsx';
 
 const Custom_Viewport = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Custom_Viewport = () => {
         >
           <p className="blue-gradient_text">3D</p>
         </button>
+        <ThemeToggle />
           <div className="flex space-x-4">
             <Link to="/About" className="text-white-800 hover:text-blue-500">
               About

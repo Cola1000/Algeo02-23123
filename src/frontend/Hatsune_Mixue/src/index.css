@@ -16,9 +16,17 @@ body {
 :root {
   --blue-rgb: 237 245 255;
   --green-rgb: 125 161 35;
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --primary-color: #2b77e7;
+  --secondary-color: #646cff;
+  --border-color: #d5dae1;
+  --button-background: #2b77e7;
+  --button-text: #1a1a1a;
 }
 
 body {
+  color: var(--text-color);
   font-family: "Work Sans", sans-serif;
   display: flex;
   justify-content: center;
@@ -211,7 +219,7 @@ body:has(.card[data-color="green"]:hover) {
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--secondary-color);
   text-decoration: inherit;
 }
 a:hover {
@@ -226,6 +234,10 @@ body {
   min-height: 100vh;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -233,12 +245,13 @@ h1 {
 
 button {
   border-radius: 8px;
+  color: var(--button-text);
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--button-background);
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -250,18 +263,17 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --background-color: #1a1a1a;
+    --text-color: #ffffff;
+    --primary-color: #2b77e7;
+    --secondary-color: #535bf2;
+    --border-color: #444444;
+    --button-background: #2b77e7;
+    --button-text: #ffffff;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+} */
 
 .scroller {
   animation: scroll 10s linear infinite;
@@ -297,4 +309,25 @@ button:focus-visible {
 .nav {
   position: relative;
   z-index: 10;
+}
+
+/* Dark mode styles */
+.dark-mode {
+  --background-color: #1a1a1a;
+  --text-color: #ffffff;
+  --primary-color: #2b77e7;
+  --secondary-color: #535bf2;
+  --border-color: #444444;
+  --button-background: #2b77e7;
+  --button-text: #ffffff;
+}
+
+body.dark-mode {
+  color: var(--text-color);
+}
+
+button.dark-mode {
+  background-color: var(--button-background);
+  color: var(--button-text);
+  border: 1px solid var(--border-color);
 }
