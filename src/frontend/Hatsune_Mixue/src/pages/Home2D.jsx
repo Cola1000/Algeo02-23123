@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDropzone } from 'react-dropzone';
-import albumPictures from './albumPictures.jsx';
+import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDropzone } from "react-dropzone";
+import albumPictures from "./albumPictures.jsx";
 
 const Home2D = () => {
   const navigate = useNavigate();
@@ -20,7 +20,10 @@ const Home2D = () => {
   // Get current albums
   const indexOfLastAlbum = currentPage * albumsPerPage;
   const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
-  const currentAlbums = albumPictures.slice(indexOfFirstAlbum, indexOfLastAlbum);
+  const currentAlbums = albumPictures.slice(
+    indexOfFirstAlbum,
+    indexOfLastAlbum
+  );
 
   const handleAlbumClick = (albumId) => {
     navigate(`/album/${albumId}`);
@@ -50,17 +53,15 @@ const Home2D = () => {
       "Do you want to use your microphone for audio recognition?"
     );
     if (useMicrophone) {
-      navigate('/audio-recorder');
+      navigate("/audio-recorder");
     } else {
       alert("Please select an audio file.");
 
-      
       // Logic to upload an audio file goes here
-
 
       setShowDropzone(true);
     }
-  };  
+  };
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center p-8">
@@ -95,9 +96,7 @@ const Home2D = () => {
             {isDragActive ? (
               <p>Drop the files here ...</p>
             ) : (
-              <p>
-                Drag 'n' drop some files here, or click to select files
-              </p>
+              <p>Drag 'n' drop some files here, or click to select files</p>
             )}
           </div>
         )}
@@ -113,7 +112,7 @@ const Home2D = () => {
                   >
                     <img
                       src={
-                        albumPictures[index % albumPictures.length].imageSrc// Repeat the same image if there's only one
+                        albumPictures[index % albumPictures.length].imageSrc // Repeat the same image if there's only one
                       }
                       alt={`Album ${index + 1}`}
                       className="w-full h-full object-cover rounded-lg"
