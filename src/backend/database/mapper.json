@@ -1,0 +1,1113 @@
+[
+    {
+        "id": 1,
+        "title": "Album 1",
+        "imageSrc": "src/backend/database/picture/R-10282465-1515108948-6341-jpeg.jpg",
+        "songs": [
+            {
+                "id": "1_1",
+                "file": "pop.00004.wav"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Album 2",
+        "imageSrc": "src/backend/database/picture/R-193552-1395014725-1934-jpeg.jpg",
+        "songs": [
+            {
+                "id": "2_1",
+                "file": "pop.00048.wav"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Album 3",
+        "imageSrc": "src/backend/database/picture/R-550519-1130389992-jpeg.jpg",
+        "songs": [
+            {
+                "id": "3_1",
+                "file": "pop.00061.wav"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "title": "Album 4",
+        "imageSrc": "src/backend/database/picture/R-4824598-1426733035-2407-jpeg.jpg",
+        "songs": [
+            {
+                "id": "4_1",
+                "file": "pop.00051.wav"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "title": "Album 5",
+        "imageSrc": "src/backend/database/picture/R-1506789-1224796615-jpeg.jpg",
+        "songs": [
+            {
+                "id": "5_1",
+                "file": "pop.00083.wav"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "title": "Album 6",
+        "imageSrc": "src/backend/database/picture/R-1051486-1544874905-6915-jpeg.jpg",
+        "songs": [
+            {
+                "id": "6_1",
+                "file": "pop.00073.wav"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "title": "Album 7",
+        "imageSrc": "src/backend/database/picture/R-8383664-1460735993-1638-jpeg.jpg",
+        "songs": [
+            {
+                "id": "7_1",
+                "file": "pop.00024.wav"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "title": "Album 8",
+        "imageSrc": "src/backend/database/picture/R-1388116-1265977760-jpeg.jpg",
+        "songs": [
+            {
+                "id": "8_1",
+                "file": "pop.00022.wav"
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "title": "Album 9",
+        "imageSrc": "src/backend/database/picture/R-17273431-1612556204-9339-jpeg.jpg",
+        "songs": [
+            {
+                "id": "9_1",
+                "file": "pop.00016.wav"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "title": "Album 10",
+        "imageSrc": "src/backend/database/picture/R-1722717-1493313806-5063-jpeg.jpg",
+        "songs": [
+            {
+                "id": "10_1",
+                "file": "pop.00053.wav"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "title": "Album 11",
+        "imageSrc": "src/backend/database/picture/R-339581-1381939909-7259-jpeg.jpg",
+        "songs": [
+            {
+                "id": "11_1",
+                "file": "pop.00071.wav"
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "title": "Album 12",
+        "imageSrc": "src/backend/database/picture/R-1606397-1610544474-7841-jpeg.jpg",
+        "songs": [
+            {
+                "id": "12_1",
+                "file": "pop.00034.wav"
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "title": "Album 13",
+        "imageSrc": "src/backend/database/picture/R-4473502-1519837907-9366-jpeg.jpg",
+        "songs": [
+            {
+                "id": "13_1",
+                "file": "pop.00075.wav"
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "title": "Album 14",
+        "imageSrc": "src/backend/database/picture/R-10601119-1547075203-7791-jpeg.jpg",
+        "songs": [
+            {
+                "id": "14_1",
+                "file": "pop.00098.wav"
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "title": "Album 15",
+        "imageSrc": "src/backend/database/picture/R-3458476-1349736692-3256-jpeg.jpg",
+        "songs": [
+            {
+                "id": "15_1",
+                "file": "pop.00092.wav"
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "title": "Album 16",
+        "imageSrc": "src/backend/database/picture/R-1409915-1217704285-jpeg.jpg",
+        "songs": [
+            {
+                "id": "16_1",
+                "file": "pop.00026.wav"
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "title": "Album 17",
+        "imageSrc": "src/backend/database/picture/R-430456-1392460603-2420-jpeg.jpg",
+        "songs": [
+            {
+                "id": "17_1",
+                "file": "pop.00097.wav"
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "title": "Album 18",
+        "imageSrc": "src/backend/database/picture/R-605328-1437550728-2440-jpeg.jpg",
+        "songs": [
+            {
+                "id": "18_1",
+                "file": "pop.00031.wav"
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "title": "Album 19",
+        "imageSrc": "src/backend/database/picture/R-2748195-1359916812-1158-jpeg.jpg",
+        "songs": [
+            {
+                "id": "19_1",
+                "file": "pop.00077.wav"
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "title": "Album 20",
+        "imageSrc": "src/backend/database/picture/R-564416-1516990740-5131-jpeg.jpg",
+        "songs": [
+            {
+                "id": "20_1",
+                "file": "pop.00018.wav"
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "title": "Album 21",
+        "imageSrc": "src/backend/database/picture/R-161715-1348177745-2185-jpeg.jpg",
+        "songs": [
+            {
+                "id": "21_1",
+                "file": "pop.00044.wav"
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "title": "Album 22",
+        "imageSrc": "src/backend/database/picture/R-3849802-1346812950-6695-jpeg.jpg",
+        "songs": [
+            {
+                "id": "22_1",
+                "file": "pop.00040.wav"
+            }
+        ]
+    },
+    {
+        "id": 23,
+        "title": "Album 23",
+        "imageSrc": "src/backend/database/picture/R-15604928-1594400033-6545-jpeg.jpg",
+        "songs": [
+            {
+                "id": "23_1",
+                "file": "pop.00057.wav"
+            }
+        ]
+    },
+    {
+        "id": 24,
+        "title": "Album 24",
+        "imageSrc": "src/backend/database/picture/R-16246618-1605922348-3124-jpeg.jpg",
+        "songs": [
+            {
+                "id": "24_1",
+                "file": "pop.00020.wav"
+            }
+        ]
+    },
+    {
+        "id": 25,
+        "title": "Album 25",
+        "imageSrc": "src/backend/database/picture/R-1512792-1317026516-jpeg.jpg",
+        "songs": [
+            {
+                "id": "25_1",
+                "file": "Cogitation of Epochs.mp3"
+            }
+        ]
+    },
+    {
+        "id": 26,
+        "title": "Album 26",
+        "imageSrc": "src/backend/database/picture/R-435013-1456662087-6736-jpeg.jpg",
+        "songs": [
+            {
+                "id": "26_1",
+                "file": "pop.00036.wav"
+            }
+        ]
+    },
+    {
+        "id": 27,
+        "title": "Album 27",
+        "imageSrc": "src/backend/database/picture/R-654483-1254398111-jpeg.jpg",
+        "songs": [
+            {
+                "id": "27_1",
+                "file": "pop.00084.wav"
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "title": "Album 28",
+        "imageSrc": "src/backend/database/picture/R-1233135-1262727989-jpeg.jpg",
+        "songs": [
+            {
+                "id": "28_1",
+                "file": "pop.00006.wav"
+            }
+        ]
+    },
+    {
+        "id": 29,
+        "title": "Album 29",
+        "imageSrc": "src/backend/database/picture/R-792143-1409343127-4409-jpeg.jpg",
+        "songs": [
+            {
+                "id": "29_1",
+                "file": "pop.00052.wav"
+            }
+        ]
+    },
+    {
+        "id": 30,
+        "title": "Album 30",
+        "imageSrc": "src/backend/database/picture/R-194021-1335400289-jpeg.jpg",
+        "songs": [
+            {
+                "id": "30_1",
+                "file": "pop.00086.wav"
+            }
+        ]
+    },
+    {
+        "id": 31,
+        "title": "Album 31",
+        "imageSrc": "src/backend/database/picture/R-2108805-1589229252-1950-jpeg.jpg",
+        "songs": [
+            {
+                "id": "31_1",
+                "file": "pop.00085.wav"
+            }
+        ]
+    },
+    {
+        "id": 32,
+        "title": "Album 32",
+        "imageSrc": "src/backend/database/picture/R-7752088-1448062969-3458-jpeg.jpg",
+        "songs": [
+            {
+                "id": "32_1",
+                "file": "pop.00028.wav"
+            }
+        ]
+    },
+    {
+        "id": 33,
+        "title": "Album 33",
+        "imageSrc": "src/backend/database/picture/R-163168-1616961080-5721-jpeg.jpg",
+        "songs": [
+            {
+                "id": "33_1",
+                "file": "pop.00046.wav"
+            }
+        ]
+    },
+    {
+        "id": 34,
+        "title": "Album 34",
+        "imageSrc": "src/backend/database/picture/R-2927291-1359557202-8030-jpeg.jpg",
+        "songs": [
+            {
+                "id": "34_1",
+                "file": "pop.00054.wav"
+            }
+        ]
+    },
+    {
+        "id": 35,
+        "title": "Album 35",
+        "imageSrc": "src/backend/database/picture/R-780895-1415493074-8332-jpeg.jpg",
+        "songs": [
+            {
+                "id": "35_1",
+                "file": "pop.00000.wav"
+            }
+        ]
+    },
+    {
+        "id": 36,
+        "title": "Album 36",
+        "imageSrc": "src/backend/database/picture/R-386005-1610873164-9153-jpeg.jpg",
+        "songs": [
+            {
+                "id": "36_1",
+                "file": "pop.00017.wav"
+            }
+        ]
+    },
+    {
+        "id": 37,
+        "title": "Album 37",
+        "imageSrc": "src/backend/database/picture/R-412429-1468170877-3069-jpeg.jpg",
+        "songs": [
+            {
+                "id": "37_1",
+                "file": "pop.00082.wav"
+            }
+        ]
+    },
+    {
+        "id": 38,
+        "title": "Album 38",
+        "imageSrc": "src/backend/database/picture/R-711523-1348834066-6668-jpeg.jpg",
+        "songs": [
+            {
+                "id": "38_1",
+                "file": "pop.00043.wav"
+            }
+        ]
+    },
+    {
+        "id": 39,
+        "title": "Album 39",
+        "imageSrc": "src/backend/database/picture/R-6855297-1428067843-4727-jpeg.jpg",
+        "songs": [
+            {
+                "id": "39_1",
+                "file": "pop.00093.wav"
+            }
+        ]
+    },
+    {
+        "id": 40,
+        "title": "Album 40",
+        "imageSrc": "src/backend/database/picture/R-3796450-1417902923-5466-jpeg.jpg",
+        "songs": [
+            {
+                "id": "40_1",
+                "file": "pop.00033.wav"
+            }
+        ]
+    },
+    {
+        "id": 41,
+        "title": "Album 41",
+        "imageSrc": "src/backend/database/picture/R-5433401-1517670284-7634-jpeg.jpg",
+        "songs": [
+            {
+                "id": "41_1",
+                "file": "pop.00079.wav"
+            }
+        ]
+    },
+    {
+        "id": 42,
+        "title": "Album 42",
+        "imageSrc": "src/backend/database/picture/R-568772-1616949023-7431-jpeg.jpg",
+        "songs": [
+            {
+                "id": "42_1",
+                "file": "pop.00059.wav"
+            }
+        ]
+    },
+    {
+        "id": 43,
+        "title": "Album 43",
+        "imageSrc": "src/backend/database/picture/R-16228065-1605880200-4301-jpeg.jpg",
+        "songs": [
+            {
+                "id": "43_1",
+                "file": "pop.00001.wav"
+            }
+        ]
+    },
+    {
+        "id": 44,
+        "title": "Album 44",
+        "imageSrc": "src/backend/database/picture/R-8932514-1471737119-5155-jpeg.jpg",
+        "songs": [
+            {
+                "id": "44_1",
+                "file": "pop.00023.wav"
+            }
+        ]
+    },
+    {
+        "id": 45,
+        "title": "Album 45",
+        "imageSrc": "src/backend/database/picture/R-440970-1532105184-8336-jpeg.jpg",
+        "songs": [
+            {
+                "id": "45_1",
+                "file": "pop.00002.wav"
+            }
+        ]
+    },
+    {
+        "id": 46,
+        "title": "Album 46",
+        "imageSrc": "src/backend/database/picture/R-13414611-1563295278-2426-jpeg.jpg",
+        "songs": [
+            {
+                "id": "46_1",
+                "file": "pop.00094.wav"
+            }
+        ]
+    },
+    {
+        "id": 47,
+        "title": "Album 47",
+        "imageSrc": "src/backend/database/picture/R-1078681-1330911516-jpeg.jpg",
+        "songs": [
+            {
+                "id": "47_1",
+                "file": "pop.00025.wav"
+            }
+        ]
+    },
+    {
+        "id": 48,
+        "title": "Album 48",
+        "imageSrc": "src/backend/database/picture/R-363044-1558120834-1440-jpeg.jpg",
+        "songs": [
+            {
+                "id": "48_1",
+                "file": "pop.00011.wav"
+            }
+        ]
+    },
+    {
+        "id": 49,
+        "title": "Album 49",
+        "imageSrc": "src/backend/database/picture/R-1107770-1542821879-5503-jpeg.jpg",
+        "songs": [
+            {
+                "id": "49_1",
+                "file": "pop.00049.wav"
+            }
+        ]
+    },
+    {
+        "id": 50,
+        "title": "Album 50",
+        "imageSrc": "src/backend/database/picture/R-1095076-1191665487-jpeg.jpg",
+        "songs": [
+            {
+                "id": "50_1",
+                "file": "pop.00095.wav"
+            }
+        ]
+    },
+    {
+        "id": 51,
+        "title": "Album 51",
+        "imageSrc": "src/backend/database/picture/R-5870290-1404987933-3232-jpeg.jpg",
+        "songs": [
+            {
+                "id": "51_1",
+                "file": "pop.00063.wav"
+            }
+        ]
+    },
+    {
+        "id": 52,
+        "title": "Album 52",
+        "imageSrc": "src/backend/database/picture/R-1766793-1292425272-jpeg.jpg",
+        "songs": [
+            {
+                "id": "52_1",
+                "file": "pop.00012.wav"
+            }
+        ]
+    },
+    {
+        "id": 53,
+        "title": "Album 53",
+        "imageSrc": "src/backend/database/picture/R-5540489-1632141289-7882-jpeg.jpg",
+        "songs": [
+            {
+                "id": "53_1",
+                "file": "pop.00019.wav"
+            }
+        ]
+    },
+    {
+        "id": 54,
+        "title": "Album 54",
+        "imageSrc": "src/backend/database/picture/R-15667831-1595586931-3013-jpeg.jpg",
+        "songs": [
+            {
+                "id": "54_1",
+                "file": "pop.00042.wav"
+            }
+        ]
+    },
+    {
+        "id": 55,
+        "title": "Album 55",
+        "imageSrc": "src/backend/database/picture/R-653078-1435461104-2918-jpeg.jpg",
+        "songs": [
+            {
+                "id": "55_1",
+                "file": "pop.00089.wav"
+            }
+        ]
+    },
+    {
+        "id": 56,
+        "title": "Album 56",
+        "imageSrc": "src/backend/database/picture/R-306331-1592101911-2408-jpeg.jpg",
+        "songs": [
+            {
+                "id": "56_1",
+                "file": "pop.00091.wav"
+            }
+        ]
+    },
+    {
+        "id": 57,
+        "title": "Album 57",
+        "imageSrc": "src/backend/database/picture/R-2546873-1512920036-1732-jpeg.jpg",
+        "songs": [
+            {
+                "id": "57_1",
+                "file": "pop.00014.wav"
+            }
+        ]
+    },
+    {
+        "id": 58,
+        "title": "Album 58",
+        "imageSrc": "src/backend/database/picture/R-766524-1156627339-jpeg.jpg",
+        "songs": [
+            {
+                "id": "58_1",
+                "file": "pop.00003.wav"
+            }
+        ]
+    },
+    {
+        "id": 59,
+        "title": "Album 59",
+        "imageSrc": "src/backend/database/picture/R-10589411-1533578036-6923-jpeg.jpg",
+        "songs": [
+            {
+                "id": "59_1",
+                "file": "pop.00056.wav"
+            }
+        ]
+    },
+    {
+        "id": 60,
+        "title": "Album 60",
+        "imageSrc": "src/backend/database/picture/R-2746635-1531619672-5829-jpeg.jpg",
+        "songs": [
+            {
+                "id": "60_1",
+                "file": "pop.00027.wav"
+            }
+        ]
+    },
+    {
+        "id": 61,
+        "title": "Album 61",
+        "imageSrc": "src/backend/database/picture/R-1901258-1624748278-9076-jpeg.jpg",
+        "songs": [
+            {
+                "id": "61_1",
+                "file": "pop.00090.wav"
+            }
+        ]
+    },
+    {
+        "id": 62,
+        "title": "Album 62",
+        "imageSrc": "src/backend/database/picture/R-522821-1540545424-7874-jpeg.jpg",
+        "songs": [
+            {
+                "id": "62_1",
+                "file": "pop.00088.wav"
+            }
+        ]
+    },
+    {
+        "id": 63,
+        "title": "Album 63",
+        "imageSrc": "src/backend/database/picture/R-6023931-1446633341-5764-jpeg.jpg",
+        "songs": [
+            {
+                "id": "63_1",
+                "file": "pop.00055.wav"
+            }
+        ]
+    },
+    {
+        "id": 64,
+        "title": "Album 64",
+        "imageSrc": "src/backend/database/picture/R-2405286-1513084501-7813-jpeg.jpg",
+        "songs": [
+            {
+                "id": "64_1",
+                "file": "pop.00068.wav"
+            }
+        ]
+    },
+    {
+        "id": 65,
+        "title": "Album 65",
+        "imageSrc": "src/backend/database/picture/R-8179039-1600996407-9403-jpeg.jpg",
+        "songs": [
+            {
+                "id": "65_1",
+                "file": "pop.00005.wav"
+            }
+        ]
+    },
+    {
+        "id": 66,
+        "title": "Album 66",
+        "imageSrc": "src/backend/database/picture/R-821155-1364648906-4723-jpeg.jpg",
+        "songs": [
+            {
+                "id": "66_1",
+                "file": "pop.00045.wav"
+            }
+        ]
+    },
+    {
+        "id": 67,
+        "title": "Album 67",
+        "imageSrc": "src/backend/database/picture/R-393208-1466990826-9745-jpeg.jpg",
+        "songs": [
+            {
+                "id": "67_1",
+                "file": "pop.00099.wav"
+            }
+        ]
+    },
+    {
+        "id": 68,
+        "title": "Album 68",
+        "imageSrc": "src/backend/database/picture/R-1013690-1226009830-jpeg.jpg",
+        "songs": [
+            {
+                "id": "68_1",
+                "file": "pop.00009.wav"
+            }
+        ]
+    },
+    {
+        "id": 69,
+        "title": "Album 69",
+        "imageSrc": "src/backend/database/picture/R-1466868-1439561444-5213-jpeg.jpg",
+        "songs": [
+            {
+                "id": "69_1",
+                "file": "pop.00060.wav"
+            }
+        ]
+    },
+    {
+        "id": 70,
+        "title": "Album 70",
+        "imageSrc": "src/backend/database/picture/R-164065-1627132085-2509-jpeg.jpg",
+        "songs": [
+            {
+                "id": "70_1",
+                "file": "pop.00066.wav"
+            }
+        ]
+    },
+    {
+        "id": 71,
+        "title": "Album 71",
+        "imageSrc": "src/backend/database/picture/R-4325562-1362002984-1759-jpeg.jpg",
+        "songs": [
+            {
+                "id": "71_1",
+                "file": "pop.00030.wav"
+            }
+        ]
+    },
+    {
+        "id": 72,
+        "title": "Album 72",
+        "imageSrc": "src/backend/database/picture/R-379789-1163899828-jpeg.jpg",
+        "songs": [
+            {
+                "id": "72_1",
+                "file": "pop.00015.wav"
+            }
+        ]
+    },
+    {
+        "id": 73,
+        "title": "Album 73",
+        "imageSrc": "src/backend/database/picture/R-1671969-1287351196-jpeg.jpg",
+        "songs": [
+            {
+                "id": "73_1",
+                "file": "pop.00080.wav"
+            }
+        ]
+    },
+    {
+        "id": 74,
+        "title": "Album 74",
+        "imageSrc": "src/backend/database/picture/R-1476698-1549059465-9784-jpeg.jpg",
+        "songs": [
+            {
+                "id": "74_1",
+                "file": "pop.00070.wav"
+            }
+        ]
+    },
+    {
+        "id": 75,
+        "title": "Album 75",
+        "imageSrc": "src/backend/database/picture/R-6348291-1417042662-7467-jpeg.jpg",
+        "songs": [
+            {
+                "id": "75_1",
+                "file": "pop.00038.wav"
+            }
+        ]
+    },
+    {
+        "id": 76,
+        "title": "Album 76",
+        "imageSrc": "src/backend/database/picture/R-1766814-1313533557-jpeg.jpg",
+        "songs": [
+            {
+                "id": "76_1",
+                "file": "pop.00007.wav"
+            }
+        ]
+    },
+    {
+        "id": 77,
+        "title": "Album 77",
+        "imageSrc": "src/backend/database/picture/R-6149924-1416094108-5787-jpeg.jpg",
+        "songs": [
+            {
+                "id": "77_1",
+                "file": "pop.00087.wav"
+            }
+        ]
+    },
+    {
+        "id": 78,
+        "title": "Album 78",
+        "imageSrc": "src/backend/database/picture/R-1876492-1587476784-2811-jpeg.jpg",
+        "songs": [
+            {
+                "id": "78_1",
+                "file": "pop.00050.wav"
+            }
+        ]
+    },
+    {
+        "id": 79,
+        "title": "Album 79",
+        "imageSrc": "src/backend/database/picture/R-993254-1507660096-9269-jpeg.jpg",
+        "songs": [
+            {
+                "id": "79_1",
+                "file": "pop.00062.wav"
+            }
+        ]
+    },
+    {
+        "id": 80,
+        "title": "Album 80",
+        "imageSrc": "src/backend/database/picture/R-671709-1301366698-jpeg.jpg",
+        "songs": [
+            {
+                "id": "80_1",
+                "file": "pop.00058.wav"
+            }
+        ]
+    },
+    {
+        "id": 81,
+        "title": "Album 81",
+        "imageSrc": "src/backend/database/picture/R-605068-1192614646-jpeg.jpg",
+        "songs": [
+            {
+                "id": "81_1",
+                "file": "pop.00072.wav"
+            }
+        ]
+    },
+    {
+        "id": 82,
+        "title": "Album 82",
+        "imageSrc": "src/backend/database/picture/R-7397335-1440616859-4189-jpeg.jpg",
+        "songs": [
+            {
+                "id": "82_1",
+                "file": "pop.00065.wav"
+            }
+        ]
+    },
+    {
+        "id": 83,
+        "title": "Album 83",
+        "imageSrc": "src/backend/database/picture/R-1300846-1208015716-jpeg.jpg",
+        "songs": [
+            {
+                "id": "83_1",
+                "file": "pop.00096.wav"
+            }
+        ]
+    },
+    {
+        "id": 84,
+        "title": "Album 84",
+        "imageSrc": "src/backend/database/picture/R-1113560-1542565589-3660-jpeg.jpg",
+        "songs": [
+            {
+                "id": "84_1",
+                "file": "pop.00081.wav"
+            }
+        ]
+    },
+    {
+        "id": 85,
+        "title": "Album 85",
+        "imageSrc": "src/backend/database/picture/R-588644-1537220503-8968-jpeg.jpg",
+        "songs": [
+            {
+                "id": "85_1",
+                "file": "pop.00010.wav"
+            }
+        ]
+    },
+    {
+        "id": 86,
+        "title": "Album 86",
+        "imageSrc": "src/backend/database/picture/R-667272-1383911286-7908-jpeg.jpg",
+        "songs": [
+            {
+                "id": "86_1",
+                "file": "pop.00029.wav"
+            }
+        ]
+    },
+    {
+        "id": 87,
+        "title": "Album 87",
+        "imageSrc": "src/backend/database/picture/R-1354479-1346387027-4774-jpeg.jpg",
+        "songs": [
+            {
+                "id": "87_1",
+                "file": "pop.00064.wav"
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "title": "Album 88",
+        "imageSrc": "src/backend/database/picture/R-5180946-1613258075-2396-jpeg.jpg",
+        "songs": [
+            {
+                "id": "88_1",
+                "file": "pop.00021.wav"
+            }
+        ]
+    },
+    {
+        "id": 89,
+        "title": "Album 89",
+        "imageSrc": "src/backend/database/picture/R-6449572-1517745187-5914-jpeg.jpg",
+        "songs": [
+            {
+                "id": "89_1",
+                "file": "pop.00076.wav"
+            }
+        ]
+    },
+    {
+        "id": 90,
+        "title": "Album 90",
+        "imageSrc": "src/backend/database/picture/R-3279555-1323689417-jpeg.jpg",
+        "songs": [
+            {
+                "id": "90_1",
+                "file": "pop.00074.wav"
+            }
+        ]
+    },
+    {
+        "id": 91,
+        "title": "Album 91",
+        "imageSrc": "src/backend/database/picture/R-20188231-1631312156-6390-jpeg.jpg",
+        "songs": [
+            {
+                "id": "91_1",
+                "file": "pop.00039.wav"
+            }
+        ]
+    },
+    {
+        "id": 92,
+        "title": "Album 92",
+        "imageSrc": "src/backend/database/picture/R-12704594-1547471870-9975-jpeg.jpg",
+        "songs": [
+            {
+                "id": "92_1",
+                "file": "pop.00013.wav"
+            }
+        ]
+    },
+    {
+        "id": 93,
+        "title": "Album 93",
+        "imageSrc": "src/backend/database/picture/R-1373614-1222691090-jpeg.jpg",
+        "songs": [
+            {
+                "id": "93_1",
+                "file": "pop.00067.wav"
+            }
+        ]
+    },
+    {
+        "id": 94,
+        "title": "Album 94",
+        "imageSrc": "src/backend/database/picture/R-2085604-1386812856-5311-jpeg.jpg",
+        "songs": [
+            {
+                "id": "94_1",
+                "file": "pop.00069.wav"
+            }
+        ]
+    },
+    {
+        "id": 95,
+        "title": "Album 95",
+        "imageSrc": "src/backend/database/picture/R-6029951-1425765229-2274-jpeg.jpg",
+        "songs": [
+            {
+                "id": "95_1",
+                "file": "pop.00037.wav"
+            }
+        ]
+    },
+    {
+        "id": 96,
+        "title": "Album 96",
+        "imageSrc": "src/backend/database/picture/R-2562581-1378719005-4584-jpeg.jpg",
+        "songs": [
+            {
+                "id": "96_1",
+                "file": "pop.00008.wav"
+            }
+        ]
+    },
+    {
+        "id": 97,
+        "title": "Album 97",
+        "imageSrc": "src/backend/database/picture/R-1302238-1604694512-7691-jpeg.jpg",
+        "songs": [
+            {
+                "id": "97_1",
+                "file": "pop.00032.wav"
+            }
+        ]
+    },
+    {
+        "id": 98,
+        "title": "Album 98",
+        "imageSrc": "src/backend/database/picture/R-4142558-1356726640-9434-jpeg.jpg",
+        "songs": [
+            {
+                "id": "98_1",
+                "file": "pop.00041.wav"
+            }
+        ]
+    },
+    {
+        "id": 99,
+        "title": "Album 99",
+        "imageSrc": "src/backend/database/picture/R-6981271-1513569493-5661-jpeg.jpg",
+        "songs": [
+            {
+                "id": "99_1",
+                "file": "pop.00047.wav"
+            }
+        ]
+    },
+    {
+        "id": 100,
+        "title": "Album 100",
+        "imageSrc": "src/backend/database/picture/R-642061-1142263910-jpeg.jpg",
+        "songs": [
+            {
+                "id": "100_1",
+                "file": "pop.00078.wav"
+            }
+        ]
+    },
+    {
+        "id": 101,
+        "title": "Album 101",
+        "imageSrc": "src/backend/database/picture/R-8524081-1463337325-2970-jpeg.jpg",
+        "songs": [
+            {
+                "id": "101_1",
+                "file": "pop.00035.wav"
+            }
+        ]
+    }
+]

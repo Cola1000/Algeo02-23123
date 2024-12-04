@@ -136,8 +136,8 @@ def load_database(dataset_path, midi_dataset_path):
 
 
 if __name__ == "__main__":
-    dataset_path = "/Users/Agung/Documents/wiwekaputera/ITB/semester-3/algeo/HatsuneMix-ue-/src/backend/database/audio"
-    midi_dataset_path = "/Users/Agung/Documents/wiwekaputera/ITB/semester-3/algeo/HatsuneMix-ue-/src/backend/database/midi_audio"
+    dataset_path = "src/backend/database/audio"
+    midi_dataset_path = "src/backend/database/midi_audio"
 
     # Load the database
     load_database(dataset_path, midi_dataset_path)
