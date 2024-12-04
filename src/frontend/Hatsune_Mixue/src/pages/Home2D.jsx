@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import albumPictures from "./albumPictures.jsx";
+import HillBackground from '../models/HillBackground.jsx';
 
 const Home2D = () => {
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ const Home2D = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center p-8">
+      <HillBackground />
       <section className="text-center">
         <h1 className="head-text text-cool-blue rounded-lg px-6 py-6 shadow-card">
           Hatsune Mixue
@@ -74,13 +76,13 @@ const Home2D = () => {
         <div className="flex flex-col sm:flex-row gap-5 mt-8 z-10 relative justify-center items-center">
           <button
             onClick={handleAlbumRecognizer}
-            className="btn shadow-md hover:shadow-lg"
+            className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center"
           >
             Album Picture Recognizer
           </button>
           <button
             onClick={handleAudioRecognizer}
-            className="btn shadow-md hover:shadow-lg"
+            className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center"
           >
             Audio Recognizer
           </button>
@@ -146,7 +148,7 @@ const Home2D = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="mx-2 px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50"
             >
               Previous
             </button>
@@ -156,7 +158,7 @@ const Home2D = () => {
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
               disabled={currentPage === totalPages}
-              className="mx-2 px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50"
             >
               Next
             </button>
