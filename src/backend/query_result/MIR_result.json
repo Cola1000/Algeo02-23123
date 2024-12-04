@@ -1,0 +1,35 @@
+[
+    {
+        "similarity_rank": 1,
+        "similarity_score": 1.0,
+        "id": 235,
+        "title": "Album 235",
+        "imageSrc": "src/backend/database/picture/R-440970-1532105184-8336-jpeg.jpg",
+        "song": {
+            "id": "235_1",
+            "file": "pop.00099.wav"
+        }
+    },
+    {
+        "similarity_rank": 2,
+        "similarity_score": 0.7801,
+        "id": 478,
+        "title": "Album 478",
+        "imageSrc": "src/backend/database/picture/R-427699-1427628697-2401-jpeg.jpg",
+        "song": {
+            "id": "478_1",
+            "file": "pop.00030.wav"
+        }
+    },
+    {
+        "similarity_rank": 3,
+        "similarity_score": 0.7583,
+        "id": 253,
+        "title": "Album 253",
+        "imageSrc": "src/backend/database/picture/R-939627-1511360646-8117-jpeg.jpg",
+        "song": {
+            "id": "253_1",
+            "file": "pop.00031.wav"
+        }
+    }
+]

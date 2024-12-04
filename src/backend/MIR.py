@@ -2,12 +2,15 @@ import os
 import numpy as np
 import shutil
 from music21 import converter
-from backend.utils.convert_audio_to_midi import convert_audio_to_midi
+from utils.convert_audio_to_midi import convert_audio_to_midi
 import json
 
-# Constants for MIDI note range
-MIDI_MIN = 0
-MIDI_MAX = 127
+# ====================================================================================
+# Constants
+# ====================================================================================
+
+SIMILARITY_THRESHOLD = 0.75  # Minimum similarity score to consider a match
+MIR_RESULT_JSON = "src/backend/query_result/MIR_result.json"
 
 # ====================================================================================
 # Step 1: Audio Processing
@@ -98,20 +101,18 @@ def extract_features(notes):
         return np.zeros(128), np.zeros(255), np.zeros(255)
 
     # Absolute Tone Based (ATB)
-    atb = np.histogram(notes, bins=range(MIDI_MIN, MIDI_MAX + 2), density=True)[0]
+    atb = np.histogram(notes, bins=range(0, 128 + 1), density=True)[0]
 
     # Relative Tone Based (RTB)
     intervals = np.diff(notes)  # Differences between consecutive notes
     if intervals.size == 0:
         intervals = [0]  # Handle single-note case
-    rtb = np.histogram(intervals, bins=range(-MIDI_MAX, MIDI_MAX + 2), density=True)[0]
+    rtb = np.histogram(intervals, bins=range(-127, 128 + 1), density=True)[0]
 
     # First Tone Based (FTB)
     first_note = notes[0]
     ftb_intervals = [note - first_note for note in notes]
-    ftb = np.histogram(
-        ftb_intervals, bins=range(-MIDI_MAX, MIDI_MAX + 2), density=True
-    )[0]
+    ftb = np.histogram(ftb_intervals, bins=range(-127, 128 + 1), density=True)[0]
     return atb, rtb, ftb
 
 
@@ -165,11 +166,11 @@ def calculate_similarity(query_features, database_features):
 
 
 # ====================================================================================
-# Overall Process Function: Query by Humming
+# Step 4: Similarity Calculation and Matching
 # ====================================================================================
 
 
-def query_by_humming(query_audio_file, database_files, threshold=0.8):
+def query_by_humming(query_audio_file, database_files, threshold=SIMILARITY_THRESHOLD):
     """
     Perform query by humming to find matching MIDI files in the database.
 
@@ -221,13 +222,18 @@ def query_by_humming(query_audio_file, database_files, threshold=0.8):
 
 def save_matches(matches, mapper, result_dir="test/result"):
     """
-    Save the matched audio files and album images to the result directory.
+    Save the matched audio files and album images to the result directory,
+    and save the matched information with similarity scores to MIR_result.json.
 
     Parameters:
         matches (list): A list of tuples containing matched file paths and their similarity scores.
         mapper (list): The data mapper containing metadata of songs and albums.
         result_dir (str): The directory to save the result audio and pictures.
     """
+    if not matches:
+        print("No matches to save.")
+        return
+
     # Prepare result directories
     result_audio_dir = os.path.join(result_dir, "audio")
     result_picture_dir = os.path.join(result_dir, "picture")
@@ -241,49 +247,86 @@ def save_matches(matches, mapper, result_dir="test/result"):
             try:
                 if os.path.isfile(file_path) or os.path.islink(file_path):
                     os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
             except Exception as e:
                 print(f"Error deleting file {file_path}: {e}")
 
-    # Copy matched audio files and album images to the result directories
-    for rank, (match, similarity) in enumerate(matches, start=1):
-        # Find the corresponding audio file and image from the mapper
-        found = False
+    # Prepare list for MIR_result.json
+    mir_results = []
+    similarity_rank = 1
+
+    for match, similarity in matches:
+        # Find the corresponding album and song from the mapper
+        match_found = False
         for album in mapper:
             for song in album["songs"]:
-                # Match the song file name without extension
-                if (
-                    song["file"].rsplit(".", 1)[0]
-                    == os.path.basename(match).rsplit(".", 1)[0]
-                ):
+                song_basename = os.path.basename(song["file"]).rsplit(".", 1)[0]
+                match_basename = os.path.basename(match).rsplit(".", 1)[0]
+                if song_basename == match_basename:
                     # Copy the audio file
                     audio_file_path = os.path.join(
                         "src/backend/database/audio", song["file"]
                     )
                     destination_audio_path = os.path.join(
-                        result_audio_dir, f"{rank}_{os.path.basename(song['file'])}"
+                        result_audio_dir,
+                        f"{similarity_rank}_{os.path.basename(song['file'])}",
                     )
-                    if os.path.exists(audio_file_path):
+                    try:
                         shutil.copy(audio_file_path, destination_audio_path)
-                    else:
-                        print(f"Audio file {audio_file_path} not found.")
+                        print(f"Copied {audio_file_path} to {destination_audio_path}")
+                    except Exception as e:
+                        print(f"Error copying audio file {audio_file_path}: {e}")
+                        continue  # Skip to next if copying fails
 
                     # Copy the album image
                     image_src = album["imageSrc"]
                     destination_image_path = os.path.join(
-                        result_picture_dir, f"{rank}.jpg"
+                        result_picture_dir, f"{similarity_rank}.jpg"
                     )
-                    if os.path.exists(image_src):
+                    try:
                         shutil.copy(image_src, destination_image_path)
-                    else:
-                        print(f"Image file {image_src} not found.")
-                    found = True
-                    break
-            if found:
-                break
+                        print(f"Copied {image_src} to {destination_image_path}")
+                    except Exception as e:
+                        print(f"Error copying image {image_src}: {e}")
+                        continue  # Skip to next if copying fails
+
+                    # Prepare MIR_result.json entry
+                    mir_entry = {
+                        "similarity_rank": similarity_rank,
+                        "similarity_score": round(similarity, 4),
+                        "id": album["id"],
+                        "title": album["title"],
+                        "imageSrc": image_src,
+                        "song": song,
+                    }
+                    mir_results.append(mir_entry)
+                    match_found = True
+                    break  # Assuming one song per MIDI file
+            if match_found:
+                break  # Move to next match
+
+        if not match_found:
+            print(f"No matching album/song found for MIDI file {match}")
+            continue
+
+        similarity_rank += 1
+
+    # Save MIR_result.json
+    mir_result_path = MIR_RESULT_JSON
+    try:
+        os.makedirs(os.path.dirname(mir_result_path), exist_ok=True)
+        with open(mir_result_path, "w") as f:
+            json.dump(mir_results, f, indent=4)
+        print(f"Saved MIR_result.json to {mir_result_path}")
+    except Exception as e:
+        print(f"Error saving MIR_result.json: {e}")
+
+    return mir_results  # Return the list of matched results
 
 
 # ====================================================================================
-# Utils: Convert Dataset to MIDI
+# Step 6: Utils - Convert Dataset to MIDI
 # ====================================================================================
 
 
@@ -329,12 +372,16 @@ def main():
     mapper_file = "src/backend/database/mapper_all_img.json"
 
     # Load the mapper (metadata of songs and albums)
-    with open(mapper_file, "r") as f:
-        mapper = json.load(f)
+    try:
+        with open(mapper_file, "r") as f:
+            mapper = json.load(f)
+    except Exception as e:
+        print(f"Error loading mapper file {mapper_file}: {e}")
+        return
 
     # Convert the dataset to MIDI files (only if new audio files are added)
-    # Uncomment the following line to convert all audio files in the dataset to MIDI
-    # convert_dataset_to_midi(dataset_path, midi_dataset_path)
+    print("Converting dataset audio files to MIDI...")
+    convert_dataset_to_midi(dataset_path, midi_dataset_path)
 
     # Get the list of MIDI files for querying
     database_files = [
@@ -353,17 +400,24 @@ def main():
     print(f"Loaded {len(database_files)} MIDI files for querying.")
 
     # Perform query by humming
-    matches = query_by_humming(query_audio_file, database_files, threshold=0.95)
+    print("Processing query audio and retrieving similar MIDI files...\n")
+    matches = query_by_humming(
+        query_audio_file, database_files, threshold=SIMILARITY_THRESHOLD
+    )
 
-    # Save the matches to the result directories
-    save_matches(matches, mapper, result_dir=result_dir)
+    # Save the matches to the result directories and MIR_result.json
+    mir_results = save_matches(matches, mapper, result_dir=result_dir)
 
     # Print the matches
-    if matches:
-        for match, similarity in matches:
-            print(f"Match: {os.path.basename(match)} with similarity: {similarity:.4f}")
+    if mir_results:
+        # Print the matched MIDI paths above SIMILARITY_THRESHOLD
+        print(f"\nMatched MIDI Files (Similarity >= {SIMILARITY_THRESHOLD}):")
+        for entry in mir_results:
+            print(
+                f"Rank {entry['similarity_rank']}: {entry['song']['file']} (Similarity: {entry['similarity_score']})"
+            )
     else:
-        print("No matches found.")
+        print(f"No matches found with similarity score >= {SIMILARITY_THRESHOLD}.")
 
 
 if __name__ == "__main__":

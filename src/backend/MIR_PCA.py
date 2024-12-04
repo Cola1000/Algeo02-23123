@@ -2,10 +2,16 @@ import os
 import numpy as np
 import shutil
 from music21 import converter
-from backend.utils.convert_audio_to_midi import convert_audio_to_midi
+from utils.convert_audio_to_midi import convert_audio_to_midi
 import json
 
+# ====================================================================================
 # Constants
+# ====================================================================================
+
+SIMILARITY_THRESHOLD = 0.75  # Minimum similarity score to consider a match
+MIR_RESULT_JSON = "src/backend/query_result/MIR_result.json"
+
 MIDI_MIN = 0
 MIDI_MAX = 127
 N_COMPONENTS = 20  # Number of principal components for PCA
@@ -183,116 +189,7 @@ def calculate_similarity(query_features, database_features):
 
 
 # ====================================================================================
-# Additional Utility Functions
-# ====================================================================================
-
-
-def save_matches(matches, mapper, result_dir):
-    """
-    Save the matched audio files and album images to the result directory.
-    """
-    result_audio_dir = os.path.join(result_dir, "audio")
-    result_picture_dir = os.path.join(result_dir, "picture")
-    os.makedirs(result_audio_dir, exist_ok=True)
-    os.makedirs(result_picture_dir, exist_ok=True)
-
-    # Empty the destination folders before saving new files
-    for folder in [result_audio_dir, result_picture_dir]:
-        for filename in os.listdir(folder):
-            file_path = os.path.join(folder, filename)
-            try:
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
-            except Exception as e:
-                print(f"Error deleting file {file_path}: {e}")
-
-    for rank, (match, similarity) in enumerate(matches, start=1):
-        # Find the corresponding audio file and image
-        found = False
-        for album in mapper:
-            for song in album["songs"]:
-                if (
-                    song["file"].rsplit(".", 1)[0]
-                    == os.path.basename(match).rsplit(".", 1)[0]
-                ):
-                    audio_file_path = os.path.join(
-                        "src/backend/database/audio", song["file"]
-                    )
-                    if not os.path.exists(audio_file_path):
-                        print(f"Audio file {audio_file_path} does not exist.")
-                        continue
-                    destination_audio_path = os.path.join(
-                        result_audio_dir, f"{rank}_{os.path.basename(song['file'])}"
-                    )
-                    shutil.copy(audio_file_path, destination_audio_path)
-                    print(f"Copied {audio_file_path} to {destination_audio_path}")
-
-                    # Save the corresponding album image
-                    image_src = album["imageSrc"]
-                    if not os.path.exists(image_src):
-                        print(f"Image file {image_src} does not exist.")
-                        continue
-                    destination_image_path = os.path.join(
-                        result_picture_dir, f"{rank}.jpg"
-                    )
-                    shutil.copy(image_src, destination_image_path)
-                    print(f"Copied {image_src} to {destination_image_path}")
-                    found = True
-                    break  # Exit the inner loop if match is found
-            if found:
-                break  # Exit the outer loop if match is found
-
-
-def convert_dataset_to_midi(dataset_path, midi_dataset_path):
-    """
-    Convert all audio files in the dataset to MIDI and save them in the MIDI dataset path.
-    This function should be called only when a new dataset is added.
-    """
-    os.makedirs(midi_dataset_path, exist_ok=True)
-    for audio_file in os.listdir(dataset_path):
-        if audio_file.endswith((".wav", ".mp3", ".flac", ".ogg")):
-            audio_file_path = os.path.join(dataset_path, audio_file)
-            midi_file_name = audio_file.rsplit(".", 1)[0] + ".mid"
-            midi_file_path = os.path.join(midi_dataset_path, midi_file_name)
-            if os.path.exists(midi_file_path):
-                print(
-                    f"MIDI file already exists for {audio_file_path}, skipping conversion."
-                )
-                continue
-            try:
-                convert_audio_to_midi(audio_file_path, midi_file_path)
-                print(f"Converted {audio_file_path} to {midi_file_path}")
-            except Exception as e:
-                print(f"Error converting {audio_file_path} to MIDI: {e}")
-
-
-def load_pca_model(midi_dataset_path):
-    """
-    Load and fit PCA model based on the database MIDI files.
-    Returns the fitted PCA model.
-    """
-    all_features = []
-    for midi_file in os.listdir(midi_dataset_path):
-        if midi_file.endswith(".mid"):
-            midi_file_path = os.path.join(midi_dataset_path, midi_file)
-            notes = process_midi_file(midi_file_path)
-            normalized_notes = normalize_notes(notes)
-            atb, rtb, ftb = extract_features(normalized_notes)
-            combined_features = np.concatenate([atb, rtb, ftb])  # Total 638 features
-            if combined_features.size != 0:
-                all_features.append(combined_features)
-
-    if not all_features:
-        print("No features extracted from MIDI files. PCA cannot be applied.")
-        return None
-
-    all_features = np.array(all_features)
-    pca_model = fit_pca_model(all_features)
-    return pca_model
-
-
-# ====================================================================================
-# Overall Process Function: Query by Humming
+# Step 4: Similarity Calculation and Matching
 # ====================================================================================
 
 
@@ -301,7 +198,7 @@ def query_by_humming(
     database_files,
     mapper,
     pca_model,
-    threshold=0.8,
+    threshold=SIMILARITY_THRESHOLD,
     result_dir="test/result",
 ):
     """
@@ -375,10 +272,172 @@ def query_by_humming(
     ]
     matches.sort(key=lambda x: x[1], reverse=True)
 
-    # Save matches to result directories
-    save_matches(matches, mapper, result_dir)
+    # Save matches to result directories and JSON
+    mir_results = save_matches(matches, mapper, result_dir)
 
-    return matches
+    return mir_results
+
+
+# ====================================================================================
+# Step 5: Save Matches
+# ====================================================================================
+
+
+def save_matches(matches, mapper, result_dir):
+    """
+    Save the matched audio files and album images to the result directory,
+    and save the matched information with similarity scores to MIR_result.json.
+    """
+    if not matches:
+        print("No matches to save.")
+        return []
+
+    # Prepare result directories
+    result_audio_dir = os.path.join(result_dir, "audio")
+    result_picture_dir = os.path.join(result_dir, "picture")
+    os.makedirs(result_audio_dir, exist_ok=True)
+    os.makedirs(result_picture_dir, exist_ok=True)
+
+    # Remove existing contents to ensure purity
+    for folder in [result_audio_dir, result_picture_dir]:
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
+
+    # Prepare list for MIR_result.json
+    mir_results = []
+    similarity_rank = 1
+
+    for match, similarity in matches:
+        # Find the corresponding album and song from the mapper
+        match_found = False
+        for album in mapper:
+            for song in album["songs"]:
+                song_basename = os.path.basename(song["file"]).rsplit(".", 1)[0]
+                match_basename = os.path.basename(match).rsplit(".", 1)[0]
+                if song_basename == match_basename:
+                    # Copy the audio file
+                    audio_file_path = os.path.join(
+                        "src/backend/database/audio", song["file"]
+                    )
+                    destination_audio_path = os.path.join(
+                        result_audio_dir,
+                        f"{similarity_rank}_{os.path.basename(song['file'])}",
+                    )
+                    try:
+                        shutil.copy(audio_file_path, destination_audio_path)
+                        print(f"Copied {audio_file_path} to {destination_audio_path}")
+                    except Exception as e:
+                        print(f"Error copying audio file {audio_file_path}: {e}")
+                        continue  # Skip to next if copying fails
+
+                    # Copy the album image
+                    image_src = album["imageSrc"]
+                    destination_image_path = os.path.join(
+                        result_picture_dir, f"{similarity_rank}.jpg"
+                    )
+                    try:
+                        shutil.copy(image_src, destination_image_path)
+                        print(f"Copied {image_src} to {destination_image_path}")
+                    except Exception as e:
+                        print(f"Error copying image {image_src}: {e}")
+                        continue  # Skip to next if copying fails
+
+                    # Prepare MIR_result.json entry
+                    mir_entry = {
+                        "similarity_rank": similarity_rank,
+                        "similarity_score": round(similarity, 4),
+                        "id": album["id"],
+                        "title": album["title"],
+                        "imageSrc": image_src,
+                        "song": song,
+                    }
+                    mir_results.append(mir_entry)
+                    match_found = True
+                    break  # Exit the inner loop if match is found
+            if match_found:
+                break  # Exit the outer loop if match is found
+
+        if not match_found:
+            print(f"No matching album/song found for MIDI file {match}")
+            continue
+
+        similarity_rank += 1
+
+    # Save MIR_result.json
+    try:
+        os.makedirs(os.path.dirname(MIR_RESULT_JSON), exist_ok=True)
+        with open(MIR_RESULT_JSON, "w") as f:
+            json.dump(mir_results, f, indent=4)
+        print(f"Saved MIR_result.json to {MIR_RESULT_JSON}")
+    except Exception as e:
+        print(f"Error saving MIR_result.json: {e}")
+
+    return mir_results  # Return the list of matched results
+
+
+# ====================================================================================
+# Step 6: Utils - Convert Dataset to MIDI
+# ====================================================================================
+
+
+def convert_dataset_to_midi(dataset_path, midi_dataset_path):
+    """
+    Convert all audio files in the dataset to MIDI and save them in the MIDI dataset path.
+    This function should be called only when a new dataset is added.
+    """
+    os.makedirs(midi_dataset_path, exist_ok=True)
+    for audio_file in os.listdir(dataset_path):
+        if audio_file.endswith((".wav", ".mp3", ".flac", ".ogg")):
+            audio_file_path = os.path.join(dataset_path, audio_file)
+            midi_file_name = audio_file.rsplit(".", 1)[0] + ".mid"
+            midi_file_path = os.path.join(midi_dataset_path, midi_file_name)
+            if os.path.exists(midi_file_path):
+                print(
+                    f"MIDI file already exists for {audio_file_path}, skipping conversion."
+                )
+                continue
+            try:
+                convert_audio_to_midi(audio_file_path, midi_file_path)
+                print(f"Converted {audio_file_path} to {midi_file_path}")
+            except Exception as e:
+                print(f"Error converting {audio_file_path} to MIDI: {e}")
+
+
+# ====================================================================================
+# Step 7: Load and Fit PCA Model
+# ====================================================================================
+
+
+def load_pca_model(midi_dataset_path):
+    """
+    Load and fit PCA model based on the database MIDI files.
+    Returns the fitted PCA model.
+    """
+    all_features = []
+    for midi_file in os.listdir(midi_dataset_path):
+        if midi_file.endswith(".mid"):
+            midi_file_path = os.path.join(midi_dataset_path, midi_file)
+            notes = process_midi_file(midi_file_path)
+            normalized_notes = normalize_notes(notes)
+            atb, rtb, ftb = extract_features(normalized_notes)
+            combined_features = np.concatenate([atb, rtb, ftb])  # Total 638 features
+            if combined_features.size != 0:
+                all_features.append(combined_features)
+
+    if not all_features:
+        print("No features extracted from MIDI files. PCA cannot be applied.")
+        return None
+
+    all_features = np.array(all_features)
+    pca_model = fit_pca_model(all_features)
+    return pca_model
 
 
 # ====================================================================================
@@ -389,7 +448,7 @@ def query_by_humming(
 def main():
     dataset_path = "src/backend/database/audio"
     midi_dataset_path = "src/backend/database/midi_audio"
-    query_audio_file = "test/query/audio/Cogitation of Epochs.mp3"
+    query_audio_file = "test/query/audio/pop.00099.wav"
     result_dir = "test/result"
     mapper_file = "src/backend/database/mapper_all_img.json"
 
@@ -402,8 +461,8 @@ def main():
         return
 
     # Convert dataset to MIDI (only if needed)
-    # Uncomment the following line when adding a new dataset
-    # convert_dataset_to_midi(dataset_path, midi_dataset_path)
+    print("Converting dataset audio files to MIDI...")
+    convert_dataset_to_midi(dataset_path, midi_dataset_path)
 
     # Ensure MIDI dataset directory exists
     if not os.path.exists(midi_dataset_path):
@@ -435,22 +494,25 @@ def main():
         return
 
     # Perform query by humming
-    matches = query_by_humming(
+    print("Processing query audio and retrieving similar MIDI files...\n")
+    mir_results = query_by_humming(
         query_audio_file,
         database_files,
         mapper,
         pca_model,
-        threshold=0.85,
+        threshold=SIMILARITY_THRESHOLD,
         result_dir=result_dir,
     )
 
     # Print the matches
-    if matches:
-        print("\nTop Matches:")
-        for match, similarity in matches:
-            print(f"Match: {match} with similarity: {similarity:.4f}")
+    if mir_results:
+        print(f"\nMatched MIDI Files (Similarity >= {SIMILARITY_THRESHOLD}):")
+        for entry in mir_results:
+            print(
+                f"Rank {entry['similarity_rank']}: {entry['song']['file']} (Similarity: {entry['similarity_score']})"
+            )
     else:
-        print("No matches found.")
+        print(f"No matches found with similarity score >= {SIMILARITY_THRESHOLD}.")
 
 
 if __name__ == "__main__":
