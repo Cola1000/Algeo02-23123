@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import shutil
 from music21 import converter
 from convert_audio_to_midi import convert_audio_to_midi
 
@@ -111,7 +112,7 @@ def query_by_humming(
     os.makedirs(result_dir, exist_ok=True)
     for rank, (match, similarity) in enumerate(matches, start=1):
         match_filename = os.path.join(result_dir, f"{rank}.mid")
-        os.rename(match, match_filename)
+        shutil.copy(match, match_filename)
 
     return matches
 
@@ -120,41 +121,46 @@ def load_database(dataset_path, midi_dataset_path):
     """
     Load the audio files from the dataset, convert them to MIDI, and save them in the MIDI dataset path.
     """
-    for genre_folder in os.listdir(dataset_path):
-        genre_folder_path = os.path.join(dataset_path, genre_folder)
-        if not os.path.isdir(genre_folder_path):
-            continue
-        midi_genre_folder_path = os.path.join(midi_dataset_path, genre_folder)
-        os.makedirs(midi_genre_folder_path, exist_ok=True)
-        for audio_file in os.listdir(genre_folder_path):
-            if audio_file.endswith((".wav", ".mp3", ".flac", ".ogg")):
-                audio_file_path = os.path.join(genre_folder_path, audio_file)
-                midi_file_path = os.path.join(
-                    midi_genre_folder_path, audio_file.rsplit(".", 1)[0] + ".mid"
-                )
-                convert_audio_to_midi(audio_file_path, midi_file_path)
+    for audio_file in os.listdir(dataset_path):
+        if audio_file.endswith((".wav", ".mp3", ".flac", ".ogg")):
+            audio_file_path = os.path.join(dataset_path, audio_file)
+            midi_file_path = os.path.join(
+                midi_dataset_path, audio_file.rsplit(".", 1)[0] + ".mid"
+            )
+            convert_audio_to_midi(audio_file_path, midi_file_path)
 
 
-if __name__ == "__main__":
+def main():
     dataset_path = "src/backend/database/audio"
     midi_dataset_path = "src/backend/database/midi_audio"
+    query_audio_file = "test/query/audio/Cogitation of Epochs_trimmed.mp3"
+    result_dir = "test/result/audio"
 
     # Load the database
     load_database(dataset_path, midi_dataset_path)
 
     # List of MIDI files for querying
     database_files = [
-        os.path.join(dp, f)
-        for dp, dn, filenames in os.walk(midi_dataset_path)
-        for f in filenames
+        os.path.join(midi_dataset_path, f)
+        for f in os.listdir(midi_dataset_path)
         if f.endswith(".mid")
     ]
 
-    query_audio_file = "test/query/audio/Cogitation of Epochs_trimmed.mp3"
+    # Debug print to check loaded MIDI files
+    print(f"Loaded {len(database_files)} MIDI files for querying.")
 
     # Perform query by humming
-    matches = query_by_humming(query_audio_file, database_files, threshold=0.95)
+    matches = query_by_humming(
+        query_audio_file, database_files, threshold=0.95, result_dir=result_dir
+    )
 
     # Print the matches
-    for match, similarity in matches:
-        print(f"Match: {match} with similarity: {similarity}")
+    if matches:
+        for match, similarity in matches:
+            print(f"Match: {match} with similarity: {similarity}")
+    else:
+        print("No matches found.")
+
+
+if __name__ == "__main__":
+    main()
