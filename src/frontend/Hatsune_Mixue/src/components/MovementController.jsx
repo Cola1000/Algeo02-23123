@@ -1,4 +1,3 @@
-// MovementController.jsx
 import React, { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from 'three';
@@ -6,8 +5,8 @@ import * as THREE from 'three';
 const MovementController = ({ cameraRef }) => {
   const velocity = useRef({ x: 0, z: 0 });
   const direction = useRef({ yaw: 0, pitch: 0 });
-  const speed = 0.03;
-  const rotationSpeed = 0.002;
+  const speed = 0.1;
+  const rotationSpeed = 0.005;
 
   useEffect(() => {
     const onKeyDown = (e) => {

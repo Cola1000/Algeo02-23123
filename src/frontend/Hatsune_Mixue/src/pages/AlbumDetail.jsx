@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import albumPictures from './albumPictures.jsx';
+import albumPictures from '../components/albumPictures.jsx';
 
 const AlbumDetail = () => {
   const { albumId } = useParams();
