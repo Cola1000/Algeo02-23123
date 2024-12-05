@@ -294,7 +294,7 @@ def save_matches(matches, mapper, result_dir="test/result"):
                     # Prepare MIR_result.json entry
                     mir_entry = {
                         "similarity_rank": similarity_rank,
-                        "similarity_score": round(similarity, 4),
+                        "similarity_percentage": round(similarity, 4),
                         "id": album["id"],
                         "title": album["title"],
                         "imageSrc": image_src,
@@ -414,7 +414,7 @@ def main():
         print(f"\nMatched MIDI Files (Similarity >= {SIMILARITY_THRESHOLD}):")
         for entry in mir_results:
             print(
-                f"Rank {entry['similarity_rank']}: {entry['song']['file']} (Similarity: {entry['similarity_score']})"
+                f"Rank {entry['similarity_rank']}: {entry['song']['file']} (Similarity: {entry['similarity_percentage']})"
             )
     else:
         print(f"No matches found with similarity score >= {SIMILARITY_THRESHOLD}.")
