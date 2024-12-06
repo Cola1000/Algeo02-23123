@@ -42,7 +42,7 @@ const Home3D = () => {
     <div style={{ width: '100vw', height: '100vh', position: 'absolute' }}>
       <Canvas shadows>
         <Suspense fallback={null}>
-          {/* <Environment files={hdri} background={true} /> */}
+          <Environment files={hdri} background={true} />
           <PerspectiveCamera ref={cameraRef} makeDefault position={[-3, 1.5, 3]} rotation={[0, Math.PI, 0]} />
           <hemisphereLight intensity={0.5}/>
           <ambientLight intensity={0} />

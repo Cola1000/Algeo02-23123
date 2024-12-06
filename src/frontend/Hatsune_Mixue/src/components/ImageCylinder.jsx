@@ -9,14 +9,14 @@ function ImageCylinder({ images }) {
 
   useFrame(() => {
     if (ref.current) {
-      ref.current.rotation.y += 0.01; // Adjust speed as needed
+      ref.current.rotation.y += 0.001; // Adjust speed
     }
   });
 
   const maxImages = 50;
   const imagesToShow = Math.min(images.length, maxImages);
   const angleStep = (2 * Math.PI) / imagesToShow;
-  const radius = 15; //Radius of Encirclement
+  const radius = 10; //Radius of Encirclement
 
   return (
     <group ref={ref}>
@@ -28,7 +28,7 @@ function ImageCylinder({ images }) {
           <mesh
             key={i}
             position={[x, 3, z]}
-            rotation={[0, -angle + Math.PI / 2, 0]}
+            rotation={[0, angle - Math.PI / 2, 0]}
           >
             <planeGeometry args={[2, 2]} />
             <meshBasicMaterial map={texture} side={THREE.DoubleSide} />
