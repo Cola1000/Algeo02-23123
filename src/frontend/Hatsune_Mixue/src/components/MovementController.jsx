@@ -1,12 +1,20 @@
 import React, { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useSphere } from "@react-three/cannon";
 import * as THREE from 'three';
 
 const MovementController = ({ cameraRef }) => {
   const velocity = useRef({ x: 0, z: 0 });
   const direction = useRef({ yaw: 0, pitch: 0 });
-  const speed = 0.1;
-  const rotationSpeed = 0.005;
+  const speed = 0.02;
+  const rotationSpeed = 0.0025;
+
+  // const [ref, api] = useSphere(() => ({
+  //   mass: 1,
+  //   position: [0, 1, 5],
+  //   args: 1,
+  //   type: "Dynamic",
+  // }));
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -65,12 +73,23 @@ const MovementController = ({ cameraRef }) => {
         cameraRef.current.quaternion
       );
 
+      // //Gravity
+      // const force = new THREE.Vector3();
+      // force.addScaledVector(forward, velocity.current.z);
+      // force.addScaledVector(rightMovement, velocity.current.x);
+      // api.velocity.set(force.x, api.velocity.current[1], force.z);
+
       cameraRef.current.position.addScaledVector(forward, velocity.current.z);
       cameraRef.current.position.addScaledVector(rightMovement, velocity.current.x);
     }
   });
 
-  return null;
+  return ( null
+    // <mesh ref={ref}>
+    //   <sphereBufferGeometry args={[1, 32, 32]} />
+    //   <meshStandardMaterial transparent opacity={0} />
+    // </mesh>
+  );
 };
 
 export default MovementController;

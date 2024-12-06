@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
-import albumPictures from "./albumPictures.jsx";
+import albumPictures from "../components/albumPictures.jsx";
 import HillBackground from '../models/HillBackground.jsx';
 
 const Home2D = () => {
