@@ -1,63 +1,56 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import * as THREE from 'three';
-import { Canvas, useLoader } from '@react-three/fiber';
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import albumPictures from './albumPictures';
 
 function ImageCylinder({ images }) {
-    const ref = useRef();
-    const textures = useLoader(THREE.TextureLoader, images.map(img => img.imageSrc));
+  const ref = useRef();
+  const textures = useLoader(THREE.TextureLoader, images.map(img => img.imageSrc));
 
-    useFrame(() => {
-        ref.current.rotation.y += 0.001; // Adjust speed as needed
-    });
+  useFrame(() => {
+    if (ref.current) {
+      ref.current.rotation.y += 0.01; // Adjust speed as needed
+    }
+  });
 
-    const maxImages = 50;
-    const imagesToShow = Math.min(images.length, maxImages);
-    const angleStep = (2 * Math.PI) / imagesToShow;
-    const radius = 5;
+  const maxImages = 50;
+  const imagesToShow = Math.min(images.length, maxImages);
+  const angleStep = (2 * Math.PI) / imagesToShow;
+  const radius = 15; //Radius of Encirclement
 
-    return (
-        <group ref={ref}>
-        {textures.slice(0, imagesToShow).map((texture, i) => {
-            const angle = angleStep * i;
-            const x = Math.cos(angle) * radius;
-            const z = Math.sin(angle) * radius;
-            return (
-            <mesh
-                key={i}
-                position={[x, 0, z]}
-                rotation={[0, -angle + Math.PI / 2, 0]}
-            >
-                <planeGeometry args={[1, 1]} />
-                <meshBasicMaterial map={texture} side={THREE.DoubleSide} />
-            </mesh>
-            );
-        })}
-        </group>
-    );
+  return (
+    <group ref={ref}>
+      {textures.slice(0, imagesToShow).map((texture, i) => {
+        const angle = angleStep * i;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        return (
+          <mesh
+            key={i}
+            position={[x, 3, z]}
+            rotation={[0, -angle + Math.PI / 2, 0]}
+          >
+            <planeGeometry args={[2, 2]} />
+            <meshBasicMaterial map={texture} side={THREE.DoubleSide} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
 }
 
-import { Suspense } from 'react';
-
-function Scene() {
+// Example of a standalone scene (if needed)
+function Scene({ images }) {
   return (
     <Canvas>
-      <Suspense fallback={null}>
+      <React.Suspense fallback={null}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
-        <ImageCylinder images={albumPictures} />
+        <ImageCylinder images={images} />
         <OrbitControls />
-      </Suspense>
+      </React.Suspense>
     </Canvas>
   );
 }
 
-
-export default function App() {
-  return (
-    <div style={{ height: '100vh' }}>
-      <Scene />
-    </div>
-  );
-}
+export default ImageCylinder;
