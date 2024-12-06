@@ -1,36 +1,11 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useTrimesh } from '@react-three/cannon';
-import * as THREE from 'three'
 
 import konbini_backup from '../assets/konbini.glb'
 
 export function Konbini (props) {
   const { nodes, materials } = useGLTF(konbini_backup)
-
-  // // Use 'nodes.Cube002.geometry' for the collider
-  // const geometry = useMemo(() => {
-  //   const geo = nodes.Cube002.geometry.clone();
-  //   if (!geo.index) {
-  //     const count = geo.attributes.position.count
-  //     const indices = new Uint16Array(count)
-  //     for (let i = 0; i < count; i++) {
-  //       indices[i] = i
-  //     }
-  //     geo.setIndex(new THREE.BufferAttribute(indices, 1))
-  //   }
-  //   return geo
-  // }, [nodes])
-
-  // const vertices = geometry.attributes.position.array
-  // const indices = geometry.index.array
-
-  // // Create the physics body using useTrimesh
-  // const [ref] = useTrimesh(() => ({
-  //   args: [vertices, indices],
-  //   type: 'Static',
-  //   material: { friction: 0.6, restitution: 0.1 }
-  // }))
 
   return (
     <group {...props}>

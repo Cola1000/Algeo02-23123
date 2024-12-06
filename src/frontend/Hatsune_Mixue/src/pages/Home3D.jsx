@@ -5,13 +5,22 @@ import Konbini from '../models/konbini(backup)';
 import MovementController from '../components/MovementController';
 import { useNavigate } from 'react-router-dom';
 import hdri from '../assets/moonless_golf_8k.exr';
-import { Physics } from '@react-three/cannon';
-
+import { Physics, usePlane } from '@react-three/cannon';
 import albumPictures from '../components/albumPictures';
 import ImageCylinder from '../components/ImageCylinder';
-
-import { Loader as DreiLoader } from '@react-three/drei';
 import Loader from '../components/Loader';
+
+
+{/* Ground to know where to fall */}
+function Ground() {
+  const [ref] = usePlane(() => ({ rotation: [-Math.PI/2, 0, 0], position:[0,0,0]}));
+  return (
+    <mesh ref={ref} receiveShadow>
+      <planeGeometry args={[200,200]} />
+      <meshStandardMaterial color="#888888" />
+    </mesh>
+  );
+}
 
 const Home3D = () => {
   const cameraRef = useRef();
@@ -39,9 +48,9 @@ const Home3D = () => {
   }, [navigate]);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'absolute' }}>
+    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <Canvas shadows>
-        <Suspense fallback={null}>
+        <Suspense fallback={<Loader />}>
           <Environment files={hdri} background={true} />
           <PerspectiveCamera ref={cameraRef} makeDefault position={[-3, 1.5, 3]} rotation={[0, Math.PI, 0]} />
           <hemisphereLight intensity={0.5}/>
@@ -60,14 +69,15 @@ const Home3D = () => {
               shadow-camera-bottom={-10}
           />
           
-          {/* Add the ImageCylinder */}
-          <ImageCylinder images={albumPictures} />
-
-          <Konbini position={[0, 0, 0]} scale={[1, 1, 1]} rotation={[0, 0, 0]} />
-          <MovementController cameraRef={cameraRef} />
+          {/* Added the physics :D */}
+          <Physics gravity={[0, -9.81, 0]}>
+            <Ground />
+            <ImageCylinder images={albumPictures} />
+            <Konbini position={[0, 0, 0]} scale={[1, 1, 1]} rotation={[0, 0, 0]} />
+            <MovementController cameraRef={cameraRef} />
+          </Physics>
         </Suspense>
       </Canvas>
-
     </div>
   );
 };

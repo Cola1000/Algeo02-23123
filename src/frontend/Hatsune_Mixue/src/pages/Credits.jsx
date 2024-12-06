@@ -1,24 +1,26 @@
+//Credits.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import HillBackground from '../models/HillBackground.jsx';
 
 const Credits = () => {
   const navigate = useNavigate();
-  
+
   return (
-    <div className="w-full min-h-screen flex flex-col items-center p-8">
-      {/* Back Button */}
+    <div className="w-full min-h-screen flex flex-col items-center p-8 relative">
+      <HillBackground />
+
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-4 right-4 text-blue-500 hover:underline"
+        className="absolute top-4 right-4 text-white-500 hover:underline z-10"
       >
         &larr; Back
       </button>
 
-      <h1 className="text-3xl font-bold mb-4">Credits</h1>
-      <p className="max-w-2xl text-center">
-        This project was developed by [Your Mom]. Special thanks to all contributors and open-source libraries that made this project possible.
+      <h1 className="text-3xl font-bold mb-4 text-black dark:text-white">Credits</h1>
+      <p className="max-w-2xl text-center text-black dark:text-white">
+        This project was developed by [Your Mom]. Special thanks to all contributors...
       </p>
-      {/* Add more detailed credits as needed */}
     </div>
   );
 };

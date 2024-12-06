@@ -6,15 +6,17 @@ import * as THREE from 'three';
 const MovementController = ({ cameraRef }) => {
   const velocity = useRef({ x: 0, z: 0 });
   const direction = useRef({ yaw: 0, pitch: 0 });
-  const speed = 0.08;
+  const speed = 3;
   const rotationSpeed = 0.005;
 
-    // const [ref, api] = useSphere(() => ({
-    //   mass: 1,
-    //   position: [0, 1, 5],
-    //   args: 1,
-    //   type: "Dynamic",
-    // }));
+  // Create a dynamic sphere
+  const [ref, api] = useSphere(() => ({
+    mass: 1,
+    position: [-3, 1.5, 3],
+    args: [0.5], // sphere size (radius)
+    type: "Dynamic",
+  }));
+
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -45,51 +47,36 @@ const MovementController = ({ cameraRef }) => {
     };
   }, []);
 
-  useFrame(() => {
-    if (cameraRef.current) {
+      {/* Aku hapus komen pusing tentang quaternion disini :v */}
 
-      {/* 
-        Bro ini sumpah jadi Algeo quaternion, udh beda materi bjir wkwkwk
-        Aku pusing mikirin quaternion, yaw, pitch, dll. Gak susah sih, cuman ya... :v
-      */}
+      useFrame(() => {
+        if (cameraRef.current && ref.current) {
 
-      const euler = new THREE.Euler(0, 0, 0, 'YXZ');
-      euler.setFromQuaternion(cameraRef.current.quaternion);
+          const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+          euler.setFromQuaternion(cameraRef.current.quaternion);
+          euler.y -= direction.current.yaw;
+          euler.x -= direction.current.pitch;
+          euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
+          cameraRef.current.quaternion.setFromEuler(euler);
+    
+          direction.current.yaw = 0;
+          direction.current.pitch = 0;
+    
+          const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cameraRef.current.quaternion);
+          const rightMovement = new THREE.Vector3(1, 0, 0).applyQuaternion(cameraRef.current.quaternion);
+    
+          const moveX = (rightMovement.x * velocity.current.x) + (forward.x * velocity.current.z);
+          const moveZ = (rightMovement.z * velocity.current.x) + (forward.z * velocity.current.z);
+    
+          // Set sphere's velocity on the XZ plane (Y is gravity)
+          api.velocity.set(moveX, 0, moveZ);
+    
+          const spherePosition = ref.current.position;
+          cameraRef.current.position.set(spherePosition.x, spherePosition.y + 1.5, spherePosition.z);
+        }
+      });
 
-      euler.y -= direction.current.yaw;
-
-      euler.x -= direction.current.pitch;
-      euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
-
-      cameraRef.current.quaternion.setFromEuler(euler);
-
-      direction.current.yaw = 0;
-      direction.current.pitch = 0;
-
-      const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(
-        cameraRef.current.quaternion
-      );
-      const rightMovement = new THREE.Vector3(1, 0, 0).applyQuaternion(
-        cameraRef.current.quaternion
-      );
-
-      //Gravity
-      // const force = new THREE.Vector3();
-      // force.addScaledVector(forward, velocity.current.z);
-      // force.addScaledVector(rightMovement, velocity.current.x);
-      // api.velocity.set(force.x, api.velocity.current[1], force.z);
-
-      cameraRef.current.position.addScaledVector(forward, velocity.current.z);
-      cameraRef.current.position.addScaledVector(rightMovement, velocity.current.x);
-    }
-  });
-
-  return ( null
-    // <mesh ref={ref}>
-    //   <sphereBufferGeometry args={[1, 32, 32]} />
-    //   <meshStandardMaterial transparent opacity={0} />
-    // </mesh>
-  );
+  return null;
 };
 
 export default MovementController;

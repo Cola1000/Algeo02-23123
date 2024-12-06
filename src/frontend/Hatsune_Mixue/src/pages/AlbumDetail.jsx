@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import albumPictures from '../components/albumPictures.jsx';
+import HillBackground from '../models/HillBackground.jsx';
 
 const AlbumDetail = () => {
   const { albumId } = useParams();
@@ -12,32 +13,29 @@ const AlbumDetail = () => {
   }
 
   const handleDownloadImage = () => {
-    // Logic to download the album cover image
     alert('Downloading album cover image...');
   };
 
   const handleDownloadSong = (songId) => {
-    // Logic to download the individual song
     alert(`Downloading song ID: ${songId}`);
   };
 
   const handleDownloadAll = () => {
-    // Logic to download all songs and album cover as ZIP
     alert('Downloading all songs and album cover as ZIP...');
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col p-8">
-      {/* Back Button */}
+    <div className="w-full min-h-screen flex flex-col p-8 relative">
+      <HillBackground />
+
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-4 right-4 text-white-500 hover:text-blue-500"
+        className="absolute top-4 right-4 text-white-500 hover:underline z-10"
       >
         &larr; Back
       </button>
 
-      {/* Album Detail */}
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-8 mt-16 text-black dark:text-white">
         {/* Album Cover */}
         <div className="flex-shrink-0">
           <img
@@ -47,7 +45,7 @@ const AlbumDetail = () => {
           />
           <button
             onClick={handleDownloadImage}
-            className="mt-4 btn shadow-md hover:shadow-lg"
+            className="mt-4 btn shadow-md hover:shadow-lg bg-blue-500 text-white rounded-lg px-4 py-2"
           >
             Download Album Cover
           </button>
@@ -58,7 +56,7 @@ const AlbumDetail = () => {
           <h2 className="text-2xl font-bold mb-4">{album.title}</h2>
           <button
             onClick={handleDownloadAll}
-            className="mb-5 btn shadow-md hover:shadow-lg"
+            className="mb-5 btn shadow-md hover:shadow-lg bg-blue-500 text-white rounded-lg px-4 py-2"
           >
             Download All as ZIP
           </button>
@@ -71,7 +69,7 @@ const AlbumDetail = () => {
                 <span>{song.title}</span>
                 <button
                   onClick={() => handleDownloadSong(song.id)}
-                  className="text-white-500 hover:text-blue-500"
+                  className="text-white hover:text-blue-200"
                 >
                   Download
                 </button>
