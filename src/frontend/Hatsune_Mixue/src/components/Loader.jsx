@@ -14,7 +14,7 @@ const CoolLoader = () => {
   useEffect(() => {
     const imageInterval = setInterval(() => {
       setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
-    }, 350);
+    }, 250); //Interval ganti picture
 
     return () => clearInterval(imageInterval);
   }, [images.length]);
@@ -48,7 +48,7 @@ const CoolLoader = () => {
         </p>
       </div>
 
-      {/* Custom CSS */}
+      {/* Custom CSS yang aku gaakan masukin index css wkwkwkwk */}
       <style jsx>{`
         .animate-spin-slow {
           animation: spin 2s linear infinite;

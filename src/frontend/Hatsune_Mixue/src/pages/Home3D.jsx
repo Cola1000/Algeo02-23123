@@ -17,7 +17,7 @@ function Ground() {
   return (
     <mesh ref={ref} receiveShadow>
       <planeGeometry args={[200,200]} />
-      <meshStandardMaterial color="#888888" />
+      <meshStandardMaterial color="#888888" opacity={0} /> {/* Nanti tolong buat invisible yogs */}
     </mesh>
   );
 }

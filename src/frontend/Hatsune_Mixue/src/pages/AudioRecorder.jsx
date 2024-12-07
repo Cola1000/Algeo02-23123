@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HillBackground from '../models/HillBackground.jsx';
+import { applyTheme } from '../components/CheckTheme.jsx'
 
 const AudioRecorder = () => {
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -20,6 +21,7 @@ const AudioRecorder = () => {
         alert('Microphone access denied.');
         console.error(err);
       });
+      applyTheme();
   }, []);
 
   const startRecording = () => {

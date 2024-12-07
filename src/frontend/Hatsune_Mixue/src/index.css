@@ -342,3 +342,83 @@ input:checked + .slider:before {
 input:checked + .slider {
   background-color: #4f46e5;
 }
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-y: auto; 
+  font-family: Arial, sans-serif; 
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Customize scrollbar appearance */
+::-webkit-scrollbar {
+  width: 7px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    90deg,
+    rgba(59, 130, 246, 1) 0%,
+    rgba(124, 58, 237, 1) 50%,
+    rgba(59, 130, 246, 1) 100%
+  );
+  border-radius: 5px;
+  animation: color-scroll 4s linear infinite;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(37, 99, 235, 1) 0%,
+    rgba(104, 37, 235, 1) 50%,
+    rgba(37, 99, 235, 1) 100%
+  );
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+/* Animation for the gradient */
+@keyframes color-scroll {
+  0% {
+    background: linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 1) 0%,
+      rgba(124, 58, 237, 1) 50%,
+      rgba(59, 130, 246, 1) 100%
+    );
+  }
+  33% {
+    background: linear-gradient(
+      90deg,
+      rgba(37, 99, 235, 1) 0%,
+      rgba(0, 212, 255, 1) 50%,
+      rgba(37, 99, 235, 1) 100%
+    );
+  }
+  66% {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 85, 85, 1) 0%,
+      rgba(255, 212, 0, 1) 50%,
+      rgba(255, 85, 85, 1) 100%
+    );
+  }
+  100% {
+    background: linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 1) 0%,
+      rgba(124, 58, 237, 1) 50%,
+      rgba(59, 130, 246, 1) 100%
+    );
+  }
+}

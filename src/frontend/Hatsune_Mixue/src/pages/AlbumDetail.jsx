@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import albumPictures from '../components/albumPictures.jsx';
 import HillBackground from '../models/HillBackground.jsx';
+import { applyTheme } from '../components/CheckTheme.jsx'
+
 
 const AlbumDetail = () => {
   const { albumId } = useParams();
@@ -23,6 +25,10 @@ const AlbumDetail = () => {
   const handleDownloadAll = () => {
     alert('Downloading all songs and album cover as ZIP...');
   };
+
+  useEffect(() => {
+    applyTheme(); // Check and apply the theme on page load
+  }, []);
 
   return (
     <div className="w-full min-h-screen flex flex-col p-8 relative">

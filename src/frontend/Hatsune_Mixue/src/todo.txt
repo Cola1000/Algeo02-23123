@@ -1,6 +1,5 @@
 #UI/UX
-> The camera won't move in Home3D view
-> Buat si toggle-theme nya persist ke semua page
+The camera won't move in Home3D view
 Kalau bisa, di Home3D, jika user pencet '1','2','3' di keyboard, mereka teleport ke lantai tersebut didepan pintu minimarketnya
 > Setiap kedepan pintu minimarket, mengeluarkan pop-up untuk melakukan fungsi dibawah ini
 > Buat page si Credit dan About

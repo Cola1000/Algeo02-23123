@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HillBackground from '../models/HillBackground.jsx';
+import { applyTheme } from '../components/CheckTheme.jsx'
 
 const About = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    applyTheme(); // Check and apply the theme on page load
+  }, []);
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center p-8 pt-16 relative">

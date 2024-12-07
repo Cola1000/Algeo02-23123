@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import albumPictures from "../components/albumPictures.jsx";
-import HillBackground from '../models/HillBackground.jsx';
+import HillBackground from "../models/HillBackground.jsx";
+import { applyTheme } from '../components/CheckTheme.jsx'
 
 const Home2D = () => {
   const navigate = useNavigate();
@@ -38,17 +39,15 @@ const Home2D = () => {
   // Drag and drop logic
   const onDrop = useCallback((acceptedFiles) => {
     setSelectedFiles(acceptedFiles);
-    // Implement logic to handle the uploaded files
-
     alert(`You have uploaded ${acceptedFiles.length} file(s).`);
-    // You can process the files here
+
+    // Process the files here
 
     setShowDropzone(false);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  // Handles the Audio Recognizer button click
   const handleAudioRecognizer = () => {
     const useMicrophone = window.confirm(
       "Do you want to use your microphone for audio recognition?"
@@ -64,12 +63,16 @@ const Home2D = () => {
     }
   };
 
+  useEffect(() => {
+    applyTheme(); // Check and apply the theme on page load
+  }, []);
+
   return (
-    <div className="w-full min-h-screen flex flex-col items-center p-8">
+    <div className="w-full min-h-screen flex flex-col items-center p-8 overflow-y-auto">
       <HillBackground />
       <section className="text-center">
         <h1 className="head-text text-cool-blue rounded-lg px-6 py-6 shadow-card">
-          Hatsune Mixue
+          Hatsune Mix[ue]
         </h1>
 
         {/* Buttons */}
@@ -103,7 +106,7 @@ const Home2D = () => {
           </div>
         )}
 
-        {/*Album Auto-scroller*/}
+        {/* Album Auto-scroller */}
         <div className="mt-16 w-full max-w-screen-lg overflow-hidden z-0 relative">
           <div className="scroller flex gap-4 items-center flex-nowrap animate-auto-scroll">
             {albumPictures.length > 0
@@ -114,7 +117,7 @@ const Home2D = () => {
                   >
                     <img
                       src={
-                        albumPictures[index % albumPictures.length].imageSrc // Repeat the same image if there's only one
+                        albumPictures[index % albumPictures.length].imageSrc
                       }
                       alt={`Album ${index + 1}`}
                       className="w-full h-full object-cover rounded-lg"
