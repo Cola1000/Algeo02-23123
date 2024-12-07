@@ -1,9 +1,8 @@
 #UI/UX
 The camera won't move in Home3D view
 Kalau bisa, di Home3D, jika user pencet '1','2','3' di keyboard, mereka teleport ke lantai tersebut didepan pintu minimarketnya
-> Setiap kedepan pintu minimarket, mengeluarkan pop-up untuk melakukan fungsi dibawah ini
-> Buat page si Credit dan About
-> Buat sebuah info window di kanan bawah setiap kali user masuk ke Home3D bahwa mereka jalan bisa pake WASD dan bisa juga pencet '1','2','3' untuk teleport dan pencet 'E' atau 'X' di keyboard untuk nutup si window info/tips nya
+Setiap kedepan pintu minimarket, mengeluarkan pop-up untuk melakukan fungsi dibawah ini
+Buat sebuah info window di kanan bawah setiap kali user masuk ke Home3D bahwa mereka jalan bisa pake WASD dan bisa juga pencet '1','2','3' untuk teleport dan pencet 'E' atau 'X' di keyboard untuk nutup si window info/tips nya
 
 #Logic Implementation
 Implementasi Funsgi Album Picture Recognizer beserta Audio Recognizer di Home3D
@@ -13,7 +12,7 @@ Pastikan user memasukan tipe format data yang sesuai apa yang mereka pilih
 #Back-End
 Connect tombol Album Recognizer dan Audio Recognizer nya ke Back-End
 Connect 'albumPictures.jsx' ke fungsi mapper di Back-End
-Handle case dimana user upload ZIP atau langsung upload satu album --> Buat tombol baru untuk hal tersebut
+Handle case dimana user upload ZIP atau langsung upload satu album
 
 Bonus: 
 Buat si Website lebih enak dilihat dan accessible untuk Mobile Devices

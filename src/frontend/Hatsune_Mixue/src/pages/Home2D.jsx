@@ -8,13 +8,14 @@ import { applyTheme } from '../components/CheckTheme.jsx'
 const Home2D = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const albumsPerPage = 8;
+  const albumsPerPage = 12;
 
   // State to manage selected files
   const [selectedFiles, setSelectedFiles] = useState([]);
 
-  // State to control the visibility of the dropzone
+  // State to control the visibility of the dropzones
   const [showDropzone, setShowDropzone] = useState(false);
+  const [showZipDropzone, setShowZipDropzone] = useState(false);
 
   // Calculate total pages
   const totalPages = Math.ceil(albumPictures.length / albumsPerPage);
@@ -34,19 +35,36 @@ const Home2D = () => {
   // Handles the Album Picture Recognizer button click
   const handleAlbumRecognizer = () => {
     setShowDropzone(true);
+    setShowZipDropzone(false);
+  };
+
+  // Handles the Zip File Recognizer button click
+  const handleZipRecognizer = () => {
+    setShowZipDropzone(true);
+    setShowDropzone(false);
   };
 
   // Drag and drop logic
   const onDrop = useCallback((acceptedFiles) => {
     setSelectedFiles(acceptedFiles);
     alert(`You have uploaded ${acceptedFiles.length} file(s).`);
-
-    // Process the files here
-
     setShowDropzone(false);
   }, []);
 
+  // Drag and drop logic (for zip)
+  const onZipDrop = useCallback((acceptedFiles) => {
+    const zipFiles = acceptedFiles.filter(file => file.type === "application/zip");
+    if (zipFiles.length === 0) {
+      alert("Please upload a valid .zip file.");
+      return;
+    }
+    setSelectedFiles(zipFiles);
+    alert(`You have uploaded ${zipFiles.length} .zip file(s).`);
+    setShowZipDropzone(false);
+  }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps: getZipRootProps, getInputProps: getZipInputProps, isDragActive: isZipDragActive } = useDropzone({ onDrop: onZipDrop });
 
   const handleAudioRecognizer = () => {
     const useMicrophone = window.confirm(
@@ -56,9 +74,6 @@ const Home2D = () => {
       navigate("/audio-recorder");
     } else {
       alert("Please select an audio file.");
-
-      // Logic to upload an audio file goes here
-
       setShowDropzone(true);
     }
   };
@@ -76,7 +91,7 @@ const Home2D = () => {
         </h1>
 
         {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-5 mt-8 z-10 relative justify-center items-center">
+        <div className="flex flex-wrap gap-5 mt-8 z-10 relative justify-center items-center">
           <button
             onClick={handleAlbumRecognizer}
             className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center"
@@ -89,9 +104,15 @@ const Home2D = () => {
           >
             Audio Recognizer
           </button>
+          <button
+            onClick={handleZipRecognizer}
+            className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center"
+          >
+            Zip File Recognizer
+          </button>
         </div>
 
-        {/* Drag and Drop Area */}
+        {/* Drag and Drop Area for Images */}
         {showDropzone && (
           <div
             {...getRootProps()}
@@ -102,6 +123,21 @@ const Home2D = () => {
               <p>Drop the files here ...</p>
             ) : (
               <p>Drag 'n' drop some files here, or click to select files</p>
+            )}
+          </div>
+        )}
+
+        {/* Drag and Drop Area for Zip Files */}
+        {showZipDropzone && (
+          <div
+            {...getZipRootProps()}
+            className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer"
+          >
+            <input {...getZipInputProps()} />
+            {isZipDragActive ? (
+              <p>Drop the zip file here ...</p>
+            ) : (
+              <p>Drag 'n' drop a .zip file here, or click to select one</p>
             )}
           </div>
         )}
