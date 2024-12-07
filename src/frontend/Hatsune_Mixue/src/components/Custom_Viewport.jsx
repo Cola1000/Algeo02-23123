@@ -7,7 +7,7 @@ const Custom_Viewport = () => {
   const navigate = useNavigate();
   return (
     <nav className="relative top-0 left-0 right-0 z-50">
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mb-5">
         <div className="flex justify-between h-0 items-center">
           <button
             onClick={() => navigate('/Home3D')}

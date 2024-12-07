@@ -6,6 +6,7 @@ import Custom_Viewport from './components/Custom_Viewport';
 import { Home3D, Home2D, About, Credits } from './pages/index.js';
 import AlbumDetail from './pages/AlbumDetail';
 import AudioRecorder from './pages/AudioRecorder.jsx';
+import HeartPage from './pages/My_Wife.jsx';
 
 function App() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/About" element={<About />} />
         <Route path="/album/:albumId" element={<AlbumDetail />} />
         <Route path="/audio-recorder" element={<AudioRecorder />} />
+        <Route path="/My_Wife" element={<HeartPage />} />
       </Routes>
     </main>
   );

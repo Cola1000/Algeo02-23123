@@ -311,6 +311,13 @@ button:focus-visible {
   z-index: 10;
 }
 
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --primary-color: #2b77e7;
+  --secondary-color: #646cff;
+}
+
 /* Dark mode styles */
 .dark-mode {
   --background-color: #1a1a1a;
@@ -420,5 +427,37 @@ body, html {
       rgba(124, 58, 237, 1) 50%,
       rgba(59, 130, 246, 1) 100%
     );
+  }
+}
+
+.heart-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.heart {
+  position: absolute;
+  bottom: 0;
+  font-size: 2rem;
+  animation: float 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1.5);
+    opacity: 0;
   }
 }
