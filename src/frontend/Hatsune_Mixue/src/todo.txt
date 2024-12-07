@@ -2,7 +2,7 @@
 The camera won't move in Home3D view
 Kalau bisa, di Home3D, jika user pencet '1','2','3' di keyboard, mereka teleport ke lantai tersebut didepan pintu minimarketnya
 Setiap kedepan pintu minimarket, mengeluarkan pop-up untuk melakukan fungsi dibawah ini
-Buat sebuah info window di kanan bawah setiap kali user masuk ke Home3D bahwa mereka jalan bisa pake WASD dan bisa juga pencet '1','2','3' untuk teleport dan pencet 'E' atau 'X' di keyboard untuk nutup si window info/tips nya
+Benerin info window dimana ketika user keluar dari Home3D dan masuk lagi, keluarin aja lagi si window nya
 
 #Logic Implementation
 Implementasi Funsgi Album Picture Recognizer beserta Audio Recognizer di Home3D

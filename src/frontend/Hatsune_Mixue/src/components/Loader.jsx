@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Html, useProgress } from '@react-three/drei';
 
-const CoolLoader = () => {
+const CoolLoader = ({ onLoaded }) => {
   const { progress } = useProgress();
   const [currentImage, setCurrentImage] = useState(() => Math.floor(Math.random() * 3));
 
@@ -12,12 +12,17 @@ const CoolLoader = () => {
   ];
 
   useEffect(() => {
+    // Switch images periodically
     const imageInterval = setInterval(() => {
       setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
-    }, 250); //Interval ganti picture
+    }, 250);
+
+    if (progress === 100 && onLoaded) {
+      onLoaded();
+    }
 
     return () => clearInterval(imageInterval);
-  }, [images.length]);
+  }, [images.length, progress, onLoaded]);
 
   return (
     <Html center>
@@ -48,7 +53,7 @@ const CoolLoader = () => {
         </p>
       </div>
 
-      {/* Custom CSS yang aku gaakan masukin index css wkwkwkwk */}
+      {/* Custom CSS */}
       <style jsx>{`
         .animate-spin-slow {
           animation: spin 2s linear infinite;
