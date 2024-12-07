@@ -108,7 +108,7 @@ const Home2D = () => {
             onClick={handleZipRecognizer}
             className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center"
           >
-            Zip File Recognizer
+            Upload a Database (Zip)
           </button>
         </div>
 
