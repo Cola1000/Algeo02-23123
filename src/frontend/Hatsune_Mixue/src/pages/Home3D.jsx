@@ -92,7 +92,7 @@ const Home3D = () => {
           />
           
           {/* Added the physics :D */}
-          <Physics gravity={[0, -9.81, 0]}>
+          <Physics gravity={[0, -9.81, 0]} defaultContactMaterial={{ restitution: 0.3 }}>
             <Ground />
             <ImageCylinder images={albumPictures} />
             <Konbini position={[0, 0, 0]} scale={[1, 1, 1]} rotation={[0, 0, 0]} />
