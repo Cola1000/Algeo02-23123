@@ -19,7 +19,7 @@ const creditsData = [
       { name: "Our Repository", link: "https://github.com/Cola1000/HatsuneMix-ue-" },
       { name: "Vite", link: "https://vite.dev" },
       { name: "Github GLTF to React", link: "https://gltf.pmnd.rs" },
-      { name: "3D Hill Model Inspiration (rockdanister)", link: "https://github.com/rocksdanister/lively" },
+      { name: "3D Hill Model Inspiration (yoichi kobayashi)", link: "https://codepen.io/ykob" },
       { name: "JavaScript Mastery 3D Website Tutorial", link: "https://youtu.be/FkowOdMjvYo?si=13ccbqc_fKwn5yTy" },
       { name: "Audio Visualizer @ React", link: "https://dev.to/ssk14/visualizing-audio-as-a-waveform-in-react-o67" },
     ],
