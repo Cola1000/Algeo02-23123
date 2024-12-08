@@ -8,7 +8,7 @@ import { applyTheme } from '../components/CheckTheme.jsx'
 const Home2D = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const albumsPerPage = 12;
+  const albumsPerPage = 16;
 
   // State to manage selected files
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -146,7 +146,7 @@ const Home2D = () => {
         <div className="mt-16 w-full max-w-screen-lg overflow-hidden z-0 relative">
           <div className="scroller flex gap-4 items-center flex-nowrap animate-auto-scroll">
             {albumPictures.length > 0
-              ? [...Array(20)].map((_, index) => (
+              ? [...Array(100)].map((_, index) => (
                   <div
                     key={index}
                     className="custom-glow w-48 h-48 flex-shrink-0 scale-90 cursor-pointer transition-transform transform hover:scale-100"

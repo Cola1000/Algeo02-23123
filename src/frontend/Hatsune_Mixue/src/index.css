@@ -294,7 +294,7 @@ button:focus-visible {
 }
 
 .custom-glow:hover {
-  box-shadow: 0 0 10px 4px rgba(43, 119, 231, 0.8);
+  box-shadow: 0 0 10px 4px rgb(10, 196, 149);
 }
 
 .hill-background-canvas {
