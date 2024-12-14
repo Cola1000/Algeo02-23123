@@ -177,6 +177,14 @@ const albumPictures = [
       { id: '2_1', title: 'Shelter', file: "/tmpAudio/Porter Robinson & Madeon - Shelter (Official Piano Version).mp3" },
     ],
   },
+  {
+    id: 23,
+    title: 'Fontaine',
+    imageSrc: '/tmpPictures/My_Wife.jpg',
+    songs: [
+      { id: '2_1', title: 'Se Mettre un Trente et un', file: "/tmpAudio/Porter Robinson & Madeon - Shelter (Official Piano Version).mp3" },
+    ],
+  },
 ];
 
 export default albumPictures;
