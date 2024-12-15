@@ -42,7 +42,7 @@ const About = () => {
         <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
           <button
             className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105"
-            onClick={() => window.open('https://youtu.be/OuKEjFrVECw?si=gVEhhjQQ03QAnQCp', '_blank')}
+            onClick={() => window.open('https://youtu.be/tBEwePViKrs', '_blank')}
           >
             Watch Video
           </button>
