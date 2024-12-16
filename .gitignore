@@ -6,3 +6,4 @@ HatsuneMix-ue-.code-workspace
 /test/result/
 src/backend/database/audioarchive.zip
 src/backend/database/picturearchive.zip
+src/backend/database

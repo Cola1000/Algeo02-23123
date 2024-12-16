@@ -70,7 +70,7 @@ const Home2D = () => {
     // Prepare form data
     const formData = new FormData();
     zipFiles.forEach(file => {
-      formData.append('zip_file', file);
+      formData.append('zip_files', file);
     });
 
     try {
