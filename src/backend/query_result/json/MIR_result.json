@@ -1,0 +1,1014 @@
+[
+    {
+        "similarity_rank": 1,
+        "similarity_percentage": 0.9842,
+        "id": 685,
+        "title": "Album 685",
+        "imageSrc": "src/backend/database/picture/R-467990-1185556320-jpeg.jpg",
+        "song": {
+            "id": "685_1",
+            "file": "Cogitation of Epochs.mp3"
+        }
+    },
+    {
+        "similarity_rank": 2,
+        "similarity_percentage": 0.9809,
+        "id": 397,
+        "title": "Album 397",
+        "imageSrc": "src/backend/database/picture/R-2546873-1512920036-1732-jpeg.jpg",
+        "song": {
+            "id": "397_1",
+            "file": "pop.00056.wav"
+        }
+    },
+    {
+        "similarity_rank": 3,
+        "similarity_percentage": 0.9791,
+        "id": 118,
+        "title": "Album 118",
+        "imageSrc": "src/backend/database/picture/R-470173-1345458522-1643-jpeg.jpg",
+        "song": {
+            "id": "118_1",
+            "file": "pop.00063.wav"
+        }
+    },
+    {
+        "similarity_rank": 4,
+        "similarity_percentage": 0.9735,
+        "id": 631,
+        "title": "Album 631",
+        "imageSrc": "src/backend/database/picture/R-6793557-1430654646-5820-jpeg.jpg",
+        "song": {
+            "id": "631_1",
+            "file": "pop.00059.wav"
+        }
+    },
+    {
+        "similarity_rank": 5,
+        "similarity_percentage": 0.9725,
+        "id": 496,
+        "title": "Album 496",
+        "imageSrc": "src/backend/database/picture/R-3884382-1348025929-4300-jpeg.jpg",
+        "song": {
+            "id": "496_1",
+            "file": "pop.00061.wav"
+        }
+    },
+    {
+        "similarity_rank": 6,
+        "similarity_percentage": 0.9701,
+        "id": 721,
+        "title": "Album 721",
+        "imageSrc": "src/backend/database/picture/R-1176649-1406015765-6829-jpeg.jpg",
+        "song": {
+            "id": "721_1",
+            "file": "pop.00083.wav"
+        }
+    },
+    {
+        "similarity_rank": 7,
+        "similarity_percentage": 0.9672,
+        "id": 766,
+        "title": "Album 766",
+        "imageSrc": "src/backend/database/picture/R-6855297-1428067843-4727-jpeg.jpg",
+        "song": {
+            "id": "766_1",
+            "file": "pop.00084.wav"
+        }
+    },
+    {
+        "similarity_rank": 8,
+        "similarity_percentage": 0.9646,
+        "id": 793,
+        "title": "Album 793",
+        "imageSrc": "src/backend/database/picture/R-6772933-1426334197-9410-jpeg.jpg",
+        "song": {
+            "id": "793_1",
+            "file": "pop.00049.wav"
+        }
+    },
+    {
+        "similarity_rank": 9,
+        "similarity_percentage": 0.9636,
+        "id": 883,
+        "title": "Album 883",
+        "imageSrc": "src/backend/database/picture/R-6467085-1459583698-4957-jpeg.jpg",
+        "song": {
+            "id": "883_1",
+            "file": "pop.00019.wav"
+        }
+    },
+    {
+        "similarity_rank": 10,
+        "similarity_percentage": 0.9611,
+        "id": 640,
+        "title": "Album 640",
+        "imageSrc": "src/backend/database/picture/R-15661634-1596625885-5697-jpeg.jpg",
+        "song": {
+            "id": "640_1",
+            "file": "pop.00046.wav"
+        }
+    },
+    {
+        "similarity_rank": 11,
+        "similarity_percentage": 0.9609,
+        "id": 361,
+        "title": "Album 361",
+        "imageSrc": "src/backend/database/picture/R-1521566-1401195442-9999-jpeg.jpg",
+        "song": {
+            "id": "361_1",
+            "file": "pop.00068.wav"
+        }
+    },
+    {
+        "similarity_rank": 12,
+        "similarity_percentage": 0.9595,
+        "id": 289,
+        "title": "Album 289",
+        "imageSrc": "src/backend/database/picture/R-1454320-1278339592-jpeg.jpg",
+        "song": {
+            "id": "289_1",
+            "file": "pop.00096.wav"
+        }
+    },
+    {
+        "similarity_rank": 13,
+        "similarity_percentage": 0.9582,
+        "id": 109,
+        "title": "Album 109",
+        "imageSrc": "src/backend/database/picture/R-1991423-1352031594-9157-jpeg.jpg",
+        "song": {
+            "id": "109_1",
+            "file": "pop.00013.wav"
+        }
+    },
+    {
+        "similarity_rank": 14,
+        "similarity_percentage": 0.9543,
+        "id": 514,
+        "title": "Album 514",
+        "imageSrc": "src/backend/database/picture/R-12704594-1547471870-9975-jpeg.jpg",
+        "song": {
+            "id": "514_1",
+            "file": "pop.00045.wav"
+        }
+    },
+    {
+        "similarity_rank": 15,
+        "similarity_percentage": 0.9516,
+        "id": 370,
+        "title": "Album 370",
+        "imageSrc": "src/backend/database/picture/R-11157987-1510980639-1660-jpeg.jpg",
+        "song": {
+            "id": "370_1",
+            "file": "pop.00072.wav"
+        }
+    },
+    {
+        "similarity_rank": 16,
+        "similarity_percentage": 0.9515,
+        "id": 127,
+        "title": "Album 127",
+        "imageSrc": "src/backend/database/picture/R-605068-1192614646-jpeg.jpg",
+        "song": {
+            "id": "127_1",
+            "file": "pop.00012.wav"
+        }
+    },
+    {
+        "similarity_rank": 17,
+        "similarity_percentage": 0.9513,
+        "id": 847,
+        "title": "Album 847",
+        "imageSrc": "src/backend/database/picture/R-116380-1241454295-jpeg.jpg",
+        "song": {
+            "id": "847_1",
+            "file": "pop.00058.wav"
+        }
+    },
+    {
+        "similarity_rank": 18,
+        "similarity_percentage": 0.951,
+        "id": 505,
+        "title": "Album 505",
+        "imageSrc": "src/backend/database/picture/R-658528-1372065845-5417-jpeg.jpg",
+        "song": {
+            "id": "505_1",
+            "file": "pop.00035.wav"
+        }
+    },
+    {
+        "similarity_rank": 19,
+        "similarity_percentage": 0.9496,
+        "id": 217,
+        "title": "Album 217",
+        "imageSrc": "src/backend/database/picture/R-7064825-1436729271-7968-jpeg.jpg",
+        "song": {
+            "id": "217_1",
+            "file": "pop.00018.wav"
+        }
+    },
+    {
+        "similarity_rank": 20,
+        "similarity_percentage": 0.9472,
+        "id": 694,
+        "title": "Album 694",
+        "imageSrc": "src/backend/database/picture/R-1829371-1610890208-9321-jpeg.jpg",
+        "song": {
+            "id": "694_1",
+            "file": "pop.00066.wav"
+        }
+    },
+    {
+        "similarity_rank": 21,
+        "similarity_percentage": 0.9435,
+        "id": 865,
+        "title": "Album 865",
+        "imageSrc": "src/backend/database/picture/R-1696164-1449791661-1917-jpeg.jpg",
+        "song": {
+            "id": "865_1",
+            "file": "pop.00036.wav"
+        }
+    },
+    {
+        "similarity_rank": 22,
+        "similarity_percentage": 0.9414,
+        "id": 478,
+        "title": "Album 478",
+        "imageSrc": "src/backend/database/picture/R-427699-1427628697-2401-jpeg.jpg",
+        "song": {
+            "id": "478_1",
+            "file": "pop.00030.wav"
+        }
+    },
+    {
+        "similarity_rank": 23,
+        "similarity_percentage": 0.9387,
+        "id": 460,
+        "title": "Album 460",
+        "imageSrc": "src/backend/database/picture/R-898319-1427631523-4503-jpeg.jpg",
+        "song": {
+            "id": "460_1",
+            "file": "pop.00057.wav"
+        }
+    },
+    {
+        "similarity_rank": 24,
+        "similarity_percentage": 0.9375,
+        "id": 253,
+        "title": "Album 253",
+        "imageSrc": "src/backend/database/picture/R-939627-1511360646-8117-jpeg.jpg",
+        "song": {
+            "id": "253_1",
+            "file": "pop.00031.wav"
+        }
+    },
+    {
+        "similarity_rank": 25,
+        "similarity_percentage": 0.9339,
+        "id": 235,
+        "title": "Album 235",
+        "imageSrc": "src/backend/database/picture/R-440970-1532105184-8336-jpeg.jpg",
+        "song": {
+            "id": "235_1",
+            "file": "pop.00099.wav"
+        }
+    },
+    {
+        "similarity_rank": 26,
+        "similarity_percentage": 0.9338,
+        "id": 649,
+        "title": "Album 649",
+        "imageSrc": "src/backend/database/picture/R-597222-1418886384-4335-jpeg.jpg",
+        "song": {
+            "id": "649_1",
+            "file": "pop.00008.wav"
+        }
+    },
+    {
+        "similarity_rank": 27,
+        "similarity_percentage": 0.9314,
+        "id": 271,
+        "title": "Album 271",
+        "imageSrc": "src/backend/database/picture/R-8870934-1576486192-8708-jpeg.jpg",
+        "song": {
+            "id": "271_1",
+            "file": "pop.00085.wav"
+        }
+    },
+    {
+        "similarity_rank": 28,
+        "similarity_percentage": 0.9307,
+        "id": 730,
+        "title": "Album 730",
+        "imageSrc": "src/backend/database/picture/R-1359005-1260680326-jpeg.jpg",
+        "song": {
+            "id": "730_1",
+            "file": "pop.00076.wav"
+        }
+    },
+    {
+        "similarity_rank": 29,
+        "similarity_percentage": 0.9267,
+        "id": 415,
+        "title": "Album 415",
+        "imageSrc": "src/backend/database/picture/R-1044721-1217784261-jpeg.jpg",
+        "song": {
+            "id": "415_1",
+            "file": "pop.00023.wav"
+        }
+    },
+    {
+        "similarity_rank": 30,
+        "similarity_percentage": 0.9255,
+        "id": 379,
+        "title": "Album 379",
+        "imageSrc": "src/backend/database/picture/R-3908448-1350311676-5656-jpeg.jpg",
+        "song": {
+            "id": "379_1",
+            "file": "pop.00094.wav"
+        }
+    },
+    {
+        "similarity_rank": 31,
+        "similarity_percentage": 0.9244,
+        "id": 595,
+        "title": "Album 595",
+        "imageSrc": "src/backend/database/picture/R-564466-1493816008-1056-jpeg.jpg",
+        "song": {
+            "id": "595_1",
+            "file": "pop.00001.wav"
+        }
+    },
+    {
+        "similarity_rank": 32,
+        "similarity_percentage": 0.921,
+        "id": 190,
+        "title": "Album 190",
+        "imageSrc": "src/backend/database/picture/R-503889-1253547850-jpeg.jpg",
+        "song": {
+            "id": "190_1",
+            "file": "pop.00051.wav"
+        }
+    },
+    {
+        "similarity_rank": 33,
+        "similarity_percentage": 0.9192,
+        "id": 172,
+        "title": "Album 172",
+        "imageSrc": "src/backend/database/picture/R-4289408-1418886184-1276-jpeg.jpg",
+        "song": {
+            "id": "172_1",
+            "file": "pop.00088.wav"
+        }
+    },
+    {
+        "similarity_rank": 34,
+        "similarity_percentage": 0.9175,
+        "id": 541,
+        "title": "Album 541",
+        "imageSrc": "src/backend/database/picture/R-310245-1375463802-5512-jpeg.jpg",
+        "song": {
+            "id": "541_1",
+            "file": "pop.00078.wav"
+        }
+    },
+    {
+        "similarity_rank": 35,
+        "similarity_percentage": 0.9135,
+        "id": 658,
+        "title": "Album 658",
+        "imageSrc": "src/backend/database/picture/R-489638-1199638822-jpeg.jpg",
+        "song": {
+            "id": "658_1",
+            "file": "pop.00073.wav"
+        }
+    },
+    {
+        "similarity_rank": 36,
+        "similarity_percentage": 0.91,
+        "id": 1,
+        "title": "Album 1",
+        "imageSrc": "src/backend/database/picture/R-8465594-1558629408-8356-jpeg.jpg",
+        "song": {
+            "id": "1_1",
+            "file": "pop.00021.wav"
+        }
+    },
+    {
+        "similarity_rank": 37,
+        "similarity_percentage": 0.9095,
+        "id": 343,
+        "title": "Album 343",
+        "imageSrc": "src/backend/database/picture/R-19007-1239161558-jpeg.jpg",
+        "song": {
+            "id": "343_1",
+            "file": "pop.00024.wav"
+        }
+    },
+    {
+        "similarity_rank": 38,
+        "similarity_percentage": 0.9072,
+        "id": 55,
+        "title": "Album 55",
+        "imageSrc": "src/backend/database/picture/R-4557616-1368305558-6089-jpeg.jpg",
+        "song": {
+            "id": "55_1",
+            "file": "pop.00093.wav"
+        }
+    },
+    {
+        "similarity_rank": 39,
+        "similarity_percentage": 0.9061,
+        "id": 775,
+        "title": "Album 775",
+        "imageSrc": "src/backend/database/picture/R-16425597-1607677836-4958-jpeg.jpg",
+        "song": {
+            "id": "775_1",
+            "file": "pop.00082.wav"
+        }
+    },
+    {
+        "similarity_rank": 40,
+        "similarity_percentage": 0.906,
+        "id": 154,
+        "title": "Album 154",
+        "imageSrc": "src/backend/database/picture/R-1902330-1481685489-9454-jpeg.jpg",
+        "song": {
+            "id": "154_1",
+            "file": "pop.00028.wav"
+        }
+    },
+    {
+        "similarity_rank": 41,
+        "similarity_percentage": 0.9008,
+        "id": 145,
+        "title": "Album 145",
+        "imageSrc": "src/backend/database/picture/R-8383664-1460735993-1638-jpeg.jpg",
+        "song": {
+            "id": "145_1",
+            "file": "pop.00010.wav"
+        }
+    },
+    {
+        "similarity_rank": 42,
+        "similarity_percentage": 0.8992,
+        "id": 136,
+        "title": "Album 136",
+        "imageSrc": "src/backend/database/picture/R-446273-1239130419-jpeg.jpg",
+        "song": {
+            "id": "136_1",
+            "file": "pop.00086.wav"
+        }
+    },
+    {
+        "similarity_rank": 43,
+        "similarity_percentage": 0.8891,
+        "id": 10,
+        "title": "Album 10",
+        "imageSrc": "src/backend/database/picture/R-667271-1602005647-6694-jpeg.jpg",
+        "song": {
+            "id": "10_1",
+            "file": "pop.00025.wav"
+        }
+    },
+    {
+        "similarity_rank": 44,
+        "similarity_percentage": 0.8876,
+        "id": 586,
+        "title": "Album 586",
+        "imageSrc": "src/backend/database/picture/R-513908-1351967893-5710-jpeg.jpg",
+        "song": {
+            "id": "586_1",
+            "file": "pop.00089.wav"
+        }
+    },
+    {
+        "similarity_rank": 45,
+        "similarity_percentage": 0.8837,
+        "id": 703,
+        "title": "Album 703",
+        "imageSrc": "src/backend/database/picture/R-1182754-1212329479-jpeg.jpg",
+        "song": {
+            "id": "703_1",
+            "file": "pop.00005.wav"
+        }
+    },
+    {
+        "similarity_rank": 46,
+        "similarity_percentage": 0.8825,
+        "id": 856,
+        "title": "Album 856",
+        "imageSrc": "src/backend/database/picture/R-1998848-1469830199-7327-jpeg.jpg",
+        "song": {
+            "id": "856_1",
+            "file": "pop.00014.wav"
+        }
+    },
+    {
+        "similarity_rank": 47,
+        "similarity_percentage": 0.8821,
+        "id": 532,
+        "title": "Album 532",
+        "imageSrc": "src/backend/database/picture/R-1600674-1371484102-5479-jpeg.jpg",
+        "song": {
+            "id": "532_1",
+            "file": "pop.00053.wav"
+        }
+    },
+    {
+        "similarity_rank": 48,
+        "similarity_percentage": 0.8792,
+        "id": 307,
+        "title": "Album 307",
+        "imageSrc": "src/backend/database/picture/R-888206-1386608588-4477-jpeg.jpg",
+        "song": {
+            "id": "307_1",
+            "file": "pop.00017.wav"
+        }
+    },
+    {
+        "similarity_rank": 49,
+        "similarity_percentage": 0.8767,
+        "id": 442,
+        "title": "Album 442",
+        "imageSrc": "src/backend/database/picture/R-10469087-1501265566-7000-jpeg.jpg",
+        "song": {
+            "id": "442_1",
+            "file": "pop.00043.wav"
+        }
+    },
+    {
+        "similarity_rank": 50,
+        "similarity_percentage": 0.8748,
+        "id": 280,
+        "title": "Album 280",
+        "imageSrc": "src/backend/database/picture/R-1311616-1588785120-7336-jpeg.jpg",
+        "song": {
+            "id": "280_1",
+            "file": "pop.00091.wav"
+        }
+    },
+    {
+        "similarity_rank": 51,
+        "similarity_percentage": 0.8734,
+        "id": 406,
+        "title": "Album 406",
+        "imageSrc": "src/backend/database/picture/R-540570-1139377216-jpeg.jpg",
+        "song": {
+            "id": "406_1",
+            "file": "pop.00080.wav"
+        }
+    },
+    {
+        "similarity_rank": 52,
+        "similarity_percentage": 0.8718,
+        "id": 91,
+        "title": "Album 91",
+        "imageSrc": "src/backend/database/picture/R-438659-1150577899-jpeg.jpg",
+        "song": {
+            "id": "91_1",
+            "file": "pop.00065.wav"
+        }
+    },
+    {
+        "similarity_rank": 53,
+        "similarity_percentage": 0.8702,
+        "id": 73,
+        "title": "Album 73",
+        "imageSrc": "src/backend/database/picture/R-3566888-1335609363-jpeg.jpg",
+        "song": {
+            "id": "73_1",
+            "file": "pop.00002.wav"
+        }
+    },
+    {
+        "similarity_rank": 54,
+        "similarity_percentage": 0.8699,
+        "id": 523,
+        "title": "Album 523",
+        "imageSrc": "src/backend/database/picture/R-6187828-1413237343-9663-jpeg.jpg",
+        "song": {
+            "id": "523_1",
+            "file": "pop.00033.wav"
+        }
+    },
+    {
+        "similarity_rank": 55,
+        "similarity_percentage": 0.8685,
+        "id": 613,
+        "title": "Album 613",
+        "imageSrc": "src/backend/database/picture/R-457163-1553278292-3463-jpeg.jpg",
+        "song": {
+            "id": "613_1",
+            "file": "pop.00050.wav"
+        }
+    },
+    {
+        "similarity_rank": 56,
+        "similarity_percentage": 0.8663,
+        "id": 352,
+        "title": "Album 352",
+        "imageSrc": "src/backend/database/picture/R-1056463-1222956429-jpeg.jpg",
+        "song": {
+            "id": "352_1",
+            "file": "pop.00071.wav"
+        }
+    },
+    {
+        "similarity_rank": 57,
+        "similarity_percentage": 0.8663,
+        "id": 676,
+        "title": "Album 676",
+        "imageSrc": "src/backend/database/picture/R-2440818-1401371040-2624-jpeg.jpg",
+        "song": {
+            "id": "676_1",
+            "file": "pop.00067.wav"
+        }
+    },
+    {
+        "similarity_rank": 58,
+        "similarity_percentage": 0.8646,
+        "id": 487,
+        "title": "Album 487",
+        "imageSrc": "src/backend/database/picture/R-4504601-1461763670-4739-jpeg.jpg",
+        "song": {
+            "id": "487_1",
+            "file": "pop.00007.wav"
+        }
+    },
+    {
+        "similarity_rank": 59,
+        "similarity_percentage": 0.8634,
+        "id": 163,
+        "title": "Album 163",
+        "imageSrc": "src/backend/database/picture/R-310200-1161678171-jpeg.jpg",
+        "song": {
+            "id": "163_1",
+            "file": "pop.00041.wav"
+        }
+    },
+    {
+        "similarity_rank": 60,
+        "similarity_percentage": 0.8624,
+        "id": 469,
+        "title": "Album 469",
+        "imageSrc": "src/backend/database/picture/R-985713-1254682401-jpeg.jpg",
+        "song": {
+            "id": "469_1",
+            "file": "pop.00004.wav"
+        }
+    },
+    {
+        "similarity_rank": 61,
+        "similarity_percentage": 0.8608,
+        "id": 820,
+        "title": "Album 820",
+        "imageSrc": "src/backend/database/picture/R-2636195-1439021125-9962-jpeg.jpg",
+        "song": {
+            "id": "820_1",
+            "file": "pop.00037.wav"
+        }
+    },
+    {
+        "similarity_rank": 62,
+        "similarity_percentage": 0.8604,
+        "id": 262,
+        "title": "Album 262",
+        "imageSrc": "src/backend/database/picture/R-339581-1381939909-7259-jpeg.jpg",
+        "song": {
+            "id": "262_1",
+            "file": "pop.00098.wav"
+        }
+    },
+    {
+        "similarity_rank": 63,
+        "similarity_percentage": 0.8535,
+        "id": 82,
+        "title": "Album 82",
+        "imageSrc": "src/backend/database/picture/R-1534863-1531074786-3733-jpeg.jpg",
+        "song": {
+            "id": "82_1",
+            "file": "pop.00011.wav"
+        }
+    },
+    {
+        "similarity_rank": 64,
+        "similarity_percentage": 0.8468,
+        "id": 829,
+        "title": "Album 829",
+        "imageSrc": "src/backend/database/picture/R-667433-1519422416-4334-jpeg.jpg",
+        "song": {
+            "id": "829_1",
+            "file": "pop.00032.wav"
+        }
+    },
+    {
+        "similarity_rank": 65,
+        "similarity_percentage": 0.8404,
+        "id": 604,
+        "title": "Album 604",
+        "imageSrc": "src/backend/database/picture/R-1449282-1352696556-5767-jpeg.jpg",
+        "song": {
+            "id": "604_1",
+            "file": "pop.00090.wav"
+        }
+    },
+    {
+        "similarity_rank": 66,
+        "similarity_percentage": 0.8388,
+        "id": 892,
+        "title": "Album 892",
+        "imageSrc": "src/backend/database/picture/R-790427-1396891522-3304-jpeg.jpg",
+        "song": {
+            "id": "892_1",
+            "file": "pop.00087.wav"
+        }
+    },
+    {
+        "similarity_rank": 67,
+        "similarity_percentage": 0.835,
+        "id": 757,
+        "title": "Album 757",
+        "imageSrc": "src/backend/database/picture/R-213375-1432143517-2526-jpeg.jpg",
+        "song": {
+            "id": "757_1",
+            "file": "pop.00079.wav"
+        }
+    },
+    {
+        "similarity_rank": 68,
+        "similarity_percentage": 0.8347,
+        "id": 100,
+        "title": "Album 100",
+        "imageSrc": "src/backend/database/picture/R-9117760-1482178544-9220-jpeg.jpg",
+        "song": {
+            "id": "100_1",
+            "file": "pop.00006.wav"
+        }
+    },
+    {
+        "similarity_rank": 69,
+        "similarity_percentage": 0.8324,
+        "id": 388,
+        "title": "Album 388",
+        "imageSrc": "src/backend/database/picture/R-421571-1533672755-6736-jpeg.jpg",
+        "song": {
+            "id": "388_1",
+            "file": "pop.00069.wav"
+        }
+    },
+    {
+        "similarity_rank": 70,
+        "similarity_percentage": 0.8321,
+        "id": 334,
+        "title": "Album 334",
+        "imageSrc": "src/backend/database/picture/R-164065-1627132085-2509-jpeg.jpg",
+        "song": {
+            "id": "334_1",
+            "file": "pop.00081.wav"
+        }
+    },
+    {
+        "similarity_rank": 71,
+        "similarity_percentage": 0.8307,
+        "id": 433,
+        "title": "Album 433",
+        "imageSrc": "src/backend/database/picture/R-3279555-1323689417-jpeg.jpg",
+        "song": {
+            "id": "433_1",
+            "file": "pop.00015.wav"
+        }
+    },
+    {
+        "similarity_rank": 72,
+        "similarity_percentage": 0.8262,
+        "id": 577,
+        "title": "Album 577",
+        "imageSrc": "src/backend/database/picture/R-6424443-1418882461-4095-jpeg.jpg",
+        "song": {
+            "id": "577_1",
+            "file": "pop.00000.wav"
+        }
+    },
+    {
+        "similarity_rank": 73,
+        "similarity_percentage": 0.8249,
+        "id": 37,
+        "title": "Album 37",
+        "imageSrc": "src/backend/database/picture/R-530784-1431629959-3799-jpeg.jpg",
+        "song": {
+            "id": "37_1",
+            "file": "pop.00034.wav"
+        }
+    },
+    {
+        "similarity_rank": 74,
+        "similarity_percentage": 0.8206,
+        "id": 874,
+        "title": "Album 874",
+        "imageSrc": "src/backend/database/picture/R-1607670-1433971245-6503-jpeg.jpg",
+        "song": {
+            "id": "874_1",
+            "file": "pop.00064.wav"
+        }
+    },
+    {
+        "similarity_rank": 75,
+        "similarity_percentage": 0.8201,
+        "id": 622,
+        "title": "Album 622",
+        "imageSrc": "src/backend/database/picture/R-7510527-1612890134-9104-jpeg.jpg",
+        "song": {
+            "id": "622_1",
+            "file": "pop.00022.wav"
+        }
+    },
+    {
+        "similarity_rank": 76,
+        "similarity_percentage": 0.8192,
+        "id": 28,
+        "title": "Album 28",
+        "imageSrc": "src/backend/database/picture/R-386066-1301223075-jpeg.jpg",
+        "song": {
+            "id": "28_1",
+            "file": "pop.00074.wav"
+        }
+    },
+    {
+        "similarity_rank": 77,
+        "similarity_percentage": 0.8152,
+        "id": 424,
+        "title": "Album 424",
+        "imageSrc": "src/backend/database/picture/R-3625889-1406013253-5178-jpeg.jpg",
+        "song": {
+            "id": "424_1",
+            "file": "pop.00003.wav"
+        }
+    },
+    {
+        "similarity_rank": 78,
+        "similarity_percentage": 0.8151,
+        "id": 199,
+        "title": "Album 199",
+        "imageSrc": "src/backend/database/picture/R-4313968-1629975495-3986-jpeg.jpg",
+        "song": {
+            "id": "199_1",
+            "file": "pop.00095.wav"
+        }
+    },
+    {
+        "similarity_rank": 79,
+        "similarity_percentage": 0.8113,
+        "id": 811,
+        "title": "Album 811",
+        "imageSrc": "src/backend/database/picture/R-394450-1327649610-jpeg.jpg",
+        "song": {
+            "id": "811_1",
+            "file": "pop.00027.wav"
+        }
+    },
+    {
+        "similarity_rank": 80,
+        "similarity_percentage": 0.8112,
+        "id": 451,
+        "title": "Album 451",
+        "imageSrc": "src/backend/database/picture/R-7357464-1439712424-5039-jpeg.jpg",
+        "song": {
+            "id": "451_1",
+            "file": "pop.00026.wav"
+        }
+    },
+    {
+        "similarity_rank": 81,
+        "similarity_percentage": 0.803,
+        "id": 208,
+        "title": "Album 208",
+        "imageSrc": "src/backend/database/picture/R-11762926-1521952821-7279-jpeg.jpg",
+        "song": {
+            "id": "208_1",
+            "file": "pop.00077.wav"
+        }
+    },
+    {
+        "similarity_rank": 82,
+        "similarity_percentage": 0.8012,
+        "id": 46,
+        "title": "Album 46",
+        "imageSrc": "src/backend/database/picture/R-5949260-1407143352-6006-jpeg.jpg",
+        "song": {
+            "id": "46_1",
+            "file": "pop.00062.wav"
+        }
+    },
+    {
+        "similarity_rank": 83,
+        "similarity_percentage": 0.7984,
+        "id": 64,
+        "title": "Album 64",
+        "imageSrc": "src/backend/database/picture/R-1669033-1235751934-jpeg.jpg",
+        "song": {
+            "id": "64_1",
+            "file": "pop.00092.wav"
+        }
+    },
+    {
+        "similarity_rank": 84,
+        "similarity_percentage": 0.7957,
+        "id": 568,
+        "title": "Album 568",
+        "imageSrc": "src/backend/database/picture/R-2515564-1530854307-2850-jpeg.jpg",
+        "song": {
+            "id": "568_1",
+            "file": "pop.00039.wav"
+        }
+    },
+    {
+        "similarity_rank": 85,
+        "similarity_percentage": 0.7954,
+        "id": 226,
+        "title": "Album 226",
+        "imageSrc": "src/backend/database/picture/R-12128032-1528851531-4886-jpeg.jpg",
+        "song": {
+            "id": "226_1",
+            "file": "pop.00016.wav"
+        }
+    },
+    {
+        "similarity_rank": 86,
+        "similarity_percentage": 0.7902,
+        "id": 739,
+        "title": "Album 739",
+        "imageSrc": "src/backend/database/picture/R-8645720-1505411453-7137-jpeg.jpg",
+        "song": {
+            "id": "739_1",
+            "file": "pop.00009.wav"
+        }
+    },
+    {
+        "similarity_rank": 87,
+        "similarity_percentage": 0.7874,
+        "id": 559,
+        "title": "Album 559",
+        "imageSrc": "src/backend/database/picture/R-4582460-1369057513-9646-jpeg.jpg",
+        "song": {
+            "id": "559_1",
+            "file": "pop.00075.wav"
+        }
+    },
+    {
+        "similarity_rank": 88,
+        "similarity_percentage": 0.7821,
+        "id": 19,
+        "title": "Album 19",
+        "imageSrc": "src/backend/database/picture/R-116593-1528558607-1289-jpeg.jpg",
+        "song": {
+            "id": "19_1",
+            "file": "pop.00038.wav"
+        }
+    },
+    {
+        "similarity_rank": 89,
+        "similarity_percentage": 0.7798,
+        "id": 325,
+        "title": "Album 325",
+        "imageSrc": "src/backend/database/picture/R-11522971-1572078519-5108-jpeg.jpg",
+        "song": {
+            "id": "325_1",
+            "file": "pop.00047.wav"
+        }
+    },
+    {
+        "similarity_rank": 90,
+        "similarity_percentage": 0.7765,
+        "id": 316,
+        "title": "Album 316",
+        "imageSrc": "src/backend/database/picture/R-7555164-1529638383-4564-jpeg.jpg",
+        "song": {
+            "id": "316_1",
+            "file": "pop.00070.wav"
+        }
+    },
+    {
+        "similarity_rank": 91,
+        "similarity_percentage": 0.7747,
+        "id": 712,
+        "title": "Album 712",
+        "imageSrc": "src/backend/database/picture/R-636220-1297547079-jpeg.jpg",
+        "song": {
+            "id": "712_1",
+            "file": "pop.00052.wav"
+        }
+    },
+    {
+        "similarity_rank": 92,
+        "similarity_percentage": 0.7631,
+        "id": 298,
+        "title": "Album 298",
+        "imageSrc": "src/backend/database/picture/R-3425013-1544157583-9058-jpeg.jpg",
+        "song": {
+            "id": "298_1",
+            "file": "pop.00042.wav"
+        }
+    }
+]

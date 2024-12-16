@@ -2,19 +2,23 @@ import os
 import numpy as np
 import shutil
 from music21 import converter
-from utils.convert_audio_to_midi import convert_audio_to_midi
+from backend.utils.convert_audio_to_midi import convert_audio_to_midi
 import json
+import logging
+from pathlib import Path
 
-# ====================================================================================
+logging.basicConfig(level=logging.INFO)
+
 # Constants
-# ====================================================================================
-
+ROOT_DIR = BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent  # Points to 'backend/'
+MIDI_DATASET_PATH = BASE_DIR / "database" / "midi_audio"
+AUDIO_DIR = os.path.join(BASE_DIR, "database", "audio")
 SIMILARITY_THRESHOLD = 0.75  # Minimum similarity score to consider a match
 MIR_RESULT_JSON = "src/backend/query_result/MIR_result.json"
 
-# ====================================================================================
+
 # Step 1: Audio Processing
-# ====================================================================================
 
 
 def process_midi_file(midi_file_path):
@@ -201,20 +205,17 @@ def query_by_humming(query_audio_file, database_files, threshold=SIMILARITY_THRE
 # ====================================================================================
 
 
-def save_matches(matches, mapper, result_dir="test/result"):
-    """
-    Parameters:
-        matches (list): A list of tuples containing matched file paths and their similarity audios.
-        mapper (list): The data mapper containing metadata of songs and albums.
-        result_dir (str): The directory to save the result audio and pictures.
-    """
+def save_matches(matches, mapper, result_dir):
     if not matches:
-        print("No matches to save.")
+        logging.info("No matches to save.")
         return
 
     # Prepare result directories
     result_audio_dir = os.path.join(result_dir, "audio")
     result_picture_dir = os.path.join(result_dir, "picture")
+    mir_result_path = os.path.join(
+        result_dir, "json/MIR_result.json"
+    )  # Define the JSON path
     os.makedirs(result_audio_dir, exist_ok=True)
     os.makedirs(result_picture_dir, exist_ok=True)
 
@@ -227,8 +228,17 @@ def save_matches(matches, mapper, result_dir="test/result"):
                     os.unlink(file_path)
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
+                logging.info(f"Deleted file: {file_path}")
             except Exception as e:
-                print(f"Error deleting file {file_path}: {e}")
+                logging.error(f"Error deleting file {file_path}: {e}")
+
+    # Remove existing MIR_result.json if it exists
+    if os.path.exists(mir_result_path):
+        try:
+            os.remove(mir_result_path)
+            logging.info(f"Removed existing JSON file: {mir_result_path}")
+        except Exception as e:
+            logging.error(f"Error deleting JSON file {mir_result_path}: {e}")
 
     # Prepare list for MIR_result.json
     mir_results = []
@@ -239,34 +249,40 @@ def save_matches(matches, mapper, result_dir="test/result"):
         match_found = False
         for album in mapper:
             for song in album["songs"]:
-                song_basename = os.path.basename(song["file"]).rsplit(".", 1)[0]
-                match_basename = os.path.basename(match).rsplit(".", 1)[0]
+                song_basename = os.path.splitext(os.path.basename(song["file"]))[0]
+                match_basename = os.path.splitext(os.path.basename(match))[0]
                 if song_basename == match_basename:
                     # Copy the audio file
-                    audio_file_path = os.path.join(
-                        "src/backend/database/audio", song["file"]
-                    )
+                    audio_file_path = os.path.join(AUDIO_DIR, song["file"])
                     destination_audio_path = os.path.join(
                         result_audio_dir,
                         f"{similarity_rank}_{os.path.basename(song['file'])}",
                     )
+                    if not os.path.exists(audio_file_path):
+                        logging.error(f"Audio file does not exist: {audio_file_path}")
+                        continue
                     try:
                         shutil.copy(audio_file_path, destination_audio_path)
-                        print(f"Copied {audio_file_path} to {destination_audio_path}")
+                        logging.info(
+                            f"Copied {audio_file_path} to {destination_audio_path}"
+                        )
                     except Exception as e:
-                        print(f"Error copying audio file {audio_file_path}: {e}")
+                        logging.error(
+                            f"Error copying audio file {audio_file_path}: {e}"
+                        )
                         continue  # Skip to next if copying fails
 
                     # Copy the album image
-                    image_src = album["imageSrc"]
+                    image_src = os.path.join(ROOT_DIR, album["imageSrc"])
                     destination_image_path = os.path.join(
                         result_picture_dir, f"{similarity_rank}.jpg"
                     )
+
                     try:
                         shutil.copy(image_src, destination_image_path)
-                        print(f"Copied {image_src} to {destination_image_path}")
+                        logging.info(f"Copied {image_src} to {destination_image_path}")
                     except Exception as e:
-                        print(f"Error copying image {image_src}: {e}")
+                        logging.error(f"Error copying image {image_src}: {e}")
                         continue  # Skip to next if copying fails
 
                     # Prepare MIR_result.json entry
@@ -275,7 +291,7 @@ def save_matches(matches, mapper, result_dir="test/result"):
                         "similarity_percentage": round(similarity, 4),
                         "id": album["id"],
                         "title": album["title"],
-                        "imageSrc": image_src,
+                        "imageSrc": album["imageSrc"],
                         "song": song,
                     }
                     mir_results.append(mir_entry)
@@ -285,20 +301,19 @@ def save_matches(matches, mapper, result_dir="test/result"):
                 break  # Move to next match
 
         if not match_found:
-            print(f"No matching album/song found for MIDI file {match}")
+            logging.warning(f"No matching album/song found for MIDI file {match}")
             continue
 
         similarity_rank += 1
 
     # Save MIR_result.json
-    mir_result_path = MIR_RESULT_JSON
     try:
         os.makedirs(os.path.dirname(mir_result_path), exist_ok=True)
         with open(mir_result_path, "w") as f:
             json.dump(mir_results, f, indent=4)
-        print(f"Saved MIR_result.json to {mir_result_path}")
+        logging.info(f"Saved MIR_result.json to {mir_result_path}")
     except Exception as e:
-        print(f"Error saving MIR_result.json: {e}")
+        logging.error(f"Error saving MIR_result.json: {e}")
 
     return mir_results  # Return the list of matched results
 

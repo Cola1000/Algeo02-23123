@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 from pathlib import Path
 from backend.APF2 import process_query
+from backend.MIR import *
 
 # ====================================================================================
 # Setup Logging
@@ -103,7 +104,7 @@ async def upload_dataset(
         try:
             await process_database(
                 db_dir_path=str(PICTURE_DIR),
-                mapper_file=str(BASE_DIR / "database" / "mapper_all_img.json"),
+                mapper_file=str(BASE_DIR / "database" / "mapper" / "mapper.json"),
                 process_db=True,
             )
             TASK_STATUS[task_id] = "Completed"
@@ -141,15 +142,14 @@ async def get_task_status(task_id: str):
 # Endpoint to search by image
 @app.post("/search-image/")
 async def search_image(query_image: UploadFile = File(...)):
-    # Validate image format
     if not query_image.filename.lower().endswith((".png", ".jpg", ".jpeg")):
         raise HTTPException(status_code=400, detail="Invalid image format.")
 
     # Define query directory and save the uploaded image
-    query_dir = "backend/query/"
-    os.makedirs(query_dir, exist_ok=True)
+    image_query_dir = "backend/query/"
+    os.makedirs(image_query_dir, exist_ok=True)
 
-    image_path = os.path.join(query_dir, query_image.filename)
+    image_path = os.path.join(image_query_dir, query_image.filename)
     try:
         with open(image_path, "wb") as buffer:
             shutil.copyfileobj(query_image.file, buffer)
@@ -196,23 +196,74 @@ async def search_image(query_image: UploadFile = File(...)):
 
 # Endpoint to search by audio
 @app.post("/search-audio/")
-async def search_audio(audio_file: UploadFile = File(...)):
-    if not audio_file.filename.lower().endswith((".mp3", ".wav")):
+async def search_audio(query_audio: UploadFile = File(...)):
+    if not query_audio.filename.lower().endswith((".mp3", ".wav")):
         raise HTTPException(status_code=400, detail="Invalid audio format.")
 
-    audio_path = os.path.join("src/backend/query/", audio_file.filename)
-    with open(audio_path, "wb") as buffer:
-        shutil.copyfileobj(audio_file.file, buffer)
+    audio_query_dir = "backend/query/"
+    os.makedirs(audio_query_dir, exist_ok=True)
 
-    # Perform audio search
-    # Example:
-    # results = process_query_audio(audio_path)
+    audio_path = os.path.join(audio_query_dir, query_audio.filename)
+    try:
+        with open(audio_path, "wb") as buffer:
+            shutil.copyfileobj(query_audio.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save audio: {e}")
 
-    results = {
-        "message": "Audio search functionality not implemented yet."
-    }  # Placeholder
+    # Locate the mapper JSON file
+    mapper_dir = BASE_DIR / "database" / "mapper"
+    mapper_files = glob.glob(str(mapper_dir / "*.json"))
+    if not mapper_files:
+        raise HTTPException(status_code=500, detail="Mapper JSON file not found.")
 
-    return {"results": results}
+    mapper_file = mapper_files[0]  # Use the first found JSON file
+
+    # Load the mapper JSON data
+    try:
+        with open(mapper_file, "r") as f:
+            mapper = json.load(f)
+    except json.JSONDecodeError as e:
+        raise HTTPException(
+            status_code=500, detail=f"Invalid JSON format in mapper file: {e}"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to load mapper JSON: {e}")
+
+    # Optional: Add debug statements to verify mapper structure
+    print(f"Mapper Type: {type(mapper)}")  # Should output: <class 'list'>
+    if len(mapper) > 0:
+        print(f"First album keys: {mapper[0].keys()}")  # Should include 'imageSrc'
+
+    # Define the result directory
+    RESULT_DIR = BASE_DIR / "query_result"
+
+    # QUERYING
+    # Get the list of MIDI files for querying
+    database_files = [
+        os.path.join(MIDI_DATASET_PATH, f)
+        for f in os.listdir(MIDI_DATASET_PATH)
+        if f.endswith(".mid")
+    ]
+
+    if not database_files:
+        print(
+            f"No MIDI files found in {MIDI_DATASET_PATH}. Please convert the dataset first."
+        )
+        return
+
+    # Debugging statement
+    print(f"Loaded {len(database_files)} MIDI files for querying.")
+
+    # Query by humming
+    print("Processing query audio and retrieving similar MIDI files...\n")
+    matches = query_by_humming(
+        audio_path, database_files, threshold=SIMILARITY_THRESHOLD
+    )
+
+    # Save the matches to the result directories and MIR_result.json
+    mir_results = save_matches(matches, mapper, result_dir=RESULT_DIR)
+
+    return {"results": mir_results}
 
 
 if __name__ == "__main__":

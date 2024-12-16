@@ -58,15 +58,12 @@ const AudioRecorder = () => {
     formData.append("audio_file", audioBlob, "recorded_audio.wav");
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/search-audio/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("http://localhost:8000/search-audio/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Upload Audio Response:", response.data);
       setPopupData(response.data.results);
       setIsPopupVisible(true);
     } catch (error) {
@@ -75,33 +72,30 @@ const AudioRecorder = () => {
     }
   };
 
-  // Handle Audio File Upload
+  // Handle Audio File Upload via Drag and Drop
   const onDrop = useCallback(async (acceptedFiles) => {
-    const audioFiles = acceptedFiles.filter((file) =>
-      file.type.startsWith("audio/")
-    );
+    const audioFiles = acceptedFiles.filter((file) => file.type.startsWith("audio/"));
     if (audioFiles.length === 0) {
       alert("Please upload valid audio files.");
       return;
     }
     const file = audioFiles[0];
     const formData = new FormData();
-    formData.append("audio_file", file);
+    formData.append("query_audio", file);
+
+    console.log("Uploading audio file via drag-and-drop:", file);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/search-audio/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("http://localhost:8000/search-audio/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Drag and Drop Upload Response:", response.data);
       setPopupData(response.data.results);
       setIsPopupVisible(true);
     } catch (error) {
-      console.error("Error uploading audio:", error);
+      console.error("Error uploading audio via drag-and-drop:", error);
       alert("There was an error uploading your audio.");
     }
   }, []);
@@ -116,74 +110,61 @@ const AudioRecorder = () => {
       <HillBackground />
 
       {/* Home Button */}
-      <button
-        onClick={() => navigate("/")}
-        className="absolute top-4 right-4 text-white-500 hover:underline"
-      >
+      <button onClick={() => navigate("/")} className="absolute top-4 right-4 text-white-500 hover:underline">
         &larr; Home
       </button>
 
-      <h2 className="text-4xl font-bold mb-12">Audio Recognizer</h2>
+      <h2 className="text-4xl font-bold mb-12 text-white-800">Audio Recognizer</h2>
       {!isRecording ? (
         <button
           onClick={startRecording}
-          className="btn bg-blue-500 text-white shadow-md hover:shadow-lg mb-4"
-          style={{ transform: "translateY(-20px)" }}
-        >
+          className="btn bg-blue-500 text-white shadow-md hover:shadow-lg mb-4 transform translate-y-[-20px] px-6 py-2 rounded-lg">
           Start Recording
         </button>
       ) : (
-        <p
-          className="text-lg font-semibold mb-4 flashing-text"
-          style={{ transform: "translateY(-20px)" }}
-        >
-          {recordingText}
-        </p>
+        <p className="text-lg font-semibold mb-4 flashing-text transform translate-y-[-20px] text-red-600">{recordingText}</p>
       )}
 
       {/* Audio Playback */}
       {audioURL && (
-        <div className="mt-4">
-          <p>Recorded Audio:</p>
-          <audio controls src={audioURL}></audio>
-
-          {/* Display Humming Results */}
-          {isPopupVisible && popupData && (
-            <div className="search-results mt-8">
-              <h2 className="text-xl font-bold mb-4">Humming Results</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {popupData.map((album) => (
-                  <div
-                    key={album.id}
-                    className="album-card w-48 h-48 cursor-pointer transition-transform transform hover:scale-105"
-                  >
-                    <img
-                      src={`http://localhost:8000/static/${album.imageSrc
-                        .split("/")
-                        .pop()}`}
-                      alt={`Album ${album.title}`}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                    <p className="mt-2 text-center">{album.title}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+        <div className="mt-4 text-center">
+          <p className="mb-2 text-gray-700">Recorded Audio:</p>
+          <audio controls src={audioURL} className="w-full max-w-md mx-auto rounded-lg shadow-lg"></audio>
         </div>
       )}
 
-      {/* Upload Audio File */}
+      {/* Display Audio Search Results */}
+      {isPopupVisible && popupData && (
+        <div className="search-results mt-8 p-6 bg-white bg-opacity-90 rounded-xl shadow-2xl">
+          <h2 className="text-2xl font-semibold mb-6 text-center text-blue-600">Audio Search Results</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {popupData.map((album) => (
+              <div
+                key={album.id}
+                className="album-card bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300">
+                <img
+                  src={`http://localhost:8000/static/${album.imageSrc.split("/").pop()}`}
+                  alt={`Album ${album.title}`}
+                  className="w-full h-40 object-cover"
+                />
+                <div className="p-4">
+                  <p className="mt-2 text-center font-medium text-gray-800">{album.title}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Upload Audio File via Drag and Drop */}
       <div
         {...getRootProps()}
-        className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer"
-      >
-        <p>You can also upload an audio file</p>
+        className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p>Drop the audio file here ...</p>
+          <p className="text-blue-500">Drop the audio file here ...</p>
         ) : (
-          <p>Drag 'n' drop an audio file here, or click to select one</p>
+          <p className="text-gray-700">Drag 'n' drop an audio file here, or click to select one</p>
         )}
       </div>
 
@@ -208,6 +189,18 @@ const AudioRecorder = () => {
 
         .flashing-text {
           animation: flashRed 4s infinite;
+        }
+
+        .search-results {
+          /* Styles are managed by Tailwind classes */
+        }
+
+        .album-card img {
+          /* Styles are managed by Tailwind classes */
+        }
+
+        .album-card:hover img {
+          /* Styles are managed by Tailwind classes */
         }
       `}</style>
     </div>
