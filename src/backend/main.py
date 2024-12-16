@@ -4,6 +4,7 @@ import json
 import shutil
 import uuid
 from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks
+from fastapi.staticfiles import StaticFiles
 from typing import List
 from backend.utils.database_parser import parse_uploaded_database, process_database
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,6 +41,8 @@ AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 # ====================================================================================
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="src/backend/database/picture/"), name="static")
 
 # ====================================================================================
 # CORS Configuration (Adjust Origins as Needed)

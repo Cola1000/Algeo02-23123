@@ -124,21 +124,20 @@ const Home2D = () => {
     });
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/search-image/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("Image Query Success:", response.data);
-      alert("Image query successful!");
-      // Handle success (e.g., display results)
+      const response = await axios.post('http://localhost:8000/search-image/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Image Query Success:', response.data);
+      alert('Image query successful!');
+      
+      // Show popup with JSON data
+      setPopupData(response.data);
+      setIsPopupVisible(true);
     } catch (error) {
-      console.error("Image Query Error:", error);
-      alert("There was an error processing your image query.");
+      console.error('Image Query Error:', error);
+      alert('There was an error processing your image query.');
     }
   }, []);
 
