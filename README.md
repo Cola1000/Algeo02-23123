@@ -1,9 +1,9 @@
 # Tugas Besar Aljabar Linear dan Geometri 02
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/built_using-Vite-purple.svg)
+![License](https://img.shields.io/badge/license-MIT-AC0003.svg)
+![Version](https://img.shields.io/badge/built_using-Vite-C870F1.svg)
 ![Build Status](https://img.shields.io/badge/type-Tugas_Besar-brightgreen.svg)
-![Contributors](https://img.shields.io/badge/contributors-3_(person)_+_1_(Waifu)-orange.svg)
+![Contributors](https://img.shields.io/badge/contributors-3_(person)_+_1_(Waifu)-FF4500.svg)
 
 <h1 align="center">
   <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?font=Righteous&pause=500&color=FFFFFF&size=35&center=true&vCenter=true&random=false&width=435&lines=Welcome+to+:+;Hatsune+Mix[ue]" alt="Hatsune Mix[ue]" /></a>
@@ -32,8 +32,9 @@
 
 ### Built With
 
-![Three.js](https://img.shields.io/badge/three-0.171.x-blue.svg)
-![Framework](https://img.shields.io/badge/framework-React-green.svg)
+![Three.js](https://img.shields.io/badge/three-0.171.x-049EF4.svg)
+![Axios](https://img.shields.io/badge/axios-1.7.9-A166FF.svg)
+![Framework](https://img.shields.io/badge/framework-React-58C4DC.svg)
 
 ---
 
@@ -120,7 +121,8 @@ These screenshots provide a preview of the web application in action, showcasing
 
    - Example `setup.bat` (Windows):
      ```cmd
-     cd .\srcrontend\Hatsune_Mixue     npm install
+     cd .\srcrontend\Hatsune_Mixue
+     npm install
      npm run dev
      ```
 
