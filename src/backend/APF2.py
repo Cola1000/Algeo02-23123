@@ -9,7 +9,14 @@ import json
 # Constants
 # ====================================================================================
 
-SIMILARITY_THRESHOLD = 75.0  # Minimum similarity percentage to consider a match
+SIMILARITY_THRESHOLD = 75.0
+
+# Paths for storing processed data
+PROCESSED_DATA_DIR = "src/backend/database/processed_data"
+IMAGE_DB_PROJECTION_FILE = os.path.join(PROCESSED_DATA_DIR, "imageDB_projection.npz")
+MEAN_FILE = os.path.join(PROCESSED_DATA_DIR, "mean.npy")
+PRINCIPAL_COMPONENTS_FILE = os.path.join(PROCESSED_DATA_DIR, "principal_components.npy")
+ORIGINAL_IMAGE_PATHS_FILE = os.path.join(PROCESSED_DATA_DIR, "original_image_paths.npy")
 
 # ====================================================================================
 # Step 1: Image Processing and Loading
@@ -114,19 +121,24 @@ def standardize_data(imageDB):
 # ====================================================================================
 
 
-def compute_covariance_matrix(imageDB):
-    return np.cov(imageDB, rowvar=False)
+def compute_covariance_matrix(imageDB_centered):
+    return np.cov(imageDB_centered, rowvar=False)
 
 
-def perform_svd(covariant_matrix):
-    U, S, Vt = np.linalg.svd(covariant_matrix)
+def perform_svd(covariance_matrix):
+    U, S, Vt = np.linalg.svd(covariance_matrix)
     return U, S, Vt
 
 
-def select_principal_components(U, k):
+def select_principal_components(U, S, threshold=0.95):
     """
-    Select the top k principal components from the U matrix.
+    Select the top k principal components based on the cumulative variance threshold.
     """
+    cumulative_variance = np.cumsum(S) / np.sum(S)
+    k = np.argmax(cumulative_variance >= threshold) + 1
+    print(
+        f"Selected {k} principal components based on {threshold*100}% variance threshold."
+    )
     return U[:, :k]
 
 
@@ -155,21 +167,11 @@ def project_query_image(query_image_centered, principal_components):
 
 
 def compute_euclidean_distances(query_projection, dataset_projections):
-    """
-    Compute the Euclidean distances between the query image projection and the dataset projections.
-    """
     distances = np.linalg.norm(dataset_projections - query_projection, axis=1)
     return distances
 
 
 def sort_by_similarity(distances, image_paths):
-    """
-    Sort the dataset images by similarity to the query image.
-
-    Returns:
-        sorted_image_paths (list): Image paths sorted by similarity (most similar first).
-        sorted_distances (list): Corresponding distances sorted in ascending order.
-    """
     indices = np.argsort(distances)
     sorted_image_paths = [image_paths[i] for i in indices]
     sorted_distances = [distances[i] for i in indices]
@@ -177,40 +179,79 @@ def sort_by_similarity(distances, image_paths):
 
 
 # ====================================================================================
-# Step 5: Retrieval and Output
+# Database Processing
+# ====================================================================================
+
+
+def process_database(db_dir_path, process_db=True, size=(60, 60), threshold=0.95):
+    """
+    threshold (float): Variance threshold for selecting principal components.
+    """
+    if not process_db and os.path.exists(IMAGE_DB_PROJECTION_FILE):
+        print("Loading existing database projections...")
+        data = np.load(IMAGE_DB_PROJECTION_FILE)
+        imageDB_projection = data["imageDB_projection"]
+        mean = np.load(MEAN_FILE)
+        principal_components = np.load(PRINCIPAL_COMPONENTS_FILE)
+        original_image_paths = np.load(ORIGINAL_IMAGE_PATHS_FILE, allow_pickle=True)
+        original_image_paths = original_image_paths.tolist()
+    else:
+        print("Processing database images...")
+        # Load and preprocess database images
+        imageDB, original_image_paths = load_image_database(db_dir_path, size)
+        if imageDB.size == 0:
+            print("No images loaded.")
+            return None, None, None, None
+
+        # Standardize the data
+        imageDB_centered, mean = standardize_data(imageDB)
+
+        # Compute the covariance matrix
+        covariance_matrix = compute_covariance_matrix(imageDB_centered)
+
+        # Perform SVD
+        U, S, Vt = perform_svd(covariance_matrix)
+
+        # Select the principal components
+        principal_components = select_principal_components(U, S, threshold)
+
+        # Project imageDB_centered onto the principal components
+        imageDB_projection = project_data(imageDB_centered, principal_components)
+
+        # Save the data
+        os.makedirs(PROCESSED_DATA_DIR, exist_ok=True)
+        np.savez_compressed(
+            IMAGE_DB_PROJECTION_FILE, imageDB_projection=imageDB_projection
+        )
+        np.save(MEAN_FILE, mean)
+        np.save(PRINCIPAL_COMPONENTS_FILE, principal_components)
+        np.save(ORIGINAL_IMAGE_PATHS_FILE, original_image_paths)
+        print("Database processing complete and data saved.")
+
+    return imageDB_projection, mean, principal_components, original_image_paths
+
+
+# ====================================================================================
+# Step 6: Retrieval and Output
 # ====================================================================================
 
 
 def save_matches(sorted_image_paths, sorted_distances, mapper, result_directory):
-    """
-    Parameters:
-        sorted_image_paths (list): List of image file paths sorted by similarity.
-        sorted_distances (list): List of distances corresponding to the sorted images.
-        mapper (list): The data mapper containing metadata of songs and albums.
-        result_directory (str): The directory to save the result audio and pictures.
-    """
     # Prepare result directories
     result_audio_dir = os.path.join(result_directory, "audio")
     result_picture_dir = os.path.join(result_directory, "picture")
     os.makedirs(result_audio_dir, exist_ok=True)
     os.makedirs(result_picture_dir, exist_ok=True)
 
-    # Remove existing contents to ensure purity
-    for filename in os.listdir(result_audio_dir):
-        file_path = os.path.join(result_audio_dir, filename)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-        except Exception as e:
-            print(f"Error deleting file {file_path}: {e}")
-
-    for filename in os.listdir(result_picture_dir):
-        file_path = os.path.join(result_picture_dir, filename)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-        except Exception as e:
-            print(f"Error deleting file {file_path}: {e}")
+    # Clear existing contents
+    for directory in [result_audio_dir, result_picture_dir]:
+        for filename in os.listdir(directory):
+            file_path = os.path.join(directory, filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
 
     # Map to hold the best (minimum) distance for each original image
     original_image_best_distance = {}
@@ -326,33 +367,28 @@ def save_matches(sorted_image_paths, sorted_distances, mapper, result_directory)
     return apf_results  # Return the list of matched results
 
 
+# ====================================================================================
+# Step 7: Query Processing Function
+# ====================================================================================
+
+
 def process_query(
     query_image_path,
-    imageDB,
-    original_image_paths,
     result_directory,
     mapper,
     size=(60, 60),
 ):
-    # Standardize the data
-    imageDB_centered, mean = standardize_data(imageDB)
+    # Load the saved database projections and related data
+    if not os.path.exists(IMAGE_DB_PROJECTION_FILE):
+        print("Database projections not found. Please process the database first.")
+        return []
 
-    # Compute the covariance matrix
-    covariant_matrix = compute_covariance_matrix(imageDB_centered)
-
-    # Perform SVD
-    U, S, Vt = perform_svd(covariant_matrix)
-
-    # Determine the optimal number of principal components
-    cumulative_variance = np.cumsum(S) / np.sum(S)
-    threshold = 0.95
-    k = np.argmax(cumulative_variance >= threshold) + 1
-
-    # Select the top k principal components
-    principal_components = select_principal_components(U, k)
-
-    # Project imageDB_centered onto the principal components
-    imageDB_projection = project_data(imageDB_centered, principal_components)
+    data = np.load(IMAGE_DB_PROJECTION_FILE)
+    imageDB_projection = data["imageDB_projection"]
+    mean = np.load(MEAN_FILE)
+    principal_components = np.load(PRINCIPAL_COMPONENTS_FILE)
+    original_image_paths = np.load(ORIGINAL_IMAGE_PATHS_FILE, allow_pickle=True)
+    original_image_paths = original_image_paths.tolist()
 
     # Process the query image
     query_image_centered = process_query_image(query_image_path, mean, size)
@@ -378,6 +414,11 @@ def process_query(
     return apf_results
 
 
+# ====================================================================================
+# Main Function
+# ====================================================================================
+
+
 def main():
     db_dir_path = "src/backend/database/picture/"
     result_directory = "test/result"
@@ -392,23 +433,20 @@ def main():
         print(f"Error loading mapper file {mapper_file}: {e}")
         return
 
-    # Load and preprocess images
-    print("Loading and preprocessing database images...")
-    imageDB, original_image_paths = load_image_database(db_dir_path)
-    if imageDB.size == 0:
-        print("No images loaded. Exiting.")
-        return
-    print(
-        f"Loaded {len(imageDB)} images (including rotations, flips, and color jittering)."
-    )
+    # New DB = True, else False
+    process_db = False
 
-    # Process the query image and retrieve similar images and their corresponding songs
-    print(
-        "Processing query image...\n"
+    # Process or load the database
+    imageDB_projection, mean, principal_components, original_image_paths = (
+        process_database(db_dir_path, process_db=process_db)
     )
-    apf_results = process_query(
-        query_image_path, imageDB, original_image_paths, result_directory, mapper
-    )
+    if imageDB_projection is None:
+        print("Failed to process or load the database.")
+        return
+
+    # Process the query image
+    print("Processing query image...\n")
+    apf_results = process_query(query_image_path, result_directory, mapper)
 
     if apf_results:
         # Print the matched image paths above SIMILARITY_THRESHOLD
