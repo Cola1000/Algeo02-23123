@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+
+import './App.css';
+import Custom_Viewport from './components/Custom_Viewport';
+import { Home3D, Home2D, About, Credits } from './pages/index.js';
+import AlbumDetail from './pages/AlbumDetail';
+import AudioRecorder from './pages/AudioRecorder.jsx';
+import HeartPage from './pages/My_Wife.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const location = useLocation();
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <main className="w-screen h-screen relative">
+      {location.pathname !== '/Home3D' && <Custom_Viewport />}
+
+      {/* Pages */}
+      <Routes>
+        <Route path="/" element={<Home2D />} /> {/* Landing page */}
+        <Route path="/Home3D" element={<Home3D />} />
+        <Route path="/Credits" element={<Credits />} />
+        <Route path="/About" element={<About />} />
+        <Route path="/album/:albumId" element={<AlbumDetail />} />
+        <Route path="/audio-recorder" element={<AudioRecorder />} />
+        <Route path="/My_Wife" element={<HeartPage />} />
+      </Routes>
+    </main>
+  );
 }
 
-export default App
+export default App;
