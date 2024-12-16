@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 # Define Base Directory
 # ====================================================================================
 
+# BASE_DIR = backend/
 BASE_DIR = Path(__file__).resolve().parent
 
 # ====================================================================================
@@ -42,7 +43,7 @@ AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="src/backend/database/picture/"), name="static")
+app.mount("/static", StaticFiles(directory=PICTURE_DIR), name="static")
 
 # ====================================================================================
 # CORS Configuration (Adjust Origins as Needed)
@@ -180,12 +181,12 @@ async def search_image(query_image: UploadFile = File(...)):
         print(f"First album keys: {mapper[0].keys()}")  # Should include 'imageSrc'
 
     # Define the result directory
-    result_directory = "test/result"
+    RESULT_DIR = BASE_DIR / "query_result"
 
     # Perform image search
     apf_results = process_query(
         query_image_path=image_path,
-        result_directory=result_directory,
+        result_directory=RESULT_DIR,
         mapper=mapper,  # Pass the loaded mapper data
         size=(60, 60),
     )
