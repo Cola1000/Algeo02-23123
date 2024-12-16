@@ -3,19 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import albumPictures from "../components/albumPictures.jsx";
 import HillBackground from "../models/HillBackground.jsx";
-import { applyTheme } from '../components/CheckTheme.jsx'
+import { applyTheme } from '../components/CheckTheme.jsx';
+import axios from 'axios';
 
 const Home2D = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const albumsPerPage = 16;
 
-  // State to manage selected files
-  const [selectedFiles, setSelectedFiles] = useState([]);
-
-  // State to control the visibility of the dropzones
-  const [showDropzone, setShowDropzone] = useState(false);
+  // States for Zip Files
+  const [selectedZipFiles, setSelectedZipFiles] = useState([]);
   const [showZipDropzone, setShowZipDropzone] = useState(false);
+
+  // States for Image Upload
+  const [selectedImageFiles, setSelectedImageFiles] = useState([]);
+  const [showImageDropzone, setShowImageDropzone] = useState(false);
+
+  // States for Audio Upload
+  const [selectedAudioFiles, setSelectedAudioFiles] = useState([]);
+  const [showAudioDropzone, setShowAudioDropzone] = useState(false);
 
   // Calculate total pages
   const totalPages = Math.ceil(albumPictures.length / albumsPerPage);
@@ -23,10 +29,7 @@ const Home2D = () => {
   // Get current albums
   const indexOfLastAlbum = currentPage * albumsPerPage;
   const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
-  const currentAlbums = albumPictures.slice(
-    indexOfFirstAlbum,
-    indexOfLastAlbum
-  );
+  const currentAlbums = albumPictures.slice(indexOfFirstAlbum, indexOfLastAlbum);
 
   const handleAlbumClick = (albumId) => {
     navigate(`/album/${albumId}`);
@@ -34,49 +37,126 @@ const Home2D = () => {
 
   // Handles the Album Picture Recognizer button click
   const handleAlbumRecognizer = () => {
-    setShowDropzone(true);
     setShowZipDropzone(false);
+    setShowImageDropzone(true);
+    setShowAudioDropzone(false);
   };
 
   // Handles the Zip File Recognizer button click
   const handleZipRecognizer = () => {
     setShowZipDropzone(true);
-    setShowDropzone(false);
+    setShowImageDropzone(false);
+    setShowAudioDropzone(false);
   };
 
-  // Drag and drop logic
-  const onDrop = useCallback((acceptedFiles) => {
-    setSelectedFiles(acceptedFiles);
-    alert(`You have uploaded ${acceptedFiles.length} file(s).`);
-    setShowDropzone(false);
-  }, []);
+  // Handles the Audio Query button click
+  const handleAudioRecognizer = () => {
+    setShowAudioDropzone(true);
+    setShowZipDropzone(false);
+    setShowImageDropzone(false);
+  };
 
-  // Drag and drop logic (for zip)
-  const onZipDrop = useCallback((acceptedFiles) => {
-    const zipFiles = acceptedFiles.filter(file => file.type === "application/zip");
+  // Drag and drop logic for Zip Files
+  const onZipDrop = useCallback(async (acceptedFiles) => {
+    const zipFiles = acceptedFiles.filter(file => file.name.endsWith('.zip'));
     if (zipFiles.length === 0) {
       alert("Please upload a valid .zip file.");
       return;
     }
-    setSelectedFiles(zipFiles);
+    setSelectedZipFiles(zipFiles);
     alert(`You have uploaded ${zipFiles.length} .zip file(s).`);
     setShowZipDropzone(false);
+
+    // Prepare form data
+    const formData = new FormData();
+    zipFiles.forEach(file => {
+      formData.append('zip_file', file);
+    });
+
+    try {
+      const response = await axios.post('http://localhost:8000/upload-dataset/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Upload Success:', response.data);
+      alert('Zip files uploaded successfully!');
+      // Handle success (e.g., update state, notify user)
+    } catch (error) {
+      console.error('Upload Error:', error);
+      alert('There was an error uploading your zip files.');
+    }
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-  const { getRootProps: getZipRootProps, getInputProps: getZipInputProps, isDragActive: isZipDragActive } = useDropzone({ onDrop: onZipDrop });
+  const { getRootProps: getZipRootProps, getInputProps: getZipInputProps, isDragActive: isZipDragActive } = useDropzone({ onDrop: onZipDrop, disabled: !showZipDropzone });
 
-  const handleAudioRecognizer = () => {
-    const useMicrophone = window.confirm(
-      "Do you want to use your microphone for audio recognition?"
-    );
-    if (useMicrophone) {
-      navigate("/audio-recorder");
-    } else {
-      alert("Please select an audio file.");
-      setShowDropzone(true);
+  // Drag and drop logic for Image Upload
+  const onImageDrop = useCallback(async (acceptedFiles) => {
+    const imageFiles = acceptedFiles.filter(file => file.type.startsWith('image/'));
+    if (imageFiles.length === 0) {
+      alert("Please upload valid image files.");
+      return;
     }
-  };
+    setSelectedImageFiles(imageFiles);
+    alert(`You have uploaded ${imageFiles.length} image file(s).`);
+    setShowImageDropzone(false);
+
+    // Prepare form data
+    const formData = new FormData();
+    imageFiles.forEach(file => {
+      formData.append('query_image', file);
+    });
+
+    try {
+      const response = await axios.post('http://localhost:8000/search-image/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Image Query Success:', response.data);
+      alert('Image query successful!');
+      // Handle success (e.g., display results)
+    } catch (error) {
+      console.error('Image Query Error:', error);
+      alert('There was an error processing your image query.');
+    }
+  }, []);
+
+  const { getRootProps: getImageRootProps, getInputProps: getImageInputProps, isDragActive: isImageDragActive } = useDropzone({ onDrop: onImageDrop, disabled: !showImageDropzone });
+
+  // Drag and drop logic for Audio Upload
+  const onAudioDrop = useCallback(async (acceptedFiles) => {
+    const audioFiles = acceptedFiles.filter(file => file.type.startsWith('audio/'));
+    if (audioFiles.length === 0) {
+      alert("Please upload valid audio files.");
+      return;
+    }
+    setSelectedAudioFiles(audioFiles);
+    alert(`You have uploaded ${audioFiles.length} audio file(s).`);
+    setShowAudioDropzone(false);
+
+    // Prepare form data
+    const formData = new FormData();
+    audioFiles.forEach(file => {
+      formData.append('audio_file', file);
+    });
+
+    try {
+      const response = await axios.post('http://localhost:8000/search-audio/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Audio Query Success:', response.data);
+      alert('Audio query successful!');
+      // Handle success (e.g., display results)
+    } catch (error) {
+      console.error('Audio Query Error:', error);
+      alert('There was an error processing your audio query.');
+    }
+  }, []);
+
+  const { getRootProps: getAudioRootProps, getInputProps: getAudioInputProps, isDragActive: isAudioDragActive } = useDropzone({ onDrop: onAudioDrop, disabled: !showAudioDropzone });
 
   useEffect(() => {
     applyTheme(); // Check and apply the theme on page load
@@ -90,7 +170,7 @@ const Home2D = () => {
           Hatsune Mix[ue]
         </h1>
 
-        {/* Buttons */}
+        {/* Action Buttons */}
         <div className="flex flex-wrap gap-5 mt-8 z-10 relative justify-center items-center">
           <button
             onClick={handleAlbumRecognizer}
@@ -113,16 +193,16 @@ const Home2D = () => {
         </div>
 
         {/* Drag and Drop Area for Images */}
-        {showDropzone && (
+        {showImageDropzone && (
           <div
-            {...getRootProps()}
+            {...getImageRootProps()}
             className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer"
           >
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here ...</p>
+            <input {...getImageInputProps()} />
+            {isImageDragActive ? (
+              <p>Drop the image files here ...</p>
             ) : (
-              <p>Drag 'n' drop some files here, or click to select files</p>
+              <p>Drag 'n' drop image files here, or click to select files</p>
             )}
           </div>
         )}
@@ -138,6 +218,21 @@ const Home2D = () => {
               <p>Drop the zip file here ...</p>
             ) : (
               <p>Drag 'n' drop a .zip file here, or click to select one</p>
+            )}
+          </div>
+        )}
+
+        {/* Drag and Drop Area for Audio Files */}
+        {showAudioDropzone && (
+          <div
+            {...getAudioRootProps()}
+            className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer"
+          >
+            <input {...getAudioInputProps()} />
+            {isAudioDragActive ? (
+              <p>Drop the audio files here ...</p>
+            ) : (
+              <p>Drag 'n' drop audio files here, or click to select one</p>
             )}
           </div>
         )}

@@ -1,82 +1,169 @@
-import React, { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
+import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { useSphere, Physics } from "@react-three/cannon";
-import * as THREE from 'three';
+import { useSphere } from "@react-three/cannon";
 
 const MovementController = ({ cameraRef }) => {
-  const velocity = useRef({ x: 0, z: 0 });
-  const direction = useRef({ yaw: 0, pitch: 0 });
-  const speed = 3;
-  const rotationSpeed = 0.005;
+  // Store input states
+  const direction = useRef({
+    forward: false,
+    backward: false,
+    left: false,
+    right: false,
+    yaw: 0,
+    pitch: 0,
+  });
 
-  // Create a dynamic sphere
+  const rotationSpeed = 0.002;
+  const movementSpeed = 10; // Increased units per second
+
+  // Initialize physics body
   const [ref, api] = useSphere(() => ({
-    mass: 1,
-    position: [-3, 1.5, 3],
-    args: [0.5], // sphere size (radius)
-    type: "Dynamic",
+    mass: 1, // Ensure the mass is non-zero
+    position: [0, 1.6, 0],
+    args: [0.5],
+    fixedRotation: true,
+    material: { friction: 0.1, restitution: 0 }, // Adjusted friction and restitution
   }));
 
+  // Store current velocity
+  const currentVelocity = useRef([0, 0, 0]);
 
   useEffect(() => {
+    const unsubscribe = api.velocity.subscribe((v) => {
+      currentVelocity.current = v;
+    });
+    return unsubscribe;
+  }, [api.velocity]);
+
+  useEffect(() => {
+    if (!cameraRef.current) return;
+
     const onKeyDown = (e) => {
-      if (e.key === "w") velocity.current.z = speed;
-      if (e.key === "s") velocity.current.z = -speed;
-      if (e.key === "a") velocity.current.x = -speed;
-      if (e.key === "d") velocity.current.x = speed;
+      switch (e.code) {
+        case "KeyW":
+          direction.current.forward = true;
+          break;
+        case "KeyS":
+          direction.current.backward = true;
+          break;
+        case "KeyA":
+          direction.current.left = true;
+          break;
+        case "KeyD":
+          direction.current.right = true;
+          break;
+        default:
+          break;
+      }
     };
 
     const onKeyUp = (e) => {
-      if (e.key === "w" || e.key === "s") velocity.current.z = 0;
-      if (e.key === "a" || e.key === "d") velocity.current.x = 0;
+      switch (e.code) {
+        case "KeyW":
+          direction.current.forward = false;
+          break;
+        case "KeyS":
+          direction.current.backward = false;
+          break;
+        case "KeyA":
+          direction.current.left = false;
+          break;
+        case "KeyD":
+          direction.current.right = false;
+          break;
+        default:
+          break;
+      }
     };
 
     const onMouseMove = (e) => {
-      direction.current.yaw = e.movementX * rotationSpeed;
-      direction.current.pitch = e.movementY * rotationSpeed;
+      if (!document.pointerLockElement) return;
+
+      const movementX = e.movementX || 0;
+      const movementY = e.movementY || 0;
+
+      direction.current.yaw -= movementX * rotationSpeed;
+      direction.current.pitch -= movementY * rotationSpeed;
+      direction.current.pitch = Math.max(
+        -Math.PI / 2,
+        Math.min(Math.PI / 2, direction.current.pitch)
+      );
+
+      const euler = new THREE.Euler(
+        direction.current.pitch,
+        direction.current.yaw,
+        0,
+        "YXZ"
+      );
+      cameraRef.current.quaternion.setFromEuler(euler);
     };
 
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
-    window.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keyup", onKeyUp);
+    document.addEventListener("mousemove", onMouseMove);
 
     return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
-      window.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keyup", onKeyUp);
+      document.removeEventListener("mousemove", onMouseMove);
     };
-  }, []);
+  }, [cameraRef]);
 
-      {/* Aku hapus komen pusing tentang quaternion disini :v */}
+  useFrame((state, delta) => {
+    if (!cameraRef.current || !ref.current) return;
 
-      useFrame(() => {
-        if (cameraRef.current && ref.current) {
+    // Calculate camera direction vectors
+    const cameraDirection = new THREE.Vector3();
+    cameraRef.current.getWorldDirection(cameraDirection);
+    cameraDirection.y = 0; // Prevent movement in the Y-axis
+    cameraDirection.normalize();
 
-          const euler = new THREE.Euler(0, 0, 0, 'YXZ');
-          euler.setFromQuaternion(cameraRef.current.quaternion);
-          euler.y -= direction.current.yaw;
-          euler.x -= direction.current.pitch;
-          euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
-          cameraRef.current.quaternion.setFromEuler(euler);
-    
-          direction.current.yaw = 0;
-          direction.current.pitch = 0;
-    
-          const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(cameraRef.current.quaternion);
-          const rightMovement = new THREE.Vector3(1, 0, 0).applyQuaternion(cameraRef.current.quaternion);
-    
-          const moveX = (rightMovement.x * velocity.current.x) + (forward.x * velocity.current.z);
-          const moveZ = (rightMovement.z * velocity.current.x) + (forward.z * velocity.current.z);
-    
-          // Set sphere's velocity on the XZ plane (Y is gravity)
-          api.velocity.set(moveX, 0, moveZ);
-    
-          const spherePosition = ref.current.position;
-          cameraRef.current.position.set(spherePosition.x, spherePosition.y + 1.5, spherePosition.z);
-        }
-      });
+    const cameraRight = new THREE.Vector3();
+    cameraRight.crossVectors(cameraDirection, new THREE.Vector3(0, 1, 0)).normalize();
 
-  return null;
+    // Determine movement input
+    const moveX = direction.current.right - direction.current.left;
+    const moveZ = direction.current.forward - direction.current.backward;
+
+    const moveVector = new THREE.Vector3(moveX, 0, moveZ);
+
+    if (moveVector.lengthSq() > 0) {
+      // Normalize to prevent faster diagonal movement
+      moveVector.normalize();
+
+      // Calculate desired movement direction based on camera orientation
+      const desiredDirection = new THREE.Vector3()
+        .copy(cameraDirection)
+        .multiplyScalar(moveVector.z * movementSpeed)
+        .addScaledVector(cameraRight, moveVector.x * movementSpeed);
+
+      // Set velocity directly
+      api.velocity.set(desiredDirection.x, currentVelocity.current[1], desiredDirection.z);
+
+      // Debugging
+      console.log("Set Velocity:", [desiredDirection.x, currentVelocity.current[1], desiredDirection.z]);
+    } else {
+      // Stop horizontal movement
+      api.velocity.set(0, currentVelocity.current[1], 0);
+    }
+
+    // Smoothly interpolate camera position
+    const position = new THREE.Vector3();
+    ref.current.getWorldPosition(position);
+    cameraRef.current.position.lerp(
+      new THREE.Vector3(position.x, position.y + 1.5, position.z),
+      0.1
+    );
+  });
+
+  // Return a visible mesh for debugging
+  return (
+    <mesh ref={ref} visible={true}> {/* Set visible to true for debugging */}
+      <sphereGeometry args={[0.5]} />
+      <meshStandardMaterial color="hotpink" />
+    </mesh>
+  );
 };
 
 export default MovementController;

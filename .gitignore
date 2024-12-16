@@ -1,0 +1,6 @@
+HatsuneMix-ue-.code-workspace
+/venv/
+/src/backend/database/archive/
+/src/backend/database/midi_archive/
+/src/backend/venv/
+/test/result/
