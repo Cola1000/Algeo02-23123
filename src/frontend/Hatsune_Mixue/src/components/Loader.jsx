@@ -1,4 +1,3 @@
-// src/components/Loader.jsx
 import React, { useState, useEffect } from 'react';
 import { Html, useProgress } from '@react-three/drei';
 

@@ -37,7 +37,7 @@ const Credits = () => {
     <div
       className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-8"
       style={{
-        color: 'var(--text-color)', // Dynamically set the text color based on the theme
+        color: 'var(--text-color)',
       }}
     >
       <HillBackground />

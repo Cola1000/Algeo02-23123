@@ -1,4 +1,3 @@
-// Home3D.jsx
 import React, { useRef, Suspense, useEffect, useState, useCallback } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera, Html } from "@react-three/drei";
@@ -18,7 +17,7 @@ function Crosshair() {
   return (
     <div style={{
       position:'absolute',
-      zIndex:999999, // ensure always on top
+      zIndex:999999, // idk why it doesn't show on top like whyyyyyyyyyyyyyyyyyyyyyyyyyyy?!?!??!?!?!
       top:'50%',
       left:'50%',
       transform:'translate(-50%, -50%)',
@@ -45,18 +44,14 @@ function PopupPanel3D({ title, onYes, onNo, cameraRef }) {
 
   useFrame(({ camera }) => {
     if (!panelRef.current) return;
-
-    // Position the panel a fixed distance in front of the camera
-    // We take the camera position and add the forward vector * 2 units
     const dir = new THREE.Vector3();
     camera.getWorldDirection(dir);
     dir.normalize();
     const camPos = camera.position.clone();
-    const desiredPos = camPos.add(dir.multiplyScalar(2)); // 2 units in front of camera
+    const desiredPos = camPos.add(dir.multiplyScalar(2));
 
     panelRef.current.position.copy(desiredPos);
 
-    // Make it face the camera by looking at camera position
     panelRef.current.lookAt(camera.position);
   });
 

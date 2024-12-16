@@ -1,6 +1,7 @@
-// src/models/HillBackground.jsx
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
+
+{/* Aku pisahin ke file .js yang lain, soalnya supaya lebih enak diliat :v */}
 import { HillBackgroundVertexShader } from "./HillBackgroundVertexShader.js";
 import { HillBackgroundFragmentShader } from "./HillBackgroundFragmentShader.js";
 
@@ -9,8 +10,7 @@ const HillBackground = ({ is3DMode = false }) => {
 
   useEffect(() => {
     if (is3DMode) {
-      // If we're in 3D mode scenario, we won't render to a separate canvas.
-      // This component can be skipped or used as a material in 3D.
+      //Just nothing
       return;
     }
 
@@ -108,7 +108,7 @@ const HillBackground = ({ is3DMode = false }) => {
   }, [is3DMode]);
 
   if (is3DMode) {
-    // If used in 3D mode, return null because we do not render this as a separate canvas.
+    // Again, nothing
     return null;
   }
 

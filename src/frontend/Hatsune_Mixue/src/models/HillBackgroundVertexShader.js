@@ -1,4 +1,3 @@
-// src/models/HillBackgroundVertexShader.js
 export const HillBackgroundVertexShader = `
   precision highp float;
   attribute vec3 position;

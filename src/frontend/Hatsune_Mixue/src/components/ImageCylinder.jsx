@@ -1,4 +1,3 @@
-// src/components/ImageCylinder.jsx
 import React, { useRef } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
@@ -25,12 +24,12 @@ function ImageCylinder({ images }) {
         const angle = angleStep * i;
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
-        // Make sure the images face inward by rotating them towards the center
+        // Ini tetep gak mau melihat kedalam cok, whyyyyyyyyyyyyy??????!?!?!?!?!!!!!!!!!
         return (
           <mesh
             key={i}
             position={[x, 3, z]}
-            rotation={[0, angle + Math.PI / 2, 0]} // rotate so that they face inward the cylinder
+            rotation={[0, angle + Math.PI / 2, 0]}
           >
             <planeGeometry args={[2, 2]} />
             <meshBasicMaterial map={texture} side={THREE.DoubleSide} />

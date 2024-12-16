@@ -1,4 +1,4 @@
-// src/pages/My_Wife.jsx (unchanged)
+// MY WIIIIIIIIIIFFFFFFFFEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 import React, { useEffect } from 'react';
 import HillBackground from '../models/HillBackground.jsx';
 import { applyTheme } from '../components/CheckTheme.jsx';

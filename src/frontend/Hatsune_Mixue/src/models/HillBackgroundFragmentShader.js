@@ -1,4 +1,3 @@
-// src/models/HillBackgroundFragmentShader.js
 export const HillBackgroundFragmentShader = `
   precision highp float;
   varying vec3 vPosition;

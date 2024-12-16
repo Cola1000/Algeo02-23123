@@ -1,11 +1,8 @@
-// src/components/MovementController.jsx
 import { useFrame } from "@react-three/fiber";
 import { useSphere } from "@react-three/cannon";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-// This controller is mostly unchanged, but we will keep it as is.
-// It handles movement and mouse look. Pressing keys 1,2,3 is handled in Home3D.
 const MovementController = ({ cameraRef, onInitAPI  }) => {
   const direction = useRef({
     forward: false,

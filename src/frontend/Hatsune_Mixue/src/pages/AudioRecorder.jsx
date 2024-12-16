@@ -1,4 +1,3 @@
-// src/pages/AudioRecorder.jsx (unchanged)
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HillBackground from '../models/HillBackground.jsx';

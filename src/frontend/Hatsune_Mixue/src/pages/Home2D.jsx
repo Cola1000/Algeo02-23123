@@ -1,4 +1,3 @@
-// src/pages/Home2D.jsx
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
@@ -137,6 +136,28 @@ const Home2D = () => {
     applyTheme();
   }, []);
 
+  const PaginationControls = () => (
+    <div className="flex justify-center mt-4">
+      <button
+        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+        disabled={currentPage === 1}
+        className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50"
+      >
+        Previous
+      </button>
+      <span className="mx-2">{`Page ${currentPage} of ${totalPages}`}</span>
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+        }
+        disabled={currentPage === totalPages}
+        className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  );
+
   return (
     <div className="w-full min-h-screen flex flex-col items-center p-8 overflow-y-auto">
       <HillBackground />
@@ -162,7 +183,7 @@ const Home2D = () => {
             onClick={handleZipRecognizer}
             className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center"
           >
-            Upload a Database (Zip)
+            Upload Mapper
           </button>
         </div>
 
@@ -229,6 +250,13 @@ const Home2D = () => {
           </div>
         </div>
 
+        {/* Top Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-8">
+            <PaginationControls />
+          </div>
+        )}
+
         <div className="mt-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {currentAlbums.map((album) => (
@@ -246,25 +274,12 @@ const Home2D = () => {
             ))}
           </div>
 
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="mx-2">{`Page ${currentPage} of ${totalPages}`}</span>
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-              className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
+          {/* Bottom Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-4">
+              <PaginationControls />
+            </div>
+          )}
         </div>
       </section>
     </div>

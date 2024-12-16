@@ -1,4 +1,3 @@
-//konbini(backup).jsx
 import React from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useTrimesh } from '@react-three/cannon';
@@ -8,8 +7,7 @@ import konbini_backup from '../assets/konbini.glb'
 export function Konbini (props) {
   const { nodes, materials } = useGLTF(konbini_backup);
 
-  // Extract a representative geometry to create a collider.
-  // In a more robust solution, you'd merge all geometries, but here we just pick one main geometry.
+  //I give up freaking doing rigging the collider on this piece of sh*t, I should just use webgl mafaka
   const colliderGeometry = nodes.Cube002.geometry;
   const positions = colliderGeometry.attributes.position.array;
   const indices = colliderGeometry.index.array;

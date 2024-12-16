@@ -1,4 +1,3 @@
-// Info3DPage.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { PerspectiveCamera, Html } from "@react-three/drei";
@@ -106,11 +105,9 @@ function TopPlane() {
   );
 }
 
-// CubeEmitter with minimum distance from origin
 function CubeEmitter() {
   const [cubes, setCubes] = useState([]);
 
-  // We'll require that cubes spawn at least 300 units away from (0,0)
   function getRandomPositionFarAway() {
     let x, z;
     const minDistance = 20;
@@ -121,7 +118,6 @@ function CubeEmitter() {
     return {x,z};
   }
 
-  // Spawn 2 cubes every second, but at least 300 units away from origin
   useEffect(() => {
     const interval = setInterval(() => {
       setCubes((prev) => {

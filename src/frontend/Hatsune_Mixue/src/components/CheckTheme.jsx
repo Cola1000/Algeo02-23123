@@ -1,4 +1,4 @@
-// src/components/CheckTheme.jsx
+// Untuk check theme aja, don't bother
 export const applyTheme = () => {
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme === 'dark') {
