@@ -1,0 +1,21 @@
+#UI/UX
+The camera won't move in Home3D view
+Kalau bisa, di Home3D, jika user pencet '1','2','3' di keyboard, mereka teleport ke lantai tersebut didepan pintu minimarketnya
+Setiap kedepan pintu minimarket, mengeluarkan pop-up untuk melakukan fungsi dibawah ini
+Benerin info window dimana ketika user keluar dari Home3D dan masuk lagi, keluarin aja lagi si window nya
+
+#Logic Implementation
+Implementasi Funsgi Album Picture Recognizer beserta Audio Recognizer di Home3D
+Di 'AlbumDetail.jsx' implementasi ketika user ingin download-download nya
+Pastikan user memasukan tipe format data yang sesuai apa yang mereka pilih
+
+#Back-End
+Connect tombol Album Recognizer dan Audio Recognizer nya ke Back-End
+Connect 'albumPictures.jsx' ke fungsi mapper di Back-End
+Handle case dimana user upload ZIP atau langsung upload satu album
+
+Bonus: 
+Buat si Website lebih enak dilihat dan accessible untuk Mobile Devices
+Untuk si Image Cylinder, mereka masih muterin Y value yang sama, kalau mau buat si Image nya stack keatas jika layer 1 sudah penuh, atau bahkan bener-bener random mau layer yang mana
+Buat Opsi di 'AlbumDetail' untuk nge-play lagunya, dan nanti si HillBackground-nya berguna menjadi semacam Spectogram yang akan (dengan live) feedback loop dari suara yang keluar dari lagu
+Jika mengimplementasi di-line sebelum ini banget, coba juga sekalian yang untuk 'AudioRecorder', jadi selagi record suara si Backgroundnya jadi Spectogram
