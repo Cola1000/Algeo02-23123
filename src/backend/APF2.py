@@ -3,6 +3,7 @@ import glob
 import numpy as np
 from PIL import Image, ImageOps
 import shutil
+from pathlib import Path
 import json
 
 # ====================================================================================
@@ -11,12 +12,24 @@ import json
 
 SIMILARITY_THRESHOLD = 75.0
 
-# Paths for storing processed data
-PROCESSED_DATA_DIR = "src/backend/database/processed_data"
-IMAGE_DB_PROJECTION_FILE = os.path.join(PROCESSED_DATA_DIR, "imageDB_projection.npz")
-MEAN_FILE = os.path.join(PROCESSED_DATA_DIR, "mean.npy")
-PRINCIPAL_COMPONENTS_FILE = os.path.join(PROCESSED_DATA_DIR, "principal_components.npy")
-ORIGINAL_IMAGE_PATHS_FILE = os.path.join(PROCESSED_DATA_DIR, "original_image_paths.npy")
+# Define backend database directories
+BASE_DIR = Path(__file__).resolve().parent  # Points to 'backend/'
+AUDIO_DIR = BASE_DIR / "database" / "audio"
+PICTURE_DIR = BASE_DIR / "database" / "picture"
+MAPPER_DIR = BASE_DIR / "database" / "mapper"
+
+# Processed Data Directory and Files
+PROCESSED_DATA_DIR = BASE_DIR / "database" / "processed_data"
+IMAGE_DB_PROJECTION_FILE = PROCESSED_DATA_DIR / "image_db_projection.npz"
+MEAN_FILE = PROCESSED_DATA_DIR / "mean.npy"
+PRINCIPAL_COMPONENTS_FILE = PROCESSED_DATA_DIR / "principal_components.npy"
+ORIGINAL_IMAGE_PATHS_FILE = PROCESSED_DATA_DIR / "original_image_paths.npy"
+
+# Ensure the directories exist
+AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+PICTURE_DIR.mkdir(parents=True, exist_ok=True)
+MAPPER_DIR.mkdir(parents=True, exist_ok=True)
+PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 # ====================================================================================
 # Step 1: Image Processing and Loading

@@ -1,4 +1,6 @@
 import os
+import glob
+import json
 import shutil
 import uuid
 from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks
@@ -7,6 +9,7 @@ from backend.utils.database_parser import parse_uploaded_database, process_datab
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 from pathlib import Path
+from backend.APF2 import process_query
 
 # ====================================================================================
 # Setup Logging
@@ -65,12 +68,6 @@ TASK_STATUS = {}
 async def upload_dataset(
     zip_files: List[UploadFile] = File(...), *, background_tasks: BackgroundTasks
 ):
-    """
-    Endpoint to upload multiple zip files containing datasets.
-    It clears existing audio and picture directories before processing new uploads.
-    After upload, it processes the database in the background.
-    Returns a task ID for status tracking.
-    """
     logger.info("Received upload request with %d file(s).", len(zip_files))
 
     # Validate that all uploaded files are zip files
@@ -140,23 +137,57 @@ async def get_task_status(task_id: str):
 # Endpoint to search by image
 @app.post("/search-image/")
 async def search_image(query_image: UploadFile = File(...)):
+    # Validate image format
     if not query_image.filename.lower().endswith((".png", ".jpg", ".jpeg")):
         raise HTTPException(status_code=400, detail="Invalid image format.")
 
-    image_path = os.path.join("src/backend/query/", query_image.filename)
-    with open(image_path, "wb") as buffer:
-        shutil.copyfileobj(query_image.file, buffer)
+    # Define query directory and save the uploaded image
+    query_dir = "backend/query/"
+    os.makedirs(query_dir, exist_ok=True)
+
+    image_path = os.path.join(query_dir, query_image.filename)
+    try:
+        with open(image_path, "wb") as buffer:
+            shutil.copyfileobj(query_image.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save image: {e}")
+
+    # Locate the mapper JSON file
+    mapper_dir = BASE_DIR / "database" / "mapper"
+    mapper_files = glob.glob(str(mapper_dir / "*.json"))
+    if not mapper_files:
+        raise HTTPException(status_code=500, detail="Mapper JSON file not found.")
+
+    mapper_file = mapper_files[0]  # Use the first found JSON file
+
+    # Load the mapper JSON data
+    try:
+        with open(mapper_file, "r") as f:
+            mapper = json.load(f)
+    except json.JSONDecodeError as e:
+        raise HTTPException(
+            status_code=500, detail=f"Invalid JSON format in mapper file: {e}"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to load mapper JSON: {e}")
+
+    # Optional: Add debug statements to verify mapper structure
+    print(f"Mapper Type: {type(mapper)}")  # Should output: <class 'list'>
+    if len(mapper) > 0:
+        print(f"First album keys: {mapper[0].keys()}")  # Should include 'imageSrc'
+
+    # Define the result directory
+    result_directory = "test/result"
 
     # Perform image search
-    # Example:
-    # mean, size = load_precomputed_values()
-    # results = process_query_image(image_path, mean, size)
+    apf_results = process_query(
+        query_image_path=image_path,
+        result_directory=result_directory,
+        mapper=mapper,  # Pass the loaded mapper data
+        size=(60, 60),
+    )
 
-    results = {
-        "message": "Image search functionality not implemented yet."
-    }  # Placeholder
-
-    return {"results": results}
+    return {"results": apf_results}
 
 
 # Endpoint to search by audio
