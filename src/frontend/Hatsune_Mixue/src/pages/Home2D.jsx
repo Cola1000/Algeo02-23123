@@ -11,6 +11,10 @@ const Home2D = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const albumsPerPage = 16;
 
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [uploadedAudios, setUploadedAudios] = useState([]);
+  const [uploadedMapper, setUploadedMapper] = useState(null);
+
   // States for Zip Files
   const [selectedZipFiles, setSelectedZipFiles] = useState([]);
   const [showZipDropzone, setShowZipDropzone] = useState(false);
@@ -57,7 +61,7 @@ const Home2D = () => {
 
   // Handles the Audio Query button click
   const handleAudioRecognizer = () => {
-    navigate('/audio-recorder');
+    navigate("/audio-recorder");
   };
 
   // Drag and drop logic for Zip Files
@@ -122,20 +126,24 @@ const Home2D = () => {
     });
 
     try {
-      const response = await axios.post('http://localhost:8000/search-image/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log('Image Query Success:', response.data);
-      alert('Image query successful!');
-      
+      const response = await axios.post(
+        "http://localhost:8000/search-image/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Image Query Success:", response.data);
+      alert("Image query successful!");
+
       // Show popup with JSON data
       setPopupData(response.data);
       setIsPopupVisible(true);
     } catch (error) {
-      console.error('Image Query Error:', error);
-      alert('There was an error processing your image query.');
+      console.error("Image Query Error:", error);
+      alert("There was an error processing your image query.");
     }
   }, []);
 
@@ -275,23 +283,46 @@ const Home2D = () => {
         )}
 
         {/* Album Auto-scroller */}
-        <div className="mt-16 w-full max-w-screen-lg overflow-hidden z-0 relative">
-          <div className="scroller flex gap-4 items-center flex-nowrap animate-auto-scroll">
-            {albumPictures.length > 0
-              ? [...Array(100)].map((_, index) => (
-                  <div
-                    key={index}
-                    className="custom-glow w-48 h-48 flex-shrink-0 scale-90 cursor-pointer transition-transform transform hover:scale-100"
-                  >
-                    <img
-                      src={albumPictures[index % albumPictures.length].imageSrc}
-                      alt={`Album ${index + 1}`}
-                      className="w-full h-full object-cover rounded-lg"
+        <div className="mt-16 w-full max-w-screen-lg overflow-hidden relative">
+          <h2 className="text-3xl font-bold mb-4">Your Datasets</h2>
+
+          {uploadedImages.length > 0 &&
+          uploadedAudios.length > 0 &&
+          uploadedMapper ? (
+            <div className="scroller flex gap-4 items-start flex-wrap overflow-x-auto">
+              {uploadedImages.map((image, index) => (
+                <div
+                  key={index}
+                  className="album-card w-48 h-48 flex-shrink-0 relative"
+                >
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`Uploaded Album ${index + 1}`}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <audio controls className="absolute bottom-2 left-2 right-2">
+                    <source
+                      src={URL.createObjectURL(uploadedAudios[index])}
+                      type={uploadedAudios[index].type}
                     />
-                  </div>
-                ))
-              : null}
-          </div>
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="w-full text-red-500 text-center">
+              <p>
+                Missing datasets: {!uploadedImages.length && "Images "}
+                {!uploadedAudios.length && "Audios "}
+                {!uploadedMapper && "Mapper "}
+              </p>
+              <p>
+                Please upload all required datasets (Images, Audios, and Mapper)
+                to display your albums.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Popup Modal */}
