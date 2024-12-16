@@ -57,9 +57,7 @@ const Home2D = () => {
 
   // Handles the Audio Query button click
   const handleAudioRecognizer = () => {
-    setShowAudioDropzone(true);
-    setShowZipDropzone(false);
-    setShowImageDropzone(false);
+    navigate('/audio-recorder');
   };
 
   // Drag and drop logic for Zip Files
