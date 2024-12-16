@@ -6,7 +6,7 @@ import * as THREE from "three";
 
 // This controller is mostly unchanged, but we will keep it as is.
 // It handles movement and mouse look. Pressing keys 1,2,3 is handled in Home3D.
-const MovementController = ({ cameraRef }) => {
+const MovementController = ({ cameraRef, onInitAPI  }) => {
   const direction = useRef({
     forward: false,
     backward: false,
@@ -21,7 +21,7 @@ const MovementController = ({ cameraRef }) => {
 
   const [ref, api] = useSphere(() => ({
     mass: 1,
-    position: [0, 1.6, 0],
+    position: [0, 1.6, -5],  //Change for initial Position
     args: [0.5],
     fixedRotation: true,
     material: { friction: 0.1, restitution: 0 },
@@ -30,6 +30,9 @@ const MovementController = ({ cameraRef }) => {
   const currentVelocity = useRef([0, 0, 0]);
 
   useEffect(() => {
+    if (onInitAPI) {
+      onInitAPI(api);
+    }
     const unsubscribe = api.velocity.subscribe((v) => {
       currentVelocity.current = v;
     });

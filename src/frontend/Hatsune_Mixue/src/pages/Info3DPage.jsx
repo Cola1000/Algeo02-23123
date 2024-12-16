@@ -1,71 +1,13 @@
-// src/pages/Info3DPage.jsx
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Canvas, useFrame, useThree, extend } from "@react-three/fiber";
+// Info3DPage.jsx
+import React, { useEffect, useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { PerspectiveCamera, Html } from "@react-three/drei";
 import { Physics, usePlane } from "@react-three/cannon";
 import MovementController from "../components/MovementController.jsx";
 import { useNavigate } from 'react-router-dom';
 import { applyTheme } from '../components/CheckTheme.jsx';
 import * as THREE from 'three';
-import AboutContent from './About.jsx';   // We'll embed About content without back button
-import CreditsContent from './Credits.jsx'; // We'll embed Credits without back button
-// We must create custom components that show about and credits inside a 3D plane
-// without their back buttons. We'll replicate their HTML inside this file directly.
 
-// Since we cannot easily re-use About and Credits as is (they have back buttons, etc.),
-// we can copy their content here in a simpler form and remove back buttons.
-
-function GroundPlane() {
-  const [ref] = usePlane(() => ({
-    rotation: [-Math.PI / 2, 0, 0],
-    position: [0,0,0]
-  }));
-  return (
-    <mesh ref={ref} receiveShadow>
-      <planeGeometry args={[2000, 2000]} />
-      <meshStandardMaterial color="#888" />
-    </mesh>
-  );
-}
-
-// A rotating cube in the sky
-function SkyCube() {
-  const ref = useRef();
-  useFrame((state, delta) => {
-    if (ref.current) {
-      ref.current.rotation.x += delta * 0.1;
-      ref.current.rotation.y += delta * 0.1;
-    }
-  });
-  return (
-    <mesh ref={ref} position={[0,50,-50]}>
-      <boxGeometry args={[5,5,5]} />
-      <meshStandardMaterial color="purple" />
-    </mesh>
-  );
-}
-
-function ThemedEnvironment({ isDarkMode }) {
-  // We can change the scene background or add a hemisphere light differently based on isDarkMode.
-  const { scene } = useThree();
-
-  useEffect(() => {
-    if (isDarkMode) {
-      // Dark mode: evening
-      scene.background = new THREE.Color(0x0a0a28);
-      // maybe add some subtle light
-    } else {
-      // Light mode: dawn
-      scene.background = new THREE.Color(0xffeedd);
-    }
-  }, [isDarkMode, scene]);
-
-  return null;
-}
-
-// We'll create simple HTML UI using drei <Html> for About and Credits.
-
-// About Panel (no back button)
 function AboutPanel() {
   return (
     <div style={{ color: 'var(--text-color)', width: '300px', maxHeight: '400px', overflow: 'auto', background: 'rgba(0,0,0,0.5)', padding: '10px', borderRadius:'10px'}}>
@@ -89,7 +31,6 @@ function AboutPanel() {
   );
 }
 
-// Credits Panel (no back button)
 const creditsData = [
   {
     section: "Developers",
@@ -139,7 +80,87 @@ function CreditsPanel() {
   );
 }
 
-// Interactive Panels as 3D Objects
+function GroundPlane() {
+  const [ref] = usePlane(() => ({
+    rotation: [-Math.PI / 2, 0, 0],
+    position: [0,0,0]
+  }));
+  return (
+    <mesh ref={ref} receiveShadow rotation={[-Math.PI/2,0,0]}>
+      <planeGeometry args={[2000, 2000]} />
+      <meshStandardMaterial transparent opacity={0} />
+    </mesh>
+  );
+}
+
+function TopPlane() {
+  const [ref] = usePlane(() => ({
+    rotation: [-Math.PI/2, 0, 0],
+    position: [0,100,0]
+  }));
+  return (
+    <mesh ref={ref} rotation={[-Math.PI/2,0,0]} visible={false}>
+      <planeGeometry args={[2000,2000]} />
+      <meshStandardMaterial transparent opacity={0} />
+    </mesh>
+  );
+}
+
+// CubeEmitter with minimum distance from origin
+function CubeEmitter() {
+  const [cubes, setCubes] = useState([]);
+
+  // We'll require that cubes spawn at least 300 units away from (0,0)
+  function getRandomPositionFarAway() {
+    let x, z;
+    const minDistance = 20;
+    do {
+      x = (Math.random() - 0.5)*2000; 
+      z = (Math.random() - 0.5)*2000; 
+    } while (Math.sqrt(x*x + z*z) < minDistance);
+    return {x,z};
+  }
+
+  // Spawn 2 cubes every second, but at least 300 units away from origin
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCubes((prev) => {
+        const newCubes = [...prev];
+        for (let i = 0; i < 2; i++) {
+          const {x,z} = getRandomPositionFarAway();
+          newCubes.push({ id: crypto.randomUUID(), x, y:0, z, velocity:1+Math.random()*2 });
+        }
+        return newCubes;
+      });
+    }, 500); 
+    return () => clearInterval(interval);
+  }, []);
+
+  useFrame(() => {
+    setCubes(prev => {
+      const newCubes = [];
+      for (const c of prev) {
+        const newY = c.y + c.velocity; 
+        if (newY < 100) {
+          newCubes.push({ ...c, y: newY });
+        }
+      }
+      return newCubes;
+    });
+  });
+
+  return (
+    <group>
+      {cubes.map(cube => (
+        <mesh key={cube.id} position={[cube.x, cube.y, cube.z]}>
+          <boxGeometry args={[5,5,5]} />
+          <meshStandardMaterial color="purple" />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 function InteractivePanel({ position, content }) {
   return (
     <mesh position={position}>
@@ -152,13 +173,12 @@ function InteractivePanel({ position, content }) {
   );
 }
 
-// A return button in front
 function ReturnButton({ onClick }) {
   return (
     <mesh position={[0,1,-5]}>
       <planeGeometry args={[1,0.5]} />
       <meshBasicMaterial color="white" transparent opacity={0}/>
-      <Html center transform distanceFactor={5}>
+      <Html center transform distanceFactor={5} style={{pointerEvents:'auto'}}>
         <button
           style={{background:'linear-gradient(to right, #00c6ff, #0072ff)', color:'#fff', padding:'10px', border:'none', borderRadius:'5px', cursor:'pointer'}}
           onClick={onClick}
@@ -170,18 +190,7 @@ function ReturnButton({ onClick }) {
   );
 }
 
-// Crosshair
-function Crosshair() {
-  const size = 0.01; 
-  return (
-    <mesh position={[0,0,-1]}>
-      <ringGeometry args={[size, size+0.001, 32]} />
-      <meshBasicMaterial color="red" />
-    </mesh>
-  );
-}
-
-const Info3DPage = () => {
+function Info3DPage() {
   const navigate = useNavigate();
   const cameraRef = useRef();
   const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
@@ -194,7 +203,6 @@ const Info3DPage = () => {
         navigate('/Home3D');
       }
       if (e.key === '/') {
-        // Toggle theme
         const newTheme = isDarkMode ? 'light' : 'dark';
         localStorage.setItem('theme', newTheme);
         if (newTheme === 'dark') {
@@ -210,35 +218,54 @@ const Info3DPage = () => {
   }, [navigate, isDarkMode]);
 
   return (
-    <div style={{width:'100vw',height:'100vh'}}>
+    <div style={{width:'100vw',height:'100vh', position:'relative'}}>
+      <div style={{
+        position:'absolute',
+        zIndex:999999,
+        top:'50%',
+        left:'50%',
+        transform:'translate(-50%, -50%)',
+        width:'5px',
+        height:'5px',
+        background:'red',
+        borderRadius:'50%'
+      }}></div>
+
       <Canvas 
         onClick={(e) => { if (!document.pointerLockElement) { e.currentTarget.requestPointerLock(); } }}
         shadows
         camera={{ position: [0, 1.5, 0], fov: 60 }}
       >
-        <PerspectiveCamera ref={cameraRef} makeDefault position={[0,1.5,0]} />
+        <PerspectiveCamera ref={cameraRef} makeDefault position={[1,2,0]} />
         <hemisphereLight intensity={0.5} />
         <ambientLight intensity={0.2} />
         <Physics gravity={[0,-9.81,0]}>
           <GroundPlane />
+          <TopPlane />
           <MovementController cameraRef={cameraRef} />
         </Physics>
         <ThemedEnvironment isDarkMode={isDarkMode}/>
-        <SkyCube />
-        {/* About panel on the left */}
+        <CubeEmitter />
         <InteractivePanel position={[-3,2,-5]} content={<AboutPanel />} />
-        {/* Credits panel on the right */}
         <InteractivePanel position={[3,2,-5]} content={<CreditsPanel />} />
         <ReturnButton onClick={()=>{document.exitPointerLock(); navigate('/Home3D')}} />
-        {/* Crosshair at center of screen */}
-        <mesh position={[0,0,-1]}>
-          <Html center>
-            <div style={{width:'2px', height:'2px', background:'red'}}></div>
-          </Html>
-        </mesh>
       </Canvas>
     </div>
   );
 };
+
+function ThemedEnvironment({ isDarkMode }) {
+  const { scene } = useThree();
+
+  useEffect(() => {
+    if (isDarkMode) {
+      scene.background = new THREE.Color(0x0a0a28);
+    } else {
+      scene.background = new THREE.Color(0xffeedd);
+    }
+  }, [isDarkMode, scene]);
+
+  return null;
+}
 
 export default Info3DPage;

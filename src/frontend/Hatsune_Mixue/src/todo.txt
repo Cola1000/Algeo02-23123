@@ -1,6 +1,5 @@
 #UI/UX
 Kalau bisa, di Home3D, jika user pencet '1','2','3' di keyboard, mereka teleport ke lantai tersebut didepan pintu minimarketnya
-Benerin info window dimana ketika user keluar dari Home3D dan masuk lagi, keluarin aja lagi si window nya
 Setiap kedepan pintu minimarket, mengeluarkan pop-up untuk melakukan fungsi dibawah ini
 
 #Logic Implementation
