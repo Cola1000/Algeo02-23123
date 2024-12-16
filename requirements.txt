@@ -54,3 +54,6 @@ tqdm==4.67.1
 typing_extensions==4.12.2
 urllib3==2.2.3
 webcolors==24.11.1
+fastapi
+uvicorn
+python-multipart

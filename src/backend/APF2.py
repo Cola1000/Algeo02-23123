@@ -422,7 +422,7 @@ def process_query(
 def main():
     db_dir_path = "src/backend/database/picture/"
     result_directory = "test/result"
-    query_image_path = "test/query/picture/test_pic_7.jpg"
+    query_image_path = "test/query/picture/test_pic_6.jpg"
     mapper_file = "src/backend/database/mapper_all_img.json"
 
     # Load the mapper

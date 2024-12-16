@@ -3,3 +3,5 @@ HatsuneMix-ue-.code-workspace
 /src/backend/database/archive/
 /src/backend/database/midi_archive/
 /test/result/
+src/backend/database/audioarchive.zip
+src/backend/database/picturearchive.zip
