@@ -1,11 +1,24 @@
-import React, { useRef } from 'react'
+//konbini(backup).jsx
+import React from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useTrimesh } from '@react-three/cannon';
 
 import konbini_backup from '../assets/konbini.glb'
 
 export function Konbini (props) {
-  const { nodes, materials } = useGLTF(konbini_backup)
+  const { nodes, materials } = useGLTF(konbini_backup);
+
+  // Extract a representative geometry to create a collider.
+  // In a more robust solution, you'd merge all geometries, but here we just pick one main geometry.
+  const colliderGeometry = nodes.Cube002.geometry;
+  const positions = colliderGeometry.attributes.position.array;
+  const indices = colliderGeometry.index.array;
+
+  useTrimesh(() => ({
+    args: [positions, indices],
+    type: 'Static',
+    ...props
+  }));
 
   return (
     <group {...props}>
@@ -135,7 +148,8 @@ export function Konbini (props) {
       <group
         position={[4.774, 6.524, -1.494]}
         rotation={[0, -1.134, 0]}
-        scale={[0.042, 0.519, 0.042]}>
+        scale={[0.042, 0.519, 0.042]}
+      >
         <mesh
           castShadow
           receiveShadow
@@ -161,7 +175,8 @@ export function Konbini (props) {
       <group
         position={[-4.453, 12.614, 3.467]}
         rotation={[0, 0.445, 0]}
-        scale={[0.042, 0.519, 0.042]}>
+        scale={[0.042, 0.519, 0.042]}
+      >
         <mesh
           castShadow
           receiveShadow
@@ -187,7 +202,8 @@ export function Konbini (props) {
       <group
         position={[6.383, 12.614, -6.153]}
         rotation={[Math.PI, -0.643, Math.PI]}
-        scale={[0.042, 0.519, 0.042]}>
+        scale={[0.042, 0.519, 0.042]}
+      >
         <mesh
           castShadow
           receiveShadow

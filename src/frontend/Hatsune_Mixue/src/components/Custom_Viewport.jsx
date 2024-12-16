@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Navigate, NavLink, useNavigate } from 'react-router-dom';
+// src/components/Custom_Viewport.jsx
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle.jsx';
 

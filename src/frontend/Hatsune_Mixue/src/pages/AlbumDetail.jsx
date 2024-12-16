@@ -1,3 +1,4 @@
+// src/pages/AlbumDetail.jsx (unchanged)
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import albumPictures from '../components/albumPictures.jsx';
@@ -25,17 +26,13 @@ const AlbumDetail = () => {
 
   const handlePlaySong = (songId, songFile) => {
     if (playingSongId === songId) {
-      // Stop the current audio
       currentAudio.pause();
       setCurrentAudio(null);
       setPlayingSongId(null);
     } else {
-      // Stop any currently playing audio
       if (currentAudio) {
         currentAudio.pause();
       }
-      
-      // Play the new song
       const audio = new Audio(songFile);
       audio.currentTime = 0;
       audio.play();
@@ -57,10 +54,8 @@ const AlbumDetail = () => {
   };
 
   useEffect(() => {
-    applyTheme(); // Check and apply the theme on page load
-
+    applyTheme();
     return () => {
-      // Stop any playing audio when leaving the page
       if (currentAudio) {
         currentAudio.pause();
         setCurrentAudio(null);
@@ -81,7 +76,6 @@ const AlbumDetail = () => {
       </button>
 
       <div className="flex flex-col md:flex-row gap-8 mt-16 text-black dark:text-white">
-        {/* Album Cover */}
         <div className="flex-shrink-0">
           <img
             src={album.imageSrc}
@@ -96,7 +90,6 @@ const AlbumDetail = () => {
           </button>
         </div>
 
-        {/* Song List */}
         <div className="flex-1">
           <h2 className="text-2xl font-bold mb-4">{album.title}</h2>
           <button

@@ -1,3 +1,4 @@
+// src/pages/AudioRecorder.jsx (unchanged)
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HillBackground from '../models/HillBackground.jsx';
@@ -11,7 +12,6 @@ const AudioRecorder = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Request microphone access
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then((stream) => {
         const recorder = new MediaRecorder(stream);
@@ -21,7 +21,7 @@ const AudioRecorder = () => {
         alert('Microphone access denied.');
         console.error(err);
       });
-      applyTheme();
+    applyTheme();
   }, []);
 
   const startRecording = () => {
@@ -34,14 +34,13 @@ const AudioRecorder = () => {
         setAudioURL(url);
       };
 
-      // Set up timer for how long recording last
       setTimeout(() => {
         stopRecording();
       }, 12100);
 
-      setRecordingText("Recording..."); //0-4 seconds
-      setTimeout(() => setRecordingText("Keep Going..."), 4000); // 4-8 seconds
-      setTimeout(() => setRecordingText("Almost there..."), 8000); // 8-12 seconds
+      setRecordingText("Recording...");
+      setTimeout(() => setRecordingText("Keep Going..."), 4000);
+      setTimeout(() => setRecordingText("Almost there..."), 8000);
     }
   };
 
@@ -57,7 +56,6 @@ const AudioRecorder = () => {
     <div className="w-full min-h-screen flex flex-col items-center justify-center p-8 relative">
       <HillBackground />
 
-      {/* Home Button */}
       <button
         onClick={() => navigate('/')}
         className="absolute top-4 right-4 text-white-500 hover:underline"
@@ -83,44 +81,25 @@ const AudioRecorder = () => {
         </p>
       )}
 
-      {/* Audio Playback */}
       {audioURL && (
         <div className="mt-4">
           <p>Recorded Audio:</p>
           <audio controls src={audioURL}></audio>
-
-
-          {/* Implement logic to process the audio */}
-
-
         </div>
       )}
 
-        {/* And no, I will not add this to index.css wkwkwk */}
-        <style jsx>{`
+      <style jsx>{`
         @keyframes flashRed {
-          0% {
-            color: #ff0000; /* Bright Red */
-          }
-          25% {
-            color: #cc0000; /* Darker Red */
-          }
-          50% {
-            color: #ff4d4d; /* Lighter Red */
-          }
-          75% {
-            color: #cc0000; /* Darker Red */
-          }
-          100% {
-            color: #ff0000; /* Bright Red */
-          }
+          0% { color: #ff0000; }
+          25% { color: #cc0000; }
+          50% { color: #ff4d4d; }
+          75% { color: #cc0000; }
+          100% { color: #ff0000; }
         }
-
         .flashing-text {
           animation: flashRed 4s infinite;
         }
       `}</style>
-
     </div>
   );
 };

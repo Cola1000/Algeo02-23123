@@ -1,10 +1,12 @@
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
+// src/components/MovementController.jsx
 import { useFrame } from "@react-three/fiber";
 import { useSphere } from "@react-three/cannon";
+import { useEffect, useRef } from "react";
+import * as THREE from "three";
 
+// This controller is mostly unchanged, but we will keep it as is.
+// It handles movement and mouse look. Pressing keys 1,2,3 is handled in Home3D.
 const MovementController = ({ cameraRef }) => {
-  // Store input states
   const direction = useRef({
     forward: false,
     backward: false,
@@ -15,18 +17,16 @@ const MovementController = ({ cameraRef }) => {
   });
 
   const rotationSpeed = 0.002;
-  const movementSpeed = 10; // Increased units per second
+  const movementSpeed = 10;
 
-  // Initialize physics body
   const [ref, api] = useSphere(() => ({
-    mass: 1, // Ensure the mass is non-zero
+    mass: 1,
     position: [0, 1.6, 0],
     args: [0.5],
     fixedRotation: true,
-    material: { friction: 0.1, restitution: 0 }, // Adjusted friction and restitution
+    material: { friction: 0.1, restitution: 0 },
   }));
 
-  // Store current velocity
   const currentVelocity = useRef([0, 0, 0]);
 
   useEffect(() => {
@@ -113,42 +113,31 @@ const MovementController = ({ cameraRef }) => {
   useFrame((state, delta) => {
     if (!cameraRef.current || !ref.current) return;
 
-    // Calculate camera direction vectors
     const cameraDirection = new THREE.Vector3();
     cameraRef.current.getWorldDirection(cameraDirection);
-    cameraDirection.y = 0; // Prevent movement in the Y-axis
+    cameraDirection.y = 0;
     cameraDirection.normalize();
 
     const cameraRight = new THREE.Vector3();
     cameraRight.crossVectors(cameraDirection, new THREE.Vector3(0, 1, 0)).normalize();
 
-    // Determine movement input
     const moveX = direction.current.right - direction.current.left;
     const moveZ = direction.current.forward - direction.current.backward;
 
     const moveVector = new THREE.Vector3(moveX, 0, moveZ);
 
     if (moveVector.lengthSq() > 0) {
-      // Normalize to prevent faster diagonal movement
       moveVector.normalize();
-
-      // Calculate desired movement direction based on camera orientation
       const desiredDirection = new THREE.Vector3()
         .copy(cameraDirection)
         .multiplyScalar(moveVector.z * movementSpeed)
         .addScaledVector(cameraRight, moveVector.x * movementSpeed);
 
-      // Set velocity directly
       api.velocity.set(desiredDirection.x, currentVelocity.current[1], desiredDirection.z);
-
-      // Debugging
-      console.log("Set Velocity:", [desiredDirection.x, currentVelocity.current[1], desiredDirection.z]);
     } else {
-      // Stop horizontal movement
       api.velocity.set(0, currentVelocity.current[1], 0);
     }
 
-    // Smoothly interpolate camera position
     const position = new THREE.Vector3();
     ref.current.getWorldPosition(position);
     cameraRef.current.position.lerp(
@@ -157,9 +146,8 @@ const MovementController = ({ cameraRef }) => {
     );
   });
 
-  // Return a visible mesh for debugging
   return (
-    <mesh ref={ref} visible={true}> {/* Set visible to true for debugging */}
+    <mesh ref={ref} visible={false}>
       <sphereGeometry args={[0.5]} />
       <meshStandardMaterial color="hotpink" />
     </mesh>
