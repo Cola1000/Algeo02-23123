@@ -1,0 +1,223 @@
+[
+    {
+        "similarity_rank": 1,
+        "similarity_percentage": 100.0,
+        "id": 899,
+        "title": "Album 899",
+        "imageSrc": "src/backend/database/picture/R-14401235-1573773330-8576-jpeg.jpg",
+        "songs": [
+            {
+                "id": "899_1",
+                "file": "pop.00087.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 2,
+        "similarity_percentage": 92.93,
+        "id": 81,
+        "title": "Album 81",
+        "imageSrc": "src/backend/database/picture/R-14035434-1570872261-6195-jpeg.jpg",
+        "songs": [
+            {
+                "id": "81_1",
+                "file": "pop.00002.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 3,
+        "similarity_percentage": 84.69,
+        "id": 935,
+        "title": "Album 935",
+        "imageSrc": "src/backend/database/picture/R-1617049-1624331284-3666-jpeg.jpg",
+        "songs": [
+            {
+                "id": "935_1",
+                "file": "pop.00038.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 4,
+        "similarity_percentage": 83.91,
+        "id": 940,
+        "title": "Album 940",
+        "imageSrc": "src/backend/database/picture/R-9595898-1484385049-3470-jpeg.jpg",
+        "songs": [
+            {
+                "id": "940_1",
+                "file": "pop.00074.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 5,
+        "similarity_percentage": 83.54,
+        "id": 134,
+        "title": "Album 134",
+        "imageSrc": "src/backend/database/picture/R-386751-1327155923-jpeg.jpg",
+        "songs": [
+            {
+                "id": "134_1",
+                "file": "pop.00012.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 6,
+        "similarity_percentage": 82.96,
+        "id": 370,
+        "title": "Album 370",
+        "imageSrc": "src/backend/database/picture/R-11157987-1510980639-1660-jpeg.jpg",
+        "songs": [
+            {
+                "id": "370_1",
+                "file": "pop.00072.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 7,
+        "similarity_percentage": 82.74,
+        "id": 502,
+        "title": "Album 502",
+        "imageSrc": "src/backend/database/picture/R-1607415-1365469205-1071-jpeg.jpg",
+        "songs": [
+            {
+                "id": "502_1",
+                "file": "pop.00061.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 8,
+        "similarity_percentage": 82.52,
+        "id": 253,
+        "title": "Album 253",
+        "imageSrc": "src/backend/database/picture/R-939627-1511360646-8117-jpeg.jpg",
+        "songs": [
+            {
+                "id": "253_1",
+                "file": "pop.00031.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 9,
+        "similarity_percentage": 82.48,
+        "id": 225,
+        "title": "Album 225",
+        "imageSrc": "src/backend/database/picture/R-99654-1605014798-1725-jpeg.jpg",
+        "songs": [
+            {
+                "id": "225_1",
+                "file": "pop.00018.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 10,
+        "similarity_percentage": 82.38,
+        "id": 883,
+        "title": "Album 883",
+        "imageSrc": "src/backend/database/picture/R-6467085-1459583698-4957-jpeg.jpg",
+        "songs": [
+            {
+                "id": "883_1",
+                "file": "pop.00019.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 11,
+        "similarity_percentage": 82.18,
+        "id": 665,
+        "title": "Album 665",
+        "imageSrc": "src/backend/database/picture/R-6392060-1430583388-9641-jpeg.jpg",
+        "songs": [
+            {
+                "id": "665_1",
+                "file": "pop.00073.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 12,
+        "similarity_percentage": 82.09,
+        "id": 693,
+        "title": "Album 693",
+        "imageSrc": "src/backend/database/picture/R-373250-1369686173-7047-jpeg.jpg",
+        "songs": [
+            {
+                "id": "693_1",
+                "file": "Cogitation of Epochs.mp3"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 13,
+        "similarity_percentage": 81.97,
+        "id": 700,
+        "title": "Album 700",
+        "imageSrc": "src/backend/database/picture/R-1190961-1368702018-3386-jpeg.jpg",
+        "songs": [
+            {
+                "id": "700_1",
+                "file": "pop.00066.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 14,
+        "similarity_percentage": 81.64,
+        "id": 122,
+        "title": "Album 122",
+        "imageSrc": "src/backend/database/picture/R-215159-1402431262-3395-jpeg.jpg",
+        "songs": [
+            {
+                "id": "122_1",
+                "file": "pop.00063.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 15,
+        "similarity_percentage": 80.46,
+        "id": 584,
+        "title": "Album 584",
+        "imageSrc": "src/backend/database/picture/R-10241165-1501774120-1339-jpeg.jpg",
+        "songs": [
+            {
+                "id": "584_1",
+                "file": "pop.00000.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 16,
+        "similarity_percentage": 80.25,
+        "id": 248,
+        "title": "Album 248",
+        "imageSrc": "src/backend/database/picture/R-1975602-1256148212-jpeg.jpg",
+        "songs": [
+            {
+                "id": "248_1",
+                "file": "pop.00020.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 17,
+        "similarity_percentage": 80.18,
+        "id": 961,
+        "title": "Album 961",
+        "imageSrc": "src/backend/database/picture/R-497796-1506804917-2432-jpeg.jpg",
+        "songs": [
+            {
+                "id": "961_1",
+                "file": "pop.00062.wav"
+            }
+        ]
+    }
+]

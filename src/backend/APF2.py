@@ -5,12 +5,13 @@ from PIL import Image, ImageOps
 import shutil
 from pathlib import Path
 import json
+import logging
 
 # ====================================================================================
 # Constants
 # ====================================================================================
 
-SIMILARITY_THRESHOLD = 75.0
+SIMILARITY_THRESHOLD = 80.0
 
 # Define backend database directories
 BASE_DIR = Path(__file__).resolve().parent  # Points to 'backend/'
@@ -30,6 +31,10 @@ AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 PICTURE_DIR.mkdir(parents=True, exist_ok=True)
 MAPPER_DIR.mkdir(parents=True, exist_ok=True)
 PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+# ROOT PROJECT DIR
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent  # Points to 'HatsuneMix-ue-/'
+
 
 # ====================================================================================
 # Step 1: Image Processing and Loading
@@ -253,18 +258,30 @@ def save_matches(sorted_image_paths, sorted_distances, mapper, result_directory)
     # Prepare result directories
     result_audio_dir = os.path.join(result_directory, "audio")
     result_picture_dir = os.path.join(result_directory, "picture")
+    apf_result_path = os.path.join(
+        result_directory, "json/APF_result.json"
+    )  # Define the JSON path
     os.makedirs(result_audio_dir, exist_ok=True)
     os.makedirs(result_picture_dir, exist_ok=True)
 
-    # Clear existing contents
+    # Clear existing contents in audio and picture directories
     for directory in [result_audio_dir, result_picture_dir]:
         for filename in os.listdir(directory):
             file_path = os.path.join(directory, filename)
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
+                    logging.info(f"Deleted file: {file_path}")
             except Exception as e:
-                print(f"Error deleting file {file_path}: {e}")
+                logging.error(f"Error deleting file {file_path}: {e}")
+
+    # Remove existing APF_result.json if it exists
+    if os.path.exists(apf_result_path):
+        try:
+            os.remove(apf_result_path)
+            logging.info(f"Removed existing JSON file: {apf_result_path}")
+        except Exception as e:
+            logging.error(f"Error deleting JSON file {apf_result_path}: {e}")
 
     # Map to hold the best (minimum) distance for each original image
     original_image_best_distance = {}
@@ -279,7 +296,7 @@ def save_matches(sorted_image_paths, sorted_distances, mapper, result_directory)
     # Calculate similarity percentages based on best distances
     distances = list(original_image_best_distance.values())
     if not distances:
-        print("No images to process.")
+        logging.warning("No images to process.")
         return
 
     min_distance = min(distances)
@@ -306,7 +323,7 @@ def save_matches(sorted_image_paths, sorted_distances, mapper, result_directory)
     ]
 
     if not filtered_images:
-        print(
+        logging.info(
             f"No matches found with similarity percentage >= {SIMILARITY_THRESHOLD}%."
         )
         return
@@ -325,9 +342,9 @@ def save_matches(sorted_image_paths, sorted_distances, mapper, result_directory)
         )
         try:
             shutil.copy(path, destination_image_path)
-            print(f"Copied {path} to {destination_image_path}")
+            logging.info(f"Copied {path} to {destination_image_path}")
         except Exception as e:
-            print(f"Error copying image {path}: {e}")
+            logging.error(f"Error copying image {path}: {e}")
             continue  # Skip to next if copying fails
 
         # Find the corresponding album for the image
@@ -336,18 +353,20 @@ def save_matches(sorted_image_paths, sorted_distances, mapper, result_directory)
             if album["imageSrc"].endswith(os.path.basename(path)):
                 # Copy corresponding audio files
                 for song in album["songs"]:
-                    audio_file_path = os.path.join(
-                        "src/backend/database/audio", song["file"]
-                    )
+                    audio_file_path = os.path.join(AUDIO_DIR, song["file"])
                     destination_audio_path = os.path.join(
                         result_audio_dir,
                         f"{similarity_rank}_{os.path.basename(song['file'])}",
                     )
                     try:
                         shutil.copy(audio_file_path, destination_audio_path)
-                        print(f"Copied {audio_file_path} to {destination_audio_path}")
+                        logging.info(
+                            f"Copied {audio_file_path} to {destination_audio_path}"
+                        )
                     except Exception as e:
-                        print(f"Error copying audio file {audio_file_path}: {e}")
+                        logging.error(
+                            f"Error copying audio file {audio_file_path}: {e}"
+                        )
 
                 # Prepare APF_result.json entry
                 apf_entry = {
@@ -363,19 +382,18 @@ def save_matches(sorted_image_paths, sorted_distances, mapper, result_directory)
                 break  # Assuming one album per image
 
         if not album_found:
-            print(f"No matching album found for image {path}")
+            logging.warning(f"No matching album found for image {path}")
 
         similarity_rank += 1
 
     # Save APF_result.json
-    apf_result_path = "src/backend/query_result/APF_result.json"
     try:
         os.makedirs(os.path.dirname(apf_result_path), exist_ok=True)
         with open(apf_result_path, "w") as f:
             json.dump(apf_results, f, indent=4)
-        print(f"Saved APF_result.json to {apf_result_path}")
+        logging.info(f"Saved APF_result.json to {apf_result_path}")
     except Exception as e:
-        print(f"Error saving APF_result.json: {e}")
+        logging.error(f"Error saving APF_result.json: {e}")
 
     return apf_results  # Return the list of matched results
 
