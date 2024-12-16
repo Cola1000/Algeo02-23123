@@ -19,26 +19,31 @@ MIR_RESULT_JSON = "src/backend/query_result/MIR_result.json"
 
 def process_midi_file(midi_file_path):
     """
-    Process a MIDI file: Extract note pitches.
-
     Parameters:
         midi_file_path (str): The path to the MIDI file.
 
     Returns:
-        list: A list of MIDI note pitches extracted from the file.
+        list: A list of MIDI note pitches extracted from the main melody track.
     """
-    score = converter.parse(midi_file_path)
-    notes = []
+    try:
+        audio = converter.parse(midi_file_path)
+        notes = []
 
-    # Flatten the score to get all notes and chords
-    for element in score.flatten().notes:
-        if element.isNote:
-            # If the element is a note, append its MIDI pitch number
-            notes.append(element.pitch.midi)
-        elif element.isChord:
-            # If the element is a chord, extend the list with MIDI pitches of all notes in the chord
-            notes.extend(p.midi for p in element.pitches)
-    return notes
+        # Try to select the first "Part" (channel 1, main melody)
+        parts = audio.getElementsByClass("Part")
+        melody_part = parts[0] if parts else audio
+
+        for element in melody_part.flatten().notes:
+            if element.isNote:
+                notes.append(element.pitch.midi)
+            elif element.isChord:
+                # If the element is a chord, extend the list with MIDI pitches of all notes in the chord
+                notes.extend(p.midi for p in element.pitches)
+
+        return notes
+    except Exception as e:
+        print(f"Error processing MIDI file {midi_file_path}: {e}")
+        return []
 
 
 def normalize_notes(notes):
@@ -68,48 +73,28 @@ def normalize_notes(notes):
 
 def extract_features(notes):
     """
-    Extract features: ATB (Absolute Tone Based), RTB (Relative Tone Based), FTB (First Tone Based).
-    This function computes the tone distribution based on three viewpoints.
-
-    2.1. Absolute Tone Based (ATB):
-        - Counts the frequency of occurrence of each MIDI note (0-127).
-        - Creates a histogram with 128 bins.
-        - Normalizes the histogram to get a standardized distribution.
-
-    2.2. Relative Tone Based (RTB):
-        - Analyzes changes between sequential notes.
-        - Calculates differences between consecutive notes (intervals).
-        - Creates a histogram with 255 bins ranging from -127 to +127.
-        - Normalizes the histogram.
-
-    2.3. First Tone Based (FTB):
-        - Focuses on the difference between each note and the first note.
-        - Calculates differences between each note and the first note.
-        - Creates a histogram with 255 bins ranging from -127 to +127.
-        - Normalizes the histogram.
-
-    All histograms are normalized to ensure all values are on a probability scale.
+    Extract ATB, RTB, FTB (normalized: density=True).
 
     Parameters:
-        notes (list): The list of normalized note pitches.
+        notes (list): List of normalized note pitches.
 
     Returns:
-        tuple: Three numpy arrays representing ATB, RTB, and FTB features.
+        tuple: Three np arrays representing normalized ATB, RTB, FTB features.
     """
     if not notes:
         # Return zero arrays if notes are empty
         return np.zeros(128), np.zeros(255), np.zeros(255)
 
-    # Absolute Tone Based (ATB)
+    # ATB
     atb = np.histogram(notes, bins=range(0, 128 + 1), density=True)[0]
 
-    # Relative Tone Based (RTB)
-    intervals = np.diff(notes)  # Differences between consecutive notes
+    # RTB
+    intervals = np.diff(notes)
     if intervals.size == 0:
-        intervals = [0]  # Handle single-note case
+        intervals = [0]
     rtb = np.histogram(intervals, bins=range(-127, 128 + 1), density=True)[0]
 
-    # First Tone Based (FTB)
+    # FTB
     first_note = notes[0]
     ftb_intervals = [note - first_note for note in notes]
     ftb = np.histogram(ftb_intervals, bins=range(-127, 128 + 1), density=True)[0]
@@ -123,8 +108,6 @@ def extract_features(notes):
 
 def cosine_similarity(vector1, vector2):
     """
-    Calculate cosine similarity between two vectors.
-
     Parameters:
         vector1 (numpy.ndarray): The first vector.
         vector2 (numpy.ndarray): The second vector.
@@ -145,11 +128,11 @@ def calculate_similarity(query_features, database_features):
     Compare query features with database features using cosine similarity.
 
     Parameters:
-        query_features (tuple): The ATB, RTB, and FTB features of the query.
+        query_features (tuple): ATB, RTB, and FTB features of the query.
         database_features (list): A list of tuples containing ATB, RTB, and FTB features of the database entries.
 
     Returns:
-        list: A list of weighted similarity scores.
+        list: A list of weighted similarity audios.
     """
     similarities = []
     # Weights for ATB, RTB, and FTB respectively
@@ -172,17 +155,15 @@ def calculate_similarity(query_features, database_features):
 
 def query_by_humming(query_audio_file, database_files, threshold=SIMILARITY_THRESHOLD):
     """
-    Perform query by humming to find matching MIDI files in the database.
-
     Parameters:
         query_audio_file (str): The path to the query audio file.
         database_files (list): A list of database MIDI file paths.
         threshold (float): The similarity threshold for matches.
 
     Returns:
-        list: A list of tuples containing matched file paths and their similarity scores.
+        list: A list of tuples containing matched file paths and their similarity audios.
     """
-    # Convert the query audio file to MIDI
+    # Convert query audio file to MIDI
     query_midi_file = query_audio_file.rsplit(".", 1)[0] + ".mid"
     convert_audio_to_midi(query_audio_file, query_midi_file)
 
@@ -199,10 +180,10 @@ def query_by_humming(query_audio_file, database_files, threshold=SIMILARITY_THRE
         db_features = extract_features(normalized_db_notes)
         database_features.append(db_features)
 
-    # Calculate similarities between the query and each database entry
+    # Calculate query w/ database entries similarity
     similarities = calculate_similarity(query_features, database_features)
 
-    # Find matches that meet the similarity threshold
+    # Find matches > threshold
     matches = [
         (db_file, similarity)
         for db_file, similarity in zip(database_files, similarities)
@@ -222,11 +203,8 @@ def query_by_humming(query_audio_file, database_files, threshold=SIMILARITY_THRE
 
 def save_matches(matches, mapper, result_dir="test/result"):
     """
-    Save the matched audio files and album images to the result directory,
-    and save the matched information with similarity scores to MIR_result.json.
-
     Parameters:
-        matches (list): A list of tuples containing matched file paths and their similarity scores.
+        matches (list): A list of tuples containing matched file paths and their similarity audios.
         mapper (list): The data mapper containing metadata of songs and albums.
         result_dir (str): The directory to save the result audio and pictures.
     """
@@ -332,8 +310,6 @@ def save_matches(matches, mapper, result_dir="test/result"):
 
 def convert_dataset_to_midi(dataset_path, midi_dataset_path):
     """
-    Convert all audio files in the dataset to MIDI and save them in the MIDI dataset path.
-
     Parameters:
         dataset_path (str): The path to the directory containing the audio files.
         midi_dataset_path (str): The path to the directory where MIDI files will be stored.
@@ -362,16 +338,13 @@ def convert_dataset_to_midi(dataset_path, midi_dataset_path):
 
 
 def main():
-    """
-    Main function to execute the query by humming process.
-    """
     dataset_path = "src/backend/database/audio"
     midi_dataset_path = "src/backend/database/midi_audio"
     query_audio_file = "test/query/audio/pop.00099.wav"
     result_dir = "test/result"
     mapper_file = "src/backend/database/mapper_all_img.json"
 
-    # Load the mapper (metadata of songs and albums)
+    # Load mapper
     try:
         with open(mapper_file, "r") as f:
             mapper = json.load(f)
@@ -379,7 +352,7 @@ def main():
         print(f"Error loading mapper file {mapper_file}: {e}")
         return
 
-    # Convert the dataset to MIDI files (only if new audio files are added)
+    # Convert the dataset to MIDI files (only if new audio files are added, else comment the two lines below)
     print("Converting dataset audio files to MIDI...")
     convert_dataset_to_midi(dataset_path, midi_dataset_path)
 
@@ -396,10 +369,10 @@ def main():
         )
         return
 
-    # Debug print to check loaded MIDI files
+    # Debugging statement
     print(f"Loaded {len(database_files)} MIDI files for querying.")
 
-    # Perform query by humming
+    # Query by humming
     print("Processing query audio and retrieving similar MIDI files...\n")
     matches = query_by_humming(
         query_audio_file, database_files, threshold=SIMILARITY_THRESHOLD
@@ -410,7 +383,7 @@ def main():
 
     # Print the matches
     if mir_results:
-        # Print the matched MIDI paths above SIMILARITY_THRESHOLD
+        # Print the matched MIDI paths that are above SIMILARITY_THRESHOLD
         print(f"\nMatched MIDI Files (Similarity >= {SIMILARITY_THRESHOLD}):")
         for entry in mir_results:
             print(

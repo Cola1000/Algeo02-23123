@@ -1,0 +1,119 @@
+[
+    {
+        "similarity_rank": 1,
+        "similarity_percentage": 100.0,
+        "id": 60,
+        "title": "Album 60",
+        "imageSrc": "src/backend/database/picture/R-14401235-1573773330-8576-jpeg.jpg",
+        "songs": [
+            {
+                "id": "60_1",
+                "file": "pop.00083.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 2,
+        "similarity_percentage": 92.93,
+        "id": 77,
+        "title": "Album 77",
+        "imageSrc": "src/backend/database/picture/R-14035434-1570872261-6195-jpeg.jpg",
+        "songs": [
+            {
+                "id": "77_1",
+                "file": "pop.00082.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 13,
+        "similarity_percentage": 81.97,
+        "id": 87,
+        "title": "Album 87",
+        "imageSrc": "src/backend/database/picture/R-1190961-1368702018-3386-jpeg.jpg",
+        "songs": [
+            {
+                "id": "87_1",
+                "file": "pop.00089.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 17,
+        "similarity_percentage": 80.18,
+        "id": 53,
+        "title": "Album 53",
+        "imageSrc": "src/backend/database/picture/R-497796-1506804917-2432-jpeg.jpg",
+        "songs": [
+            {
+                "id": "53_1",
+                "file": "pop.00037.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 28,
+        "similarity_percentage": 78.44,
+        "id": 19,
+        "title": "Album 19",
+        "imageSrc": "src/backend/database/picture/R-4526534-1367401380-7022-jpeg.jpg",
+        "songs": [
+            {
+                "id": "19_1",
+                "file": "pop.00015.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 34,
+        "similarity_percentage": 77.78,
+        "id": 95,
+        "title": "Album 95",
+        "imageSrc": "src/backend/database/picture/R-12370362-1534633733-4886-jpeg.jpg",
+        "songs": [
+            {
+                "id": "95_1",
+                "file": "pop.00002.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 44,
+        "similarity_percentage": 76.59,
+        "id": 42,
+        "title": "Album 42",
+        "imageSrc": "src/backend/database/picture/R-164065-1627132085-2509-jpeg.jpg",
+        "songs": [
+            {
+                "id": "42_1",
+                "file": "pop.00093.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 49,
+        "similarity_percentage": 75.9,
+        "id": 27,
+        "title": "Album 27",
+        "imageSrc": "src/backend/database/picture/R-10261049-1495515819-3444-jpeg.jpg",
+        "songs": [
+            {
+                "id": "27_1",
+                "file": "pop.00061.wav"
+            }
+        ]
+    },
+    {
+        "similarity_rank": 50,
+        "similarity_percentage": 75.76,
+        "id": 48,
+        "title": "Album 48",
+        "imageSrc": "src/backend/database/picture/R-219607-1508953707-3409-jpeg.jpg",
+        "songs": [
+            {
+                "id": "48_1",
+                "file": "pop.00000.wav"
+            }
+        ]
+    }
+]

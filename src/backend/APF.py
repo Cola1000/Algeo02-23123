@@ -1,7 +1,7 @@
 import os
 import glob
 import numpy as np
-from PIL import Image, ImageOps, ImageEnhance
+from PIL import Image, ImageOps
 import shutil
 import json
 
@@ -17,9 +17,6 @@ SIMILARITY_THRESHOLD = 75.0  # Minimum similarity percentage to consider a match
 
 
 def convert_to_greyscale(image):
-    """
-    Convert an image to greyscale.
-    """
     image_array = np.array(image)
     greyscale_image = (
         0.2989 * image_array[:, :, 0]
@@ -30,29 +27,12 @@ def convert_to_greyscale(image):
 
 
 def preprocess_image(image, size=(60, 60)):
-    """
-    Preprocess an image: convert to greyscale, normalize rotation, resize, and equalize.
-    """
-    # Convert to greyscale
     image = convert_to_greyscale(image)
-
-    # Normalize rotation by rotating to the smallest bounding box
-    image = ImageOps.exif_transpose(image)
-
-    # Resize image to a standard size
     image = image.resize(size)
-
-    # Histogram equalization to handle lighting variations and improve contrast
-    # This step adjusts the intensity distribution of the image to enhance contrast
-    image = ImageOps.equalize(image)
-
     return image
 
 
 def load_image(image_path, size=(60, 60)):
-    """
-    Load and preprocess an image from a file path.
-    """
     try:
         image = Image.open(image_path)
         image = preprocess_image(image, size)
@@ -63,9 +43,6 @@ def load_image(image_path, size=(60, 60)):
 
 
 def augment_with_rotations(image, size=(60, 60)):
-    """
-    Augment an image with rotations (0, 90, 180, 270 degrees).
-    """
     rotations = [0, 90, 180, 270]
     augmented_images = []
     for angle in rotations:
@@ -77,9 +54,6 @@ def augment_with_rotations(image, size=(60, 60)):
 
 
 def augment_with_flips(image, size=(60, 60)):
-    """
-    Augment an image with horizontal and vertical flips.
-    """
     flips = [image, ImageOps.mirror(image), ImageOps.flip(image)]
     augmented_images = []
     for flipped_image in flips:
@@ -89,53 +63,38 @@ def augment_with_flips(image, size=(60, 60)):
     return augmented_images
 
 
-def augment_with_color_jitter(image, size=(60, 60)):
-    """
-    Augment an image with color jittering (brightness, contrast, sharpness).
-    """
-    enhancers = [
-        ImageEnhance.Brightness(image),
-        ImageEnhance.Contrast(image),
-        ImageEnhance.Sharpness(image),
-    ]
-    factors = [0.8, 1.2]  # Jitter factors
-    augmented_images = []
-    for enhancer in enhancers:
-        for factor in factors:
-            jittered_image = enhancer.enhance(factor)
-            augmented_images.append(
-                np.array(preprocess_image(jittered_image, size)).flatten()
-            )
-    return augmented_images
-
-
 def augment_image(image, size=(60, 60)):
-    """
-    Apply all augmentations (rotations, flips, color jittering) to an image.
-    """
     augmented_images = augment_with_rotations(image, size)
     augmented_images += augment_with_flips(image, size)
-    augmented_images += augment_with_color_jitter(image, size)
     return augmented_images
 
 
 def load_image_database(directory_path, size=(60, 60)):
-    """
-    Load and preprocess all images in the specified directory.
-    """
-    image_paths = glob.glob(os.path.join(directory_path, "*.jpg"))
+    # Handle multiple image file extensions
+    image_extensions = {".jpg", ".jpeg", ".png", ".JPG", ".JPEG", ".PNG"}
+
     imageDB = []
     original_image_paths = []
-    for image_path in image_paths:
-        try:
-            image = Image.open(image_path)
-            augmented_images = augment_image(image, size)
-            imageDB.extend(augmented_images)
-            original_image_paths.extend([image_path] * len(augmented_images))
-        except Exception as e:
-            print(f"Error processing image {image_path}: {e}")
-    if imageDB:
-        imageDB = np.array(imageDB)
+
+    with os.scandir(directory_path) as entries:
+        for entry in entries:
+            if entry.is_file():
+                _, ext = os.path.splitext(entry.name)
+                if ext in image_extensions:
+                    image_path = entry.path
+                    try:
+                        image = Image.open(image_path)
+                        augmented_images = augment_image(image, size)
+                        image.close()
+                        imageDB.extend(augmented_images)
+                        original_image_paths.extend(
+                            [image_path] * len(augmented_images)
+                        )
+                    except Exception as e:
+                        print(f"Error processing image {image_path}: {e}")
+
+    imageDB = np.array(imageDB) if imageDB else np.array([])
+
     return imageDB, original_image_paths
 
 
@@ -145,9 +104,6 @@ def load_image_database(directory_path, size=(60, 60)):
 
 
 def standardize_data(imageDB):
-    """
-    Standardize the image data by centering it around the mean.
-    """
     mean = np.mean(imageDB, axis=0)
     imageDB_centered = imageDB - mean
     return imageDB_centered, mean
@@ -159,16 +115,10 @@ def standardize_data(imageDB):
 
 
 def compute_covariance_matrix(imageDB):
-    """
-    Compute the covariance matrix of the image data.
-    """
     return np.cov(imageDB, rowvar=False)
 
 
 def perform_svd(covariant_matrix):
-    """
-    Perform Singular Value Decomposition (SVD) on the covariance matrix.
-    """
     U, S, Vt = np.linalg.svd(covariant_matrix)
     return U, S, Vt
 
@@ -181,9 +131,6 @@ def select_principal_components(U, k):
 
 
 def project_data(X_centered, principal_components):
-    """
-    Project the centered data onto the principal components.
-    """
     return np.dot(X_centered, principal_components)
 
 
@@ -193,9 +140,6 @@ def project_data(X_centered, principal_components):
 
 
 def process_query_image(query_image_path, mean, size=(60, 60)):
-    """
-    Process a query image: load, preprocess, and center it.
-    """
     try:
         query_image = Image.open(query_image_path)
         query_image = preprocess_image(query_image, size)
@@ -207,9 +151,6 @@ def process_query_image(query_image_path, mean, size=(60, 60)):
 
 
 def project_query_image(query_image_centered, principal_components):
-    """
-    Project the centered query image onto the principal components.
-    """
     return np.dot(query_image_centered, principal_components)
 
 
@@ -242,9 +183,6 @@ def sort_by_similarity(distances, image_paths):
 
 def save_matches(sorted_image_paths, sorted_distances, mapper, result_directory):
     """
-    Save the matched images and corresponding audio files to the result directory,
-    and save the matched album information with similarity rank and percentage to APF_result.json.
-
     Parameters:
         sorted_image_paths (list): List of image file paths sorted by similarity.
         sorted_distances (list): List of distances corresponding to the sorted images.
@@ -396,9 +334,6 @@ def process_query(
     mapper,
     size=(60, 60),
 ):
-    """
-    Process the query image and retrieve similar images and their corresponding songs.
-    """
     # Standardize the data
     imageDB_centered, mean = standardize_data(imageDB)
 
@@ -444,7 +379,7 @@ def process_query(
 
 
 def main():
-    directory_path = "src/backend/database/picture/"
+    db_dir_path = "src/backend/database/picture/"
     result_directory = "test/result"
     query_image_path = "test/query/picture/test_pic_7.jpg"
     mapper_file = "src/backend/database/mapper_all_img.json"
@@ -458,8 +393,8 @@ def main():
         return
 
     # Load and preprocess images
-    print("Loading and preprocessing images...")
-    imageDB, original_image_paths = load_image_database(directory_path)
+    print("Loading and preprocessing database images...")
+    imageDB, original_image_paths = load_image_database(db_dir_path)
     if imageDB.size == 0:
         print("No images loaded. Exiting.")
         return
@@ -469,7 +404,7 @@ def main():
 
     # Process the query image and retrieve similar images and their corresponding songs
     print(
-        "Processing query image and retrieving similar images and their corresponding songs...\n"
+        "Processing query image...\n"
     )
     apf_results = process_query(
         query_image_path, imageDB, original_image_paths, result_directory, mapper
