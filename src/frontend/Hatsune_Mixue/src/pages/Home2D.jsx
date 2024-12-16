@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import albumPictures from "../components/albumPictures.jsx";
@@ -7,6 +7,7 @@ import { applyTheme } from "../components/CheckTheme.jsx";
 import axios from "axios";
 
 const Home2D = () => {
+  const BACKEND_STATIC_URL = "http://localhost:8000/static/";
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const albumsPerPage = 16;
@@ -14,6 +15,16 @@ const Home2D = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [uploadedAudios, setUploadedAudios] = useState([]);
   const [uploadedMapper, setUploadedMapper] = useState(null);
+
+  const albumsSectionRef = useRef(null);
+  const datasetStatusRef = useRef(null);
+  const uploadSectionRef = useRef(null);
+
+  const [datasetStatus, setDatasetStatus] = useState({
+    images: false,
+    audios: false,
+    mapper: false,
+  });
 
   // States for Zip Files
   const [selectedZipFiles, setSelectedZipFiles] = useState([]);
@@ -31,15 +42,12 @@ const Home2D = () => {
   const [popupData, setPopupData] = useState(null);
 
   // Calculate total pages
-  const totalPages = Math.ceil(albumPictures.length / albumsPerPage);
+  const totalPages = Math.ceil(uploadedImages.length / albumsPerPage);
 
   // Get current albums
   const indexOfLastAlbum = currentPage * albumsPerPage;
   const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
-  const currentAlbums = albumPictures.slice(
-    indexOfFirstAlbum,
-    indexOfLastAlbum
-  );
+  const currentAlbums = uploadedImages.slice(indexOfFirstAlbum, indexOfLastAlbum);
 
   const handleAlbumClick = (albumId) => {
     navigate(`/album/${albumId}`);
@@ -82,15 +90,11 @@ const Home2D = () => {
     });
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/upload-dataset/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("http://localhost:8000/upload-dataset/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("Upload Success:", response.data);
       alert("Zip files uploaded successfully!");
       // Handle success (e.g., update state, notify user)
@@ -108,9 +112,7 @@ const Home2D = () => {
 
   // Drag and drop logic for Image Upload
   const onImageDrop = useCallback(async (acceptedFiles) => {
-    const imageFiles = acceptedFiles.filter((file) =>
-      file.type.startsWith("image/")
-    );
+    const imageFiles = acceptedFiles.filter((file) => file.type.startsWith("image/"));
     if (imageFiles.length === 0) {
       alert("Please upload valid image files.");
       return;
@@ -126,15 +128,11 @@ const Home2D = () => {
     });
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/search-image/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("http://localhost:8000/search-image/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("Image Query Success:", response.data);
       alert("Image query successful!");
 
@@ -155,9 +153,7 @@ const Home2D = () => {
 
   // Drag and drop logic for Audio Upload
   const onAudioDrop = useCallback(async (acceptedFiles) => {
-    const audioFiles = acceptedFiles.filter((file) =>
-      file.type.startsWith("audio/")
-    );
+    const audioFiles = acceptedFiles.filter((file) => file.type.startsWith("audio/"));
     if (audioFiles.length === 0) {
       alert("Please upload valid audio files.");
       return;
@@ -173,15 +169,11 @@ const Home2D = () => {
     });
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/search-audio/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post("http://localhost:8000/search-audio/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("Audio Query Success:", response.data);
       alert("Audio query successful!");
       // Handle success (e.g., display results)
@@ -207,42 +199,81 @@ const Home2D = () => {
     setPopupData(null);
   };
 
+  useEffect(() => {
+    const fetchDatasetStatus = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/check-datasets/");
+        setDatasetStatus(response.data);
+      } catch (error) {
+        console.error("Error fetching dataset status:", error);
+        // Optionally, handle the error (e.g., show a notification)
+      }
+    };
+
+    fetchDatasetStatus();
+  }, []);
+
+  useEffect(() => {
+    const fetchUploadedData = async () => {
+      try {
+        const imagesResponse = await axios.get("http://localhost:8000/api/uploaded-images/");
+        const audiosResponse = await axios.get("http://localhost:8000/api/uploaded-audios/");
+        const mapperResponse = await axios.get("http://localhost:8000/api/uploaded-mapper/");
+
+        setUploadedImages(imagesResponse.data.uploaded_images || []);
+        setUploadedAudios(audiosResponse.data.uploaded_audios || []);
+        setUploadedMapper(mapperResponse.data.uploaded_mapper || []);
+
+        console.log("Uploaded Images:", imagesResponse.data);
+        console.log("Uploaded Audios:", audiosResponse.data);
+        console.log("Uploaded Mapper:", mapperResponse.data);
+      } catch (error) {
+        console.error("Error fetching uploaded data:", error);
+      }
+    };
+
+    fetchUploadedData();
+  }, []);
+
+  useEffect(() => {
+    if (!datasetStatus.images || !datasetStatus.audios || !datasetStatus.mapper) {
+      // Scroll to Dataset Status if any dataset is missing
+      datasetStatusRef.current?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Scroll to Albums Section if all datasets are present
+      // Replace 'albumsSectionRef' with your actual ref for the albums section
+      albumsSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [datasetStatus]);
+
   return (
     <div className="w-full min-h-screen flex flex-col items-center p-8 overflow-y-auto">
       <HillBackground />
       <section className="text-center">
-        <h1 className="head-text text-cool-blue rounded-lg px-6 py-6 shadow-card">
-          Hatsune Mix[ue]
-        </h1>
+        <h1 className="head-text text-cool-blue rounded-lg px-6 py-6 shadow-card">Hatsune Mix[ue]</h1>
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-5 mt-8 z-10 relative justify-center items-center">
           <button
             onClick={handleAlbumRecognizer}
-            className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center"
-          >
+            className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center">
             Album Picture Recognizer
           </button>
           <button
             onClick={handleAudioRecognizer}
-            className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center"
-          >
+            className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center">
             Audio Recognizer
           </button>
           <button
             onClick={handleZipRecognizer}
-            className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center"
-          >
+            className="btn shadow-md hover:shadow-lg bg-blue-500 text-white py-2 px-4 rounded-lg min-w-[250px] text-center">
             Upload a Database (Zip)
           </button>
         </div>
 
         {/* Drag and Drop Area for Images */}
         {showImageDropzone && (
-          <div
-            {...getImageRootProps()}
-            className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer"
-          >
+          <div {...getImageRootProps()} className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer">
             <input {...getImageInputProps()} />
             {isImageDragActive ? (
               <p>Drop the image files here ...</p>
@@ -254,25 +285,15 @@ const Home2D = () => {
 
         {/* Drag and Drop Area for Zip Files */}
         {showZipDropzone && (
-          <div
-            {...getZipRootProps()}
-            className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer"
-          >
+          <div {...getZipRootProps()} className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer">
             <input {...getZipInputProps()} />
-            {isZipDragActive ? (
-              <p>Drop the zip file here ...</p>
-            ) : (
-              <p>Drag 'n' drop a .zip file here, or click to select one</p>
-            )}
+            {isZipDragActive ? <p>Drop the zip file here ...</p> : <p>Drag 'n' drop a .zip file here, or click to select one</p>}
           </div>
         )}
 
         {/* Drag and Drop Area for Audio Files */}
         {showAudioDropzone && (
-          <div
-            {...getAudioRootProps()}
-            className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer"
-          >
+          <div {...getAudioRootProps()} className="mt-8 border-4 border-dashed border-gray-300 rounded p-8 cursor-pointer">
             <input {...getAudioInputProps()} />
             {isAudioDragActive ? (
               <p>Drop the audio files here ...</p>
@@ -282,81 +303,17 @@ const Home2D = () => {
           </div>
         )}
 
-        {/* Album Auto-scroller */}
-        <div className="mt-16 w-full max-w-screen-lg overflow-hidden relative">
-          <h2 className="text-3xl font-bold mb-4">Your Datasets</h2>
-
-          {uploadedImages.length > 0 &&
-          uploadedAudios.length > 0 &&
-          uploadedMapper ? (
-            <div className="scroller flex gap-4 items-start flex-wrap overflow-x-auto">
-              {uploadedImages.map((image, index) => (
-                <div
-                  key={index}
-                  className="album-card w-48 h-48 flex-shrink-0 relative"
-                >
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt={`Uploaded Album ${index + 1}`}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <audio controls className="absolute bottom-2 left-2 right-2">
-                    <source
-                      src={URL.createObjectURL(uploadedAudios[index])}
-                      type={uploadedAudios[index].type}
-                    />
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="w-full text-red-500 text-center">
-              <p>
-                Missing datasets: {!uploadedImages.length && "Images "}
-                {!uploadedAudios.length && "Audios "}
-                {!uploadedMapper && "Mapper "}
-              </p>
-              <p>
-                Please upload all required datasets (Images, Audios, and Mapper)
-                to display your albums.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Popup Modal */}
-        {isPopupVisible && popupData && (
-          <div className="modal-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="modal-content bg-white p-6 rounded-lg max-w-lg w-full">
-              <h2 className="text-xl font-bold mb-4">Search Results</h2>
-              <pre className="bg-gray-100 p-4 rounded overflow-auto max-h-80">
-                {JSON.stringify(popupData, null, 2)}
-              </pre>
-              <button
-                onClick={closePopup}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Display Search Results as Albums */}
         {popupData && popupData.results && (
           <div className="search-results mt-8">
             <h2 className="text-xl font-bold mb-4">Search Results</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-10">
               {popupData.results.map((album) => (
                 <div
                   key={album.id}
-                  className="album-card w-48 h-48 cursor-pointer transition-transform transform hover:scale-105"
-                >
+                  className="album-card w-48 h-48 cursor-pointer transition-transform transform hover:scale-105">
                   <img
-                    src={`http://localhost:8000/static/${album.imageSrc
-                      .split("/")
-                      .pop()}`}
+                    src={`http://localhost:8000/static/${album.imageSrc.split("/").pop()}`}
                     alt={`Album ${album.title}`}
                     className="w-full h-full object-cover rounded-lg"
                   />
@@ -369,20 +326,35 @@ const Home2D = () => {
 
         {/* Pagination */}
         <div className="mt-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {currentAlbums.map((album) => (
-              <div
-                key={album.id}
-                className="w-48 h-48 cursor-pointer transition-transform transform hover:scale-105"
-                onClick={() => handleAlbumClick(album.id)}
-              >
-                <img
-                  src={album.imageSrc}
-                  alt={`Album ${album.title}`}
-                  className="w-full h-full object-cover rounded-lg"
-                />
+          <div ref={albumsSectionRef} className="mt-16 w-full max-w-screen-lg overflow-hidden relative">
+            <h2 className="text-3xl font-bold mb-4">Your Datasets</h2>
+
+            {datasetStatus.images && datasetStatus.mapper ? (
+              uploadedMapper ? (
+                <div className="flex gap-4 items-start flex-wrap overflow-x-auto whitespace-nowrap flex-row">
+                  {currentAlbums.map((image, index) => (
+                    <div key={index} className="album-card w-48 h-48 flex-shrink-0 relative">
+                      <img
+                        src={`${BACKEND_STATIC_URL}${image.imageSrc.split("/").pop()}`}
+                        alt={`Uploaded Album ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>Error Displaying Datasets.</p>
+              )
+            ) : (
+              <div className="w-full text-red-500 text-center">
+                <p>
+                  Missing datasets: {!datasetStatus.images && "Images "}
+                  {!datasetStatus.audios && "Audios "}
+                  {!datasetStatus.mapper && "Mapper "}
+                </p>
+                <p>Please upload all required datasets (Images, Audios, and Mapper) to display your albums.</p>
               </div>
-            ))}
+            )}
           </div>
 
           {/* Pagination Controls */}
@@ -390,18 +362,14 @@ const Home2D = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50"
-            >
+              className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50">
               Previous
             </button>
             <span className="mx-2">{`Page ${currentPage} of ${totalPages}`}</span>
             <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50"
-            >
+              className="mx-2 px-4 py-2 w-32 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-200 disabled:opacity-50">
               Next
             </button>
           </div>

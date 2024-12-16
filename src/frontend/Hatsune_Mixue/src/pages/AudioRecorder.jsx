@@ -1,4 +1,3 @@
-// AudioRecorder.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import HillBackground from "../models/HillBackground.jsx";
@@ -105,6 +104,10 @@ const AudioRecorder = () => {
     accept: "audio/*",
   });
 
+  useEffect(() => {
+    console.log("Popup Data:", popupData);
+  }, [popupData]);
+
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center p-8 relative">
       <HillBackground />
@@ -134,14 +137,14 @@ const AudioRecorder = () => {
       )}
 
       {/* Display Audio Search Results */}
-      {isPopupVisible && popupData && (
+      {isPopupVisible && Array.isArray(popupData) && (
         <div className="search-results mt-8 p-6 bg-white bg-opacity-90 rounded-xl shadow-2xl">
           <h2 className="text-2xl font-semibold mb-6 text-center text-blue-600">Audio Search Results</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {popupData.map((album) => (
               <div
                 key={album.id}
-                className="album-card bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300">
+                className="album-card bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 cursor-pointer">
                 <img
                   src={`http://localhost:8000/static/${album.imageSrc.split("/").pop()}`}
                   alt={`Album ${album.title}`}
@@ -149,6 +152,18 @@ const AudioRecorder = () => {
                 />
                 <div className="p-4">
                   <p className="mt-2 text-center font-medium text-gray-800">{album.title}</p>
+                  {/* Display Songs of the Album */}
+                  {Array.isArray(album.songs) && (
+                    <div className="mt-4">
+                      {album.songs.map((song, index) => (
+                        <div key={song.id} className="song-card bg-gray-50 rounded-lg overflow-hidden shadow-md p-4 mb-4">
+                          <p className="text-lg font-medium text-gray-800">{`Song ${index + 1}: ${song.file}`}</p>
+                          <p className="text-sm text-gray-600">{`Similarity Ranking: ${song.similarityRanking}`}</p>
+                          <p className="text-sm text-gray-600">{`Similarity Percentage: ${song.similarityPercentage}%`}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent
 # ====================================================================================
 # Define Directories
 # ====================================================================================
-
+MAPPER_FILE = BASE_DIR / "database" / "mapper" / "mapper.json"
 PICTURE_DIR = BASE_DIR / "database" / "picture"
 AUDIO_DIR = BASE_DIR / "database" / "audio"
 
@@ -138,6 +138,146 @@ async def get_task_status(task_id: str):
     status = TASK_STATUS.get(task_id, "Task ID not found.")
     return {"task_id": task_id, "status": status}
 
+@app.get("/check-datasets/")
+async def check_datasets():
+    datasets_present = {
+        "images": False,
+        "audios": False,
+        "mapper": False
+    }
+
+    # Check if mapper.json exists
+    if not MAPPER_FILE.exists():
+        return datasets_present
+
+    try:
+        with open(MAPPER_FILE, "r") as f:
+            mapper = json.load(f)
+    except json.JSONDecodeError:
+        return datasets_present
+    except Exception:
+        return datasets_present
+
+    # Check if mapper has entries
+    if not isinstance(mapper, list) or len(mapper) == 0:
+        return datasets_present
+
+    # Verify images
+    all_images_exist = True
+    for album in mapper:
+        image_src = album.get("imageSrc", "")
+        if not image_src:
+            all_images_exist = False
+            print("Missing imageSrc in album:", album)
+            break
+        image_path = Path(image_src)
+        
+        # If image_src is a relative path, make it absolute based on project root
+        if not image_path.is_absolute():
+            image_path = Path.cwd().parent / image_src
+        
+        if not image_path.exists():
+            all_images_exist = False
+            print(f"Image file missing: {image_path}")
+            print(f"Image file missing: {image_path}")
+            print("Missing imageSrc in album:", album)
+            print("Missing audio file in song:", song)
+            break
+    datasets_present["images"] = all_images_exist
+
+    # Verify audios
+    all_audios_exist = True
+    for album in mapper:
+        songs = album.get("songs", [])
+        for song in songs:
+            audio_path = AUDIO_DIR / song.get("file", "")
+            if not audio_path.exists():
+                all_audios_exist = False
+                break
+        if not all_audios_exist:
+            break
+    datasets_present["audios"] = all_audios_exist
+
+    # Mapper is present if mapper.json is loaded and has entries
+    datasets_present["mapper"] = True
+
+    return datasets_present
+
+@app.get("/api/uploaded-images")
+async def get_uploaded_images():
+    if not MAPPER_FILE.exists():
+        raise HTTPException(status_code=404, detail="Mapper file not found.")
+    
+    try:
+        with open(MAPPER_FILE, "r") as f:
+            mapper = json.load(f)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Invalid JSON format in mapper file.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    images = []
+    for album in mapper:
+        image_src = album.get("imageSrc")
+        if image_src:
+            image_filename = Path(image_src).name
+            image_url = f"http://localhost:8000/static/{image_filename}"
+            images.append({
+                "id": album.get("id"),
+                "title": album.get("title"),
+                "imageSrc": image_url,
+                "songs": album.get("songs", [])
+            })
+    
+    return {"uploaded_images": images}
+
+@app.get("/api/uploaded-audios")
+async def get_uploaded_audios():
+    if not MAPPER_FILE.exists():
+        raise HTTPException(status_code=404, detail="Mapper file not found.")
+    
+    try:
+        with open(MAPPER_FILE, "r") as f:
+            mapper = json.load(f)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Invalid JSON format in mapper file.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    audios = []
+    for album in mapper:
+        album_id = album.get("id")
+        album_title = album.get("title")
+        songs = album.get("songs", [])
+        for song in songs:
+            audio_file = song.get("file")
+            if audio_file:
+                audio_filename = Path(audio_file).name
+                audio_url = f"http://localhost:8000/static/{audio_filename}"
+                audios.append({
+                    "id": song.get("id"),
+                    "title": song.get("title", f"Song {song.get('id')}"),
+                    "file": audio_url,
+                    "albumId": album_id,
+                    "albumTitle": album_title
+                })
+    
+    return {"uploaded_audios": audios}
+
+@app.get("/api/uploaded-mapper")
+async def get_uploaded_mapper():
+    if not MAPPER_FILE.exists():
+        raise HTTPException(status_code=404, detail="Mapper file not found.")
+    
+    try:
+        with open(MAPPER_FILE, "r") as f:
+            mapper = json.load(f)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Invalid JSON format in mapper file.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    return {"uploaded_mapper": mapper}
 
 # Endpoint to search by image
 @app.post("/search-image/")
