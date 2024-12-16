@@ -1,6 +1,7 @@
 import Home3D from './Home3D';
 import Home2D from './Home2D';
 import Credits from './Credits';
+import AudioRecorder from './AudioRecorder';
 import About from './About';
 import Info3DPage from './Info3DPage';
 

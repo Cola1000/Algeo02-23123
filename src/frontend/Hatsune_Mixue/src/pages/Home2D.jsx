@@ -15,6 +15,8 @@ const Home2D = () => {
   const [showImageDropzone, setShowImageDropzone] = useState(false);
   const [showAudioDropzone, setShowAudioDropzone] = useState(false);
 
+  const [showAudioPopup, setShowAudioPopup] = useState(false);
+
   const totalPages = Math.ceil(albumPictures.length / albumsPerPage);
   const indexOfLastAlbum = currentPage * albumsPerPage;
   const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
@@ -37,9 +39,10 @@ const Home2D = () => {
   };
 
   const handleAudioRecognizer = () => {
-    setShowAudioDropzone(true);
     setShowZipDropzone(false);
     setShowImageDropzone(false);
+    setShowAudioDropzone(false);
+    setShowAudioPopup(true);
   };
 
   const onZipDrop = useCallback(async (acceptedFiles) => {
@@ -159,7 +162,7 @@ const Home2D = () => {
   );
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center p-8 overflow-y-auto">
+    <div className="w-full min-h-screen flex flex-col items-center p-8 overflow-y-auto relative">
       <HillBackground />
       <section className="text-center">
         <h1 className="head-text text-cool-blue rounded-lg px-6 py-6 shadow-card">
@@ -282,6 +285,37 @@ const Home2D = () => {
           )}
         </div>
       </section>
+
+
+      {/* Gak tahu ah bjir, males stylingnya, yang penting ada :v */}
+      {showAudioPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded shadow-md text-black">
+            <h2 className="text-xl mb-4">Audio Recognition</h2>
+            <p className="mb-6">Do you want to use your microphone or upload a file?</p>
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  setShowAudioPopup(false);
+                  navigate('/audio-recorder');
+                }}
+                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              >
+                Use Microphone
+              </button>
+              <button
+                onClick={() => {
+                  setShowAudioPopup(false);
+                  setShowAudioDropzone(true);
+                }}
+                className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+              >
+                Upload File
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
