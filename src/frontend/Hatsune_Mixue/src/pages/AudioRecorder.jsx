@@ -54,7 +54,7 @@ const AudioRecorder = () => {
 
   const uploadAudio = async (audioBlob) => {
     const formData = new FormData();
-    formData.append("audio_file", audioBlob, "recorded_audio.wav");
+    formData.append("query_audio", audioBlob, "recorded_audio.wav");
 
     try {
       const response = await axios.post("http://localhost:8000/search-audio/", formData, {
