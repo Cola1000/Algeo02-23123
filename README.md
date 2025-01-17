@@ -14,8 +14,6 @@
 - [About the Project](#about-the-project)
 - [Features](#features)
 - [Installation](#installation)
-- [Web App Preview](#web-app-preview)
-- [Setup Instructions](#setup-instructions)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contributor](#contributor)
@@ -46,56 +44,95 @@
 
 ---
 
-## Web App Preview
-
-### Screenshots
-
-![Screenshot 1](path/to/screenshot1.png)
-![Screenshot 2](path/to/screenshot2.png)
-![Screenshot 3](path/to/screenshot2.png)
-![Screenshot 4](path/to/screenshot2.png)
-![Screenshot 5](path/to/screenshot2.png)
-
-These screenshots provide a preview of the web application in action, showcasing its essential functionalities and the thoughtfully designed user interface. They effectively demonstrate dynamic features such as album recognition and music metadata analysis, offering insights into the app's practical capabilities and performance.
-
----
-
 ## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/username/repository.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd repository
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+Follow these steps to get the application running on your local machine:
 
----
+1. **Download the ZIP Release**  
+   - Navigate to the repository’s releases page and download the latest zip file.
 
-## Setup Instructions
+2. **Extract the ZIP File**  
+   - Unzip the downloaded file to your preferred location.
 
-1. Navigate to the Project Directory  
-   Open your terminal and run:
-   ```bash
-   cd ./src/frontend/Hatsune_Mixue/
-   ```
+3. **Open a Terminal**  
+   - Navigate (`cd`) to the folder where you extracted the project.
 
-2. Install Dependencies  
-   Ensure all required packages are installed by running:
-   ```bash
-   npm install
-   ```
+4. **Set Up Python Environment**  
+   1. Run:
+      ```bash
+      pyenv 3.11.9
+      ```
+   2. Then:
+      ```bash
+      pyenv local 3.11.9
+      ```
+   3. Check your Python version:
+      ```bash
+      python --version
+      ```
+      - It should display `3.11.9`.
 
-3. Start the Development Server  
-   Run the development server with:
-   ```bash
-   npm run dev
-   ```
+5. **Update Requirements File**  
+   - Replace the existing contents of `requirements.txt` with the following:
+     ```txt
+     uvicorn
+     fastapi
+     rarfile
+     numpy
+     pillow
+     music21
+     basic_pitch
+     python-multipart
+     ```
+
+6. **Install Python Dependencies**  
+   - In your terminal, run:
+     ```bash
+     pip install -r src/backend/requirements.txt
+     ```
+   - This installs all the necessary backend dependencies.
+
+7. **Navigate to the `src` Directory**  
+   - Make sure your terminal is in the `src` directory, which contains the `backend` folder:
+     ```bash
+     cd src
+     ```
+
+8. **Run the Backend Server**  
+   - From the `src` directory, start the FastAPI server:
+     ```bash
+     uvicorn backend.main:app --reload
+     ```
+   - Keep this terminal window open and running.
+
+9. **Open Another Terminal**  
+   - You will need a second terminal to run the frontend.
+
+10. **Navigate to the React Frontend**  
+    - `cd` into:
+      ```bash
+      cd src/frontend/Hatsune_Mixue
+      ```
+
+11. **Install Frontend Dependencies**  
+    1. Install npm packages:
+       ```bash
+       npm install
+       ```
+    2. Run the development server:
+       ```bash
+       npm run dev
+       ```
+
+12. **Access the Application**  
+    - Open your browser and go to the address displayed in your second terminal, typically:
+      ```
+      http://localhost:3000
+      ```
+    - The FastAPI backend will be running at:
+      ```
+      http://localhost:8000
+      ```
 
 ### Additional Notes
 
