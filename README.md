@@ -72,49 +72,36 @@ Follow these steps to get the application running on your local machine:
       ```
       - It should display `3.11.9`.
 
-5. **Update Requirements File**  
-   - Replace the existing contents of `requirements.txt` with the following:
-     ```txt
-     uvicorn
-     fastapi
-     rarfile
-     numpy
-     pillow
-     music21
-     basic_pitch
-     python-multipart
-     ```
-
-6. **Install Python Dependencies**  
+5. **Install Python Dependencies**  
    - In your terminal, run:
      ```bash
      pip install -r src/backend/requirements.txt
      ```
    - This installs all the necessary backend dependencies.
 
-7. **Navigate to the `src` Directory**  
+6. **Navigate to the `src` Directory**  
    - Make sure your terminal is in the `src` directory, which contains the `backend` folder:
      ```bash
      cd src
      ```
 
-8. **Run the Backend Server**  
+7. **Run the Backend Server**  
    - From the `src` directory, start the FastAPI server:
      ```bash
      uvicorn backend.main:app --reload
      ```
    - Keep this terminal window open and running.
 
-9. **Open Another Terminal**  
+8. **Open Another Terminal**  
    - You will need a second terminal to run the frontend.
 
-10. **Navigate to the React Frontend**  
+9. **Navigate to the React Frontend**  
     - `cd` into:
       ```bash
       cd src/frontend/Hatsune_Mixue
       ```
 
-11. **Install Frontend Dependencies**  
+10. **Install Frontend Dependencies**  
     1. Install npm packages:
        ```bash
        npm install
@@ -124,7 +111,7 @@ Follow these steps to get the application running on your local machine:
        npm run dev
        ```
 
-12. **Access the Application**  
+11. **Access the Application**  
     - Open your browser and go to the address displayed in your second terminal, typically:
       ```
       http://localhost:3000
