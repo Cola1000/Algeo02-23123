@@ -1,0 +1,8 @@
+uvicorn
+fastapi
+rarfile
+numpy
+pillow
+music21
+basic_pitch
+python-multipart
